@@ -15,9 +15,9 @@ class Obstacle:
         self.type = obs_type
         self.colliding = []
         if(self.type == Obstacle.TYPE_WEATHER):
-            self.image = pygame.image.load(os.path.join('data', 'obs_weather.png'))
+            self.image = pygame.image.load(os.path.join('assets', 'obs_weather.png'))
         elif(self.type == Obstacle.TYPE_MOUNTAIN):
-            self.image = pygame.image.load(os.path.join('data', 'obs_mountain.png'))
+            self.image = pygame.image.load(os.path.join('assets', 'obs_mountain.png'))
             
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()

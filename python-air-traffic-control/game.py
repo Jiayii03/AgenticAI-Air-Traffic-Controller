@@ -76,8 +76,8 @@ class Game:
         self.__generateAircraftSpawnEvents()
         
         # Preload sounds.
-        self.sound_warning = pygame.mixer.Sound("data/sounds/warning.ogg")
-        self.sound_collision = pygame.mixer.Sound("data/sounds/boom.wav")
+        self.sound_warning = pygame.mixer.Sound("assets/sounds/warning.ogg")
+        self.sound_collision = pygame.mixer.Sound("assets/sounds/boom.wav")
         self.channel_warning = pygame.mixer.Channel(0)
         self.channel_collision = pygame.mixer.Channel(1)
         

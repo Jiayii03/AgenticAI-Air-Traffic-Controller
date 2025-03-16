@@ -11,9 +11,9 @@ from game import *
 
 class Aircraft:
 
-    AC_IMAGE_NORMAL = pygame.image.load(os.path.join('data', 'aircraft.png'))
-    AC_IMAGE_SELECTED = pygame.image.load(os.path.join('data', 'aircraft_sel.png'))
-    AC_IMAGE_NEAR = pygame.image.load(os.path.join('data', 'aircraft_near.png'))
+    AC_IMAGE_NORMAL = pygame.image.load(os.path.join('assets', 'aircraft.png'))
+    AC_IMAGE_SELECTED = pygame.image.load(os.path.join('assets', 'aircraft_sel.png'))
+    AC_IMAGE_NEAR = pygame.image.load(os.path.join('assets', 'aircraft_near.png'))
 
     AC_STATE_NORMAL = 1
     AC_STATE_SELECTED = 2
