@@ -46,48 +46,51 @@ class Main:
         state = STATE_MENU
         exit = 0
         score = 0       
+        game = Game(self.screen, False)
+        (gameEndCode, score) = game.start()
         
-        while (exit == 0):
-            if (state == STATE_MENU):
-                menuEndCode = None
-                menuEndCode = self.menu.main_loop()
-                self.infologger.writeout()
-                if (menuEndCode == conf.get()['codes']['start']):
-                    state = STATE_AGES
-                    self.id += 1
-                    self.infologger.add_value(self.id,'id',self.id)
-                elif (menuEndCode == conf.get()['codes']['demo']):
-                    state = STATE_DEMO
-                elif (menuEndCode == conf.get()['codes']['high_score']):
-                    state = STATE_HIGH
-                elif (menuEndCode == conf.get()['codes']['kill']):
-                    state = STATE_KILL
-            elif (state == STATE_GAME):
-                game = Game(self.screen, False)
-                (gameEndCode, score) = game.start()
-                self.infologger.add_value(self.id,'score',score)
-                if (gameEndCode == conf.get()['codes']['time_up']):
-                    state = STATE_HIGH
-                elif (gameEndCode == conf.get()['codes']['kill']):
-                    state = STATE_KILL
-                elif (gameEndCode == conf.get()['codes']['user_end']):
-                    state = STATE_MENU
-                elif (gameEndCode == conf.get()['codes']['ac_collide']):
-                    state = STATE_HIGH
-            elif (state == STATE_DEMO):
-               game = Game(self.screen, True)
-               (gameEndCode, score) = game.start()
-               state = STATE_MENU
-            elif (state == STATE_HIGH):
-                highEndCode = self.high.start(score)
-                state = STATE_MENU
-                score = 0
-            elif (state == STATE_KILL):
-                exit = 1
-            elif (state == STATE_AGES):
-                self.infologger.add_value(self.id,'agegroup',self.ages.main_loop())
-                state = STATE_GAME
-            game = None
+        
+        # while (exit == 0):
+        #     if (state == STATE_MENU):
+        #         menuEndCode = None
+        #         menuEndCode = self.menu.main_loop()
+        #         self.infologger.writeout()
+        #         if (menuEndCode == conf.get()['codes']['start']):
+        #             state = STATE_AGES
+        #             self.id += 1
+        #             self.infologger.add_value(self.id,'id',self.id)
+        #         elif (menuEndCode == conf.get()['codes']['demo']):
+        #             state = STATE_DEMO
+        #         elif (menuEndCode == conf.get()['codes']['high_score']):
+        #             state = STATE_HIGH
+        #         elif (menuEndCode == conf.get()['codes']['kill']):
+        #             state = STATE_KILL
+        #     elif (state == STATE_GAME):
+        #         game = Game(self.screen, False)
+        #         (gameEndCode, score) = game.start()
+        #         self.infologger.add_value(self.id,'score',score)
+        #         if (gameEndCode == conf.get()['codes']['time_up']):
+        #             state = STATE_HIGH
+        #         elif (gameEndCode == conf.get()['codes']['kill']):
+        #             state = STATE_KILL
+        #         elif (gameEndCode == conf.get()['codes']['user_end']):
+        #             state = STATE_MENU
+        #         elif (gameEndCode == conf.get()['codes']['ac_collide']):
+        #             state = STATE_HIGH
+        #     elif (state == STATE_DEMO):
+        #        game = Game(self.screen, True)
+        #        (gameEndCode, score) = game.start()
+        #        state = STATE_MENU
+        #     elif (state == STATE_HIGH):
+        #         highEndCode = self.high.start(score)
+        #         state = STATE_MENU
+        #         score = 0
+        #     elif (state == STATE_KILL):
+        #         exit = 1
+        #     elif (state == STATE_AGES):
+        #         self.infologger.add_value(self.id,'agegroup',self.ages.main_loop())
+        #         state = STATE_GAME
+        #     game = None
 
 # main entry point
 if __name__ == '__main__':
