@@ -4,7 +4,6 @@
 import pygame
 import random
 import math
-import pygame
 import conf
 from destination import *
 from aircraft import *
@@ -13,7 +12,12 @@ from aircraftspawnevent import *
 from utility import *
 from pgu import gui
 from flightstrippane import *
-from simulation.simulation import Simulation
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+assets_dir = os.path.join(os.path.dirname(__file__), 'assets')
+
+# from simulation.simulation import Simulation
 
 class Game:
 
@@ -76,8 +80,8 @@ class Game:
         self.__generateAircraftSpawnEvents()
         
         # Preload sounds.
-        self.sound_warning = pygame.mixer.Sound("assets/sounds/warning.ogg")
-        self.sound_collision = pygame.mixer.Sound("assets/sounds/boom.wav")
+        self.sound_warning = pygame.mixer.Sound(os.path.join(assets_dir, 'sounds', 'warning.ogg'))
+        self.sound_collision = pygame.mixer.Sound(os.path.join(assets_dir, 'sounds', 'boom.wav'))
         self.channel_warning = pygame.mixer.Channel(0)
         self.channel_collision = pygame.mixer.Channel(1)
         
@@ -105,7 +109,7 @@ class Game:
         default_num_obstacles = 3
         default_destination = (800, 600)
         
-        self.simulation = Simulation(default_num_landing_planes, default_num_obstacles, default_destination)
+        # self.simulation = Simulation(default_num_landing_planes, default_num_obstacles, default_destination)
         # ========================================================
         
         clock = pygame.time.Clock()

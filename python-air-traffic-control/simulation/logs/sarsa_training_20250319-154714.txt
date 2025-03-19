@@ -1,0 +1,2138 @@
+Logging started at 2025-03-19 15:47:14
+Log file: logs/sarsa_training_20250319-154714.txt
+Creates an ATC environment...
+Creating a SARSA agent...
+Entering training loop...
+Episode 1/500
+Reset state: {'aircraft': [{'id': 'AC1', 'location': (476, 0), 'heading': 195.27814755210431, 'speed': 200, 'waypoints': [(361, 421)], 'nearest_aircraft': 'AC5', 'nearest_aircraft_dist': 47.0, 'nearest_obstacle': <obstacle.Obstacle object at 0x0000021D408C1130>, 'nearest_obstacle_dist': 292.4414471308744}, {'id': 'AC2', 'location': (0, 620), 'heading': 61.1344010855582, 'speed': 200, 'waypoints': [(361, 421)], 'nearest_aircraft': 'AC4', 'nearest_aircraft_dist': 416.0, 'nearest_obstacle': <obstacle.Obstacle object at 0x0000021D408F75F0>, 'nearest_obstacle_dist': 219.49259668608414}, {'id': 'AC3', 'location': (0, 147), 'heading': 88.99491399474581, 'speed': 200, 'waypoints': [(228, 143)], 'nearest_aircraft': 'AC4', 'nearest_aircraft_dist': 57.0, 'nearest_obstacle': <obstacle.Obstacle object at 0x0000021D408F76E0>, 'nearest_obstacle_dist': 256.0703028466987}, {'id': 'AC4', 'location': (0, 204), 'heading': 36.15818543980832, 'speed': 200, 'waypoints': [(133, 22)], 'nearest_aircraft': 'AC3', 'nearest_aircraft_dist': 57.0, 'nearest_obstacle': <obstacle.Obstacle object at 0x0000021D408F76E0>, 'nearest_obstacle_dist': 220.80987296767324}, {'id': 'AC5', 'location': (429, 0), 'heading': 189.17518308004801, 'speed': 200, 'waypoints': [(361, 421)], 'nearest_aircraft': 'AC1', 'nearest_aircraft_dist': 47.0, 'nearest_obstacle': <obstacle.Obstacle object at 0x0000021D408C1130>, 'nearest_obstacle_dist': 308.7798568559808}], 'collision_pairs': []}
+Number of aircraft: 5
+Aircraft IDs: ['AC1', 'AC2', 'AC3', 'AC4', 'AC5']
+Aircraft positions: [(476, 0), (0, 620), (0, 147), (0, 204), (429, 0)]
+Found 1 aircraft pairs in potential collision
+Selecting first action...
+Entering episode loop...
+Step 0, Time elapsed: 0.00s
+Found 1 aircraft pairs in potential collision
+Step 0: Action=0, Reward=4.7505, Total Reward=4.7505
+State: [ 47.      180.      344.72186], Next State: [ 46.988113 179.99672  343.7365  ]
+Found 1 aircraft pairs in potential collision
+Step 1: Action=1, Reward=4.7553, Total Reward=9.5058
+Found 1 aircraft pairs in potential collision
+Step 2: Action=0, Reward=4.7510, Total Reward=14.2568
+Found 1 aircraft pairs in potential collision
+Step 3: Action=3, Reward=4.7553, Total Reward=19.0121
+Found 1 aircraft pairs in potential collision
+Step 4: Action=0, Reward=4.7558, Total Reward=23.7680
+Found 1 aircraft pairs in potential collision
+Step 5: Action=1, Reward=4.7570, Total Reward=28.5250
+Found 1 aircraft pairs in potential collision
+Step 6: Action=0, Reward=4.7531, Total Reward=33.2782
+Found 1 aircraft pairs in potential collision
+Step 7: Action=0, Reward=4.7536, Total Reward=38.0318
+Found 1 aircraft pairs in potential collision
+Step 8: Action=0, Reward=4.7541, Total Reward=42.7860
+Found 1 aircraft pairs in potential collision
+Step 9: Action=0, Reward=4.7546, Total Reward=47.5406
+Step 10, Time elapsed: 0.01s
+Found 1 aircraft pairs in potential collision
+Step 10: Action=0, Reward=4.7551, Total Reward=52.2958
+Found 1 aircraft pairs in potential collision
+Step 11: Action=0, Reward=4.7556, Total Reward=57.0514
+Found 1 aircraft pairs in potential collision
+Step 12: Action=0, Reward=4.7561, Total Reward=61.8076
+Found 1 aircraft pairs in potential collision
+Step 13: Action=0, Reward=4.7522, Total Reward=66.5598
+Found 1 aircraft pairs in potential collision
+Step 14: Action=0, Reward=4.7527, Total Reward=71.3125
+Found 1 aircraft pairs in potential collision
+Step 15: Action=2, Reward=4.7547, Total Reward=76.0672
+Found 1 aircraft pairs in potential collision
+Step 16: Action=0, Reward=4.7552, Total Reward=80.8225
+Found 1 aircraft pairs in potential collision
+Step 17: Action=0, Reward=4.7557, Total Reward=85.5782
+Found 1 aircraft pairs in potential collision
+Step 18: Action=0, Reward=4.7514, Total Reward=90.3296
+Found 1 aircraft pairs in potential collision
+Step 19: Action=0, Reward=4.7519, Total Reward=95.0816
+Step 20, Time elapsed: 0.01s
+Found 1 aircraft pairs in potential collision
+Step 20: Action=2, Reward=4.7543, Total Reward=99.8359
+Found 1 aircraft pairs in potential collision
+Step 21: Action=4, Reward=4.7527, Total Reward=104.5885
+Found 1 aircraft pairs in potential collision
+Step 22: Action=2, Reward=4.7546, Total Reward=109.3431
+Found 1 aircraft pairs in potential collision
+Step 23: Action=0, Reward=4.7551, Total Reward=114.0982
+Found 1 aircraft pairs in potential collision
+Step 24: Action=0, Reward=4.7556, Total Reward=118.8538
+Found 1 aircraft pairs in potential collision
+Step 25: Action=0, Reward=4.7513, Total Reward=123.6051
+Found 1 aircraft pairs in potential collision
+Step 26: Action=0, Reward=4.7518, Total Reward=128.3569
+Found 1 aircraft pairs in potential collision
+Step 27: Action=0, Reward=4.7523, Total Reward=133.1092
+Found 1 aircraft pairs in potential collision
+Step 28: Action=0, Reward=4.7528, Total Reward=137.8620
+Found 1 aircraft pairs in potential collision
+Step 29: Action=0, Reward=4.7533, Total Reward=142.6152
+Step 30, Time elapsed: 0.02s
+Found 1 aircraft pairs in potential collision
+Step 30: Action=0, Reward=4.7538, Total Reward=147.3690
+Found 1 aircraft pairs in potential collision
+Step 31: Action=2, Reward=4.7512, Total Reward=152.1202
+Found 1 aircraft pairs in potential collision
+Step 32: Action=0, Reward=4.7492, Total Reward=156.8694
+Found 1 aircraft pairs in potential collision
+Step 33: Action=0, Reward=4.7540, Total Reward=161.6234
+Found 1 aircraft pairs in potential collision
+Step 34: Action=0, Reward=4.7519, Total Reward=166.3753
+Found 1 aircraft pairs in potential collision
+Step 35: Action=0, Reward=4.7497, Total Reward=171.1250
+Found 1 aircraft pairs in potential collision
+Step 36: Action=0, Reward=4.7543, Total Reward=175.8793
+Found 1 aircraft pairs in potential collision
+Step 37: Action=3, Reward=4.7514, Total Reward=180.6307
+Found 1 aircraft pairs in potential collision
+Step 38: Action=0, Reward=4.7519, Total Reward=185.3825
+Found 1 aircraft pairs in potential collision
+Step 39: Action=0, Reward=4.7524, Total Reward=190.1349
+Step 40, Time elapsed: 0.02s
+Found 1 aircraft pairs in potential collision
+Step 40: Action=0, Reward=4.7529, Total Reward=194.8877
+Found 1 aircraft pairs in potential collision
+Step 41: Action=0, Reward=4.7534, Total Reward=199.6411
+Found 1 aircraft pairs in potential collision
+Step 42: Action=2, Reward=4.7497, Total Reward=204.3907
+Found 1 aircraft pairs in potential collision
+Step 43: Action=3, Reward=4.7551, Total Reward=209.1459
+Found 1 aircraft pairs in potential collision
+Step 44: Action=4, Reward=4.7532, Total Reward=213.8991
+Found 1 aircraft pairs in potential collision
+Step 45: Action=1, Reward=4.7556, Total Reward=218.6547
+Found 1 aircraft pairs in potential collision
+Step 46: Action=4, Reward=4.7545, Total Reward=223.4092
+Found 1 aircraft pairs in potential collision
+Step 47: Action=1, Reward=4.7520, Total Reward=228.1612
+Found 1 aircraft pairs in potential collision
+Step 48: Action=4, Reward=4.7558, Total Reward=232.9170
+Found 1 aircraft pairs in potential collision
+Step 49: Action=1, Reward=4.7532, Total Reward=237.6702
+Step 50, Time elapsed: 0.03s
+Found 0 aircraft pairs in potential collision
+Step 50: Action=4, Reward=4.7520, Total Reward=242.4222
+State: [ 49.90451 180.4923  173.12042], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 51: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 52: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 53: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 54: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 55: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 56: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 57: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 58: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 59: Action=2, Reward=0.0000, Total Reward=242.4222
+Step 60, Time elapsed: 0.03s
+Found 0 aircraft pairs in potential collision
+Step 60: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 61: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 62: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 63: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 64: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 65: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 66: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 67: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 68: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 69: Action=1, Reward=0.0000, Total Reward=242.4222
+Step 70, Time elapsed: 0.04s
+Found 0 aircraft pairs in potential collision
+Step 70: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 71: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 72: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 73: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 74: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 75: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 76: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 77: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 78: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 79: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 80, Time elapsed: 0.04s
+Found 0 aircraft pairs in potential collision
+Step 80: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 81: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 82: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 83: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 84: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 85: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 86: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 87: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 88: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 89: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 90, Time elapsed: 0.04s
+Found 0 aircraft pairs in potential collision
+Step 90: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 91: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 92: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 93: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 94: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 95: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 96: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 97: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 98: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 99: Action=3, Reward=0.0000, Total Reward=242.4222
+Step 100, Time elapsed: 0.05s
+Found 0 aircraft pairs in potential collision
+Step 100: Action=0, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 101: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 102: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 103: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 104: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 105: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 106: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 107: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 108: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 109: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 110, Time elapsed: 0.05s
+Found 0 aircraft pairs in potential collision
+Step 110: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 111: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 112: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 113: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 114: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 115: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 116: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 117: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 118: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 119: Action=4, Reward=0.0000, Total Reward=242.4222
+Step 120, Time elapsed: 0.06s
+Found 0 aircraft pairs in potential collision
+Step 120: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 121: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 122: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 123: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 124: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 125: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 126: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 127: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 128: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 129: Action=3, Reward=0.0000, Total Reward=242.4222
+Step 130, Time elapsed: 0.06s
+Found 0 aircraft pairs in potential collision
+Step 130: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 131: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 132: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 133: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 134: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 135: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 136: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 137: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 138: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 139: Action=3, Reward=0.0000, Total Reward=242.4222
+Step 140, Time elapsed: 0.06s
+Found 0 aircraft pairs in potential collision
+Step 140: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 141: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 142: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 143: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 144: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 145: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 146: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 147: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 148: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 149: Action=4, Reward=0.0000, Total Reward=242.4222
+Step 150, Time elapsed: 0.07s
+Found 0 aircraft pairs in potential collision
+Step 150: Action=0, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 151: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 152: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 153: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 154: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 155: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 156: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 157: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 158: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 159: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 160, Time elapsed: 0.07s
+Found 0 aircraft pairs in potential collision
+Step 160: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 161: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 162: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 163: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 164: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 165: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 166: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 167: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 168: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 169: Action=1, Reward=0.0000, Total Reward=242.4222
+Step 170, Time elapsed: 0.08s
+Found 0 aircraft pairs in potential collision
+Step 170: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 171: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 172: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 173: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 174: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 175: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 176: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 177: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 178: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 179: Action=3, Reward=0.0000, Total Reward=242.4222
+Step 180, Time elapsed: 0.08s
+Found 0 aircraft pairs in potential collision
+Step 180: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 181: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 182: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 183: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 184: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 185: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 186: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 187: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 188: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 189: Action=4, Reward=0.0000, Total Reward=242.4222
+Step 190, Time elapsed: 0.08s
+Found 0 aircraft pairs in potential collision
+Step 190: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 191: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 192: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 193: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 194: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 195: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 196: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 197: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 198: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 199: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 200, Time elapsed: 0.09s
+Found 0 aircraft pairs in potential collision
+Step 200: Action=3, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 201: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 202: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 203: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 204: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 205: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 206: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 207: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 208: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 209: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 210, Time elapsed: 0.09s
+Found 0 aircraft pairs in potential collision
+Step 210: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 211: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 212: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 213: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 214: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 215: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 216: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 217: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 218: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 219: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 220, Time elapsed: 0.10s
+Found 0 aircraft pairs in potential collision
+Step 220: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 221: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 222: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 223: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 224: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 225: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 226: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 227: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 228: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 229: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 230, Time elapsed: 0.10s
+Found 0 aircraft pairs in potential collision
+Step 230: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 231: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 232: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 233: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 234: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 235: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 236: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 237: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 238: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 239: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 240, Time elapsed: 0.10s
+Found 0 aircraft pairs in potential collision
+Step 240: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 241: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 242: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 243: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 244: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 245: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 246: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 247: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 248: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 249: Action=1, Reward=0.0000, Total Reward=242.4222
+Step 250, Time elapsed: 0.11s
+Found 0 aircraft pairs in potential collision
+Step 250: Action=2, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 251: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 252: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 253: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 254: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 255: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 256: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 257: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 258: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 259: Action=2, Reward=0.0000, Total Reward=242.4222
+Step 260, Time elapsed: 0.11s
+Found 0 aircraft pairs in potential collision
+Step 260: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 261: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 262: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 263: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 264: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 265: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 266: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 267: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 268: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 269: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 270, Time elapsed: 0.12s
+Found 0 aircraft pairs in potential collision
+Step 270: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 271: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 272: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 273: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 274: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 275: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 276: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 277: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 278: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 279: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 280, Time elapsed: 0.12s
+Found 0 aircraft pairs in potential collision
+Step 280: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 281: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 282: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 283: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 284: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 285: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 286: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 287: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 288: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 289: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 290, Time elapsed: 0.12s
+Found 0 aircraft pairs in potential collision
+Step 290: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 291: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 292: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 293: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 294: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 295: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 296: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 297: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 298: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 299: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 300, Time elapsed: 0.13s
+Found 0 aircraft pairs in potential collision
+Step 300: Action=0, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 301: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 302: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 303: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 304: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 305: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 306: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 307: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 308: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 309: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 310, Time elapsed: 0.13s
+Found 0 aircraft pairs in potential collision
+Step 310: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 311: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 312: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 313: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 314: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 315: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 316: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 317: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 318: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 319: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 320, Time elapsed: 0.14s
+Found 0 aircraft pairs in potential collision
+Step 320: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 321: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 322: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 323: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 324: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 325: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 326: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 327: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 328: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 329: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 330, Time elapsed: 0.14s
+Found 0 aircraft pairs in potential collision
+Step 330: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 331: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 332: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 333: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 334: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 335: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 336: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 337: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 338: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 339: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 340, Time elapsed: 0.14s
+Found 0 aircraft pairs in potential collision
+Step 340: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 341: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 342: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 343: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 344: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 345: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 346: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 347: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 348: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 349: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 350, Time elapsed: 0.15s
+Found 0 aircraft pairs in potential collision
+Step 350: Action=3, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 351: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 352: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 353: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 354: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 355: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 356: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 357: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 358: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 359: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 360, Time elapsed: 0.15s
+Found 0 aircraft pairs in potential collision
+Step 360: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 361: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 362: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 363: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 364: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 365: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 366: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 367: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 368: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 369: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 370, Time elapsed: 0.16s
+Found 0 aircraft pairs in potential collision
+Step 370: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 371: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 372: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 373: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 374: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 375: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 376: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 377: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 378: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 379: Action=1, Reward=0.0000, Total Reward=242.4222
+Step 380, Time elapsed: 0.16s
+Found 0 aircraft pairs in potential collision
+Step 380: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 381: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 382: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 383: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 384: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 385: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 386: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 387: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 388: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 389: Action=3, Reward=0.0000, Total Reward=242.4222
+Step 390, Time elapsed: 0.16s
+Found 0 aircraft pairs in potential collision
+Step 390: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 391: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 392: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 393: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 394: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 395: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 396: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 397: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 398: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 399: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 400, Time elapsed: 0.17s
+Found 0 aircraft pairs in potential collision
+Step 400: Action=0, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 401: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 402: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 403: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 404: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 405: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 406: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 407: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 408: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 409: Action=4, Reward=0.0000, Total Reward=242.4222
+Step 410, Time elapsed: 0.17s
+Found 0 aircraft pairs in potential collision
+Step 410: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 411: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 412: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 413: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 414: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 415: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 416: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 417: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 418: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 419: Action=1, Reward=0.0000, Total Reward=242.4222
+Step 420, Time elapsed: 0.18s
+Found 0 aircraft pairs in potential collision
+Step 420: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 421: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 422: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 423: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 424: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 425: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 426: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 427: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 428: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 429: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 430, Time elapsed: 0.18s
+Found 0 aircraft pairs in potential collision
+Step 430: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 431: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 432: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 433: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 434: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 435: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 436: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 437: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 438: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 439: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 440, Time elapsed: 0.18s
+Found 0 aircraft pairs in potential collision
+Step 440: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 441: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 442: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 443: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 444: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 445: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 446: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 447: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 448: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 449: Action=4, Reward=0.0000, Total Reward=242.4222
+Step 450, Time elapsed: 0.19s
+Found 0 aircraft pairs in potential collision
+Step 450: Action=0, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 451: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 452: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 453: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 454: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 455: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 456: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 457: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 458: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 459: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 460, Time elapsed: 0.19s
+Found 0 aircraft pairs in potential collision
+Step 460: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 461: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 462: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 463: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 464: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 465: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 466: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 467: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 468: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 469: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 470, Time elapsed: 0.20s
+Found 0 aircraft pairs in potential collision
+Step 470: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 471: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 472: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 473: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 474: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 475: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 476: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 477: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 478: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 479: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 480, Time elapsed: 0.20s
+Found 0 aircraft pairs in potential collision
+Step 480: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 481: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 482: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 483: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 484: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 485: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 486: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 487: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 488: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 489: Action=3, Reward=0.0000, Total Reward=242.4222
+Step 490, Time elapsed: 0.20s
+Found 0 aircraft pairs in potential collision
+Step 490: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 491: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 492: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 493: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 494: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 495: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 496: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 497: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 498: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 499: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 500, Time elapsed: 0.21s
+Found 0 aircraft pairs in potential collision
+Step 500: Action=2, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 501: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 502: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 503: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 504: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 505: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 506: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 507: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 508: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 509: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 510, Time elapsed: 0.21s
+Found 0 aircraft pairs in potential collision
+Step 510: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 511: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 512: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 513: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 514: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 515: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 516: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 517: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 518: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 519: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 520, Time elapsed: 0.22s
+Found 0 aircraft pairs in potential collision
+Step 520: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 521: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 522: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 523: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 524: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 525: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 526: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 527: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 528: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 529: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 530, Time elapsed: 0.22s
+Found 0 aircraft pairs in potential collision
+Step 530: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 531: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 532: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 533: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 534: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 535: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 536: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 537: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 538: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 539: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 540, Time elapsed: 0.22s
+Found 0 aircraft pairs in potential collision
+Step 540: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 541: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 542: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 543: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 544: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 545: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 546: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 547: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 548: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 549: Action=1, Reward=0.0000, Total Reward=242.4222
+Step 550, Time elapsed: 0.23s
+Found 0 aircraft pairs in potential collision
+Step 550: Action=0, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 551: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 552: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 553: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 554: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 555: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 556: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 557: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 558: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 559: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 560, Time elapsed: 0.23s
+Found 0 aircraft pairs in potential collision
+Step 560: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 561: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 562: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 563: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 564: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 565: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 566: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 567: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 568: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 569: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 570, Time elapsed: 0.24s
+Found 0 aircraft pairs in potential collision
+Step 570: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 571: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 572: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 573: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 574: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 575: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 576: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 577: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 578: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 579: Action=1, Reward=0.0000, Total Reward=242.4222
+Step 580, Time elapsed: 0.24s
+Found 0 aircraft pairs in potential collision
+Step 580: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 581: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 582: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 583: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 584: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 585: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 586: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 587: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 588: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 589: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 590, Time elapsed: 0.24s
+Found 0 aircraft pairs in potential collision
+Step 590: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 591: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 592: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 593: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 594: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 595: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 596: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 597: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 598: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 599: Action=2, Reward=0.0000, Total Reward=242.4222
+Step 600, Time elapsed: 0.25s
+Found 0 aircraft pairs in potential collision
+Step 600: Action=4, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 601: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 602: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 603: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 604: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 605: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 606: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 607: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 608: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 609: Action=4, Reward=0.0000, Total Reward=242.4222
+Step 610, Time elapsed: 0.25s
+Found 0 aircraft pairs in potential collision
+Step 610: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 611: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 612: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 613: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 614: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 615: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 616: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 617: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 618: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 619: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 620, Time elapsed: 0.25s
+Found 0 aircraft pairs in potential collision
+Step 620: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 621: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 622: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 623: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 624: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 625: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 626: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 627: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 628: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 629: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 630, Time elapsed: 0.26s
+Found 0 aircraft pairs in potential collision
+Step 630: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 631: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 632: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 633: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 634: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 635: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 636: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 637: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 638: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 639: Action=2, Reward=0.0000, Total Reward=242.4222
+Step 640, Time elapsed: 0.26s
+Found 0 aircraft pairs in potential collision
+Step 640: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 641: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 642: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 643: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 644: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 645: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 646: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 647: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 648: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 649: Action=4, Reward=0.0000, Total Reward=242.4222
+Step 650, Time elapsed: 0.27s
+Found 0 aircraft pairs in potential collision
+Step 650: Action=0, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 651: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 652: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 653: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 654: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 655: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 656: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 657: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 658: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 659: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 660, Time elapsed: 0.27s
+Found 0 aircraft pairs in potential collision
+Step 660: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 661: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 662: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 663: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 664: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 665: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 666: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 667: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 668: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 669: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 670, Time elapsed: 0.28s
+Found 0 aircraft pairs in potential collision
+Step 670: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 671: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 672: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 673: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 674: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 675: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 676: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 677: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 678: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 679: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 680, Time elapsed: 0.28s
+Found 0 aircraft pairs in potential collision
+Step 680: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 681: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 682: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 683: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 684: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 685: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 686: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 687: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 688: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 689: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 690, Time elapsed: 0.29s
+Found 0 aircraft pairs in potential collision
+Step 690: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 691: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 692: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 693: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 694: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 695: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 696: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 697: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 698: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 699: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 700, Time elapsed: 0.29s
+Found 0 aircraft pairs in potential collision
+Step 700: Action=0, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 701: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 702: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 703: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 704: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 705: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 706: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 707: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 708: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 709: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 710, Time elapsed: 0.29s
+Found 0 aircraft pairs in potential collision
+Step 710: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 711: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 712: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 713: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 714: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 715: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 716: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 717: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 718: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 719: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 720, Time elapsed: 0.30s
+Found 0 aircraft pairs in potential collision
+Step 720: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 721: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 722: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 723: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 724: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 725: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 726: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 727: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 728: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 729: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 730, Time elapsed: 0.30s
+Found 0 aircraft pairs in potential collision
+Step 730: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 731: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 732: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 733: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 734: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 735: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 736: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 737: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 738: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 739: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 740, Time elapsed: 0.30s
+Found 0 aircraft pairs in potential collision
+Step 740: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 741: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 742: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 743: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 744: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 745: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 746: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 747: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 748: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 749: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 750, Time elapsed: 0.31s
+Found 0 aircraft pairs in potential collision
+Step 750: Action=0, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 751: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 752: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 753: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 754: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 755: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 756: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 757: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 758: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 759: Action=2, Reward=0.0000, Total Reward=242.4222
+Step 760, Time elapsed: 0.31s
+Found 0 aircraft pairs in potential collision
+Step 760: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 761: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 762: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 763: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 764: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 765: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 766: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 767: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 768: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 769: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 770, Time elapsed: 0.32s
+Found 0 aircraft pairs in potential collision
+Step 770: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 771: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 772: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 773: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 774: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 775: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 776: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 777: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 778: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 779: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 780, Time elapsed: 0.32s
+Found 0 aircraft pairs in potential collision
+Step 780: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 781: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 782: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 783: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 784: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 785: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 786: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 787: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 788: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 789: Action=2, Reward=0.0000, Total Reward=242.4222
+Step 790, Time elapsed: 0.32s
+Found 0 aircraft pairs in potential collision
+Step 790: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 791: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 792: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 793: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 794: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 795: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 796: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 797: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 798: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 799: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 800, Time elapsed: 0.33s
+Found 0 aircraft pairs in potential collision
+Step 800: Action=0, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 801: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 802: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 803: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 804: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 805: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 806: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 807: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 808: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 809: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 810, Time elapsed: 0.33s
+Found 0 aircraft pairs in potential collision
+Step 810: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 811: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 812: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 813: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 814: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 815: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 816: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 817: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 818: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 819: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 820, Time elapsed: 0.34s
+Found 0 aircraft pairs in potential collision
+Step 820: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 821: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 822: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 823: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 824: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 825: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 826: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 827: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 828: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 829: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 830, Time elapsed: 0.34s
+Found 0 aircraft pairs in potential collision
+Step 830: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 831: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 832: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 833: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 834: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 835: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 836: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 837: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 838: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 839: Action=2, Reward=0.0000, Total Reward=242.4222
+Step 840, Time elapsed: 0.34s
+Found 0 aircraft pairs in potential collision
+Step 840: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 841: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 842: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 843: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 844: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 845: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 846: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 847: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 848: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 849: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 850, Time elapsed: 0.35s
+Found 0 aircraft pairs in potential collision
+Step 850: Action=3, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 851: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 852: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 853: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 854: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 855: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 856: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 857: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 858: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 859: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 860, Time elapsed: 0.35s
+Found 0 aircraft pairs in potential collision
+Step 860: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 861: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 862: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 863: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 864: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 865: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 866: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 867: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 868: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 869: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 870, Time elapsed: 0.35s
+Found 0 aircraft pairs in potential collision
+Step 870: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 871: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 872: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 873: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 874: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 875: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 876: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 877: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 878: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 879: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 880, Time elapsed: 0.36s
+Found 0 aircraft pairs in potential collision
+Step 880: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 881: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 882: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 883: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 884: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 885: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 886: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 887: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 888: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 889: Action=1, Reward=0.0000, Total Reward=242.4222
+Step 890, Time elapsed: 0.36s
+Found 0 aircraft pairs in potential collision
+Step 890: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 891: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 892: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 893: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 894: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 895: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 896: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 897: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 898: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 899: Action=1, Reward=0.0000, Total Reward=242.4222
+Step 900, Time elapsed: 0.37s
+Found 0 aircraft pairs in potential collision
+Step 900: Action=0, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 901: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 902: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 903: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 904: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 905: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 906: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 907: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 908: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 909: Action=3, Reward=0.0000, Total Reward=242.4222
+Step 910, Time elapsed: 0.37s
+Found 0 aircraft pairs in potential collision
+Step 910: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 911: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 912: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 913: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 914: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 915: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 916: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 917: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 918: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 919: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 920, Time elapsed: 0.37s
+Found 0 aircraft pairs in potential collision
+Step 920: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 921: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 922: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 923: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 924: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 925: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 926: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 927: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 928: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 929: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 930, Time elapsed: 0.38s
+Found 0 aircraft pairs in potential collision
+Step 930: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 931: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 932: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 933: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 934: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 935: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 936: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 937: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 938: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 939: Action=4, Reward=0.0000, Total Reward=242.4222
+Step 940, Time elapsed: 0.38s
+Found 0 aircraft pairs in potential collision
+Step 940: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 941: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 942: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 943: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 944: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 945: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 946: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 947: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 948: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 949: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 950, Time elapsed: 0.38s
+Found 0 aircraft pairs in potential collision
+Step 950: Action=0, Reward=0.0000, Total Reward=242.4222
+State: [0. 0. 0.], Next State: [0. 0. 0.]
+Found 0 aircraft pairs in potential collision
+Step 951: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 952: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 953: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 954: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 955: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 956: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 957: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 958: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 959: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 960, Time elapsed: 0.39s
+Found 0 aircraft pairs in potential collision
+Step 960: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 961: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 962: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 963: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 964: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 965: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 966: Action=4, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 967: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 968: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 969: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 970, Time elapsed: 0.39s
+Found 0 aircraft pairs in potential collision
+Step 970: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 971: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 972: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 973: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 974: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 975: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 976: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 977: Action=3, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 978: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 979: Action=0, Reward=0.0000, Total Reward=242.4222
+Step 980, Time elapsed: 0.40s
+Found 0 aircraft pairs in potential collision
+Step 980: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 981: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 982: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 983: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 984: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 985: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 986: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 987: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 988: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 989: Action=4, Reward=0.0000, Total Reward=242.4222
+Step 990, Time elapsed: 0.40s
+Found 0 aircraft pairs in potential collision
+Step 990: Action=2, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 991: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 992: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 993: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 994: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 995: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 996: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 997: Action=0, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 998: Action=1, Reward=0.0000, Total Reward=242.4222
+Found 0 aircraft pairs in potential collision
+Step 999: Action=3, Reward=0.0000, Total Reward=242.4222
+Episode terminated early after 1000 steps
+Episode 1 complete, Steps: 1000, Total Reward: 242.42223129587674
+Episode 1 took 0.40 seconds
+Final model saved to models/sarsa_atc_model.pkl
+Training completed. Log saved to: logs/sarsa_training_20250319-154714.txt

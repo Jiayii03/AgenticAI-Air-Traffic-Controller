@@ -4,7 +4,7 @@
 import pygame
 import random
 import conf
-from waypoint import *
+from waypoint import Waypoint
 
 class Destination(Waypoint):
 

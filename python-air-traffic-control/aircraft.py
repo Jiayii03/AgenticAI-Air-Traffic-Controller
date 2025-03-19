@@ -9,11 +9,13 @@ from waypoint import *
 from utility import *
 from game import *
 
+assets_dir = os.path.join(os.path.dirname(__file__), 'assets')
+
 class Aircraft:
 
-    AC_IMAGE_NORMAL = pygame.image.load(os.path.join('assets', 'aircraft.png'))
-    AC_IMAGE_SELECTED = pygame.image.load(os.path.join('assets', 'aircraft_sel.png'))
-    AC_IMAGE_NEAR = pygame.image.load(os.path.join('assets', 'aircraft_near.png'))
+    AC_IMAGE_NORMAL = pygame.image.load(os.path.join(assets_dir, 'aircraft.png'))
+    AC_IMAGE_SELECTED = pygame.image.load(os.path.join(assets_dir, 'aircraft_sel.png'))
+    AC_IMAGE_NEAR = pygame.image.load(os.path.join(assets_dir, 'aircraft_near.png'))
 
     AC_STATE_NORMAL = 1
     AC_STATE_SELECTED = 2
@@ -144,7 +146,7 @@ class Aircraft:
 		#Keep moving towards waypoint
         self.heading = self.__calculateHeading(self.location, self.waypoints[0].getLocation())
         self.location = self.__calculateNewLocation(self.location, self.heading, self.speed)
-        self.fs.updateAllFields()
+        # self.fs.updateAllFields()
 
     def getClickDistanceSq(self, clickpos):
         return Utility.locDistSq(clickpos, self.location)

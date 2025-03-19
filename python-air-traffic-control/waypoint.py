@@ -1,7 +1,6 @@
 #	File: waypoint.py
 
 import pygame;
-from game import *;
 
 class Waypoint:
 

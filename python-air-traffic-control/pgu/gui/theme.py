@@ -11,6 +11,7 @@ from . import surface
 from .basic import parse_color, is_color
 
 __file__ = os.path.abspath(__file__)
+assets_dir = os.path.join(os.path.dirname(__file__), 'assets')
 
 def _list_themes(dir):
     d = {}
