@@ -109,7 +109,6 @@ def train_sarsa_agent(episodes=500, render_every=50):
         episode_end_time = time.time()
         episode_duration = episode_end_time - episode_start_time
         print(f"Episode {episode+1} took {episode_duration:.2f} seconds")
-        break
     
         # Track metrics
         episode_rewards.append(total_reward)

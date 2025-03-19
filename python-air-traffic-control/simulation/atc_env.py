@@ -43,12 +43,15 @@ class ATCEnv(gym.Env):
         self.action_space = spaces.Discrete(5)  # 5 possible actions
         
         # Observation space based on state variables
-        # For the SARSA agent focusing on collision avoidance:
-        # - distance to nearest aircraft: [0, 50] pixels
-        # - angle to nearest aircraft: [0, 360) degrees
-        # - relative heading of nearest aircraft: [0, 360) degrees
-        # - distance to nearest obstacle: [0, 50] pixels
-        # - angle to nearest obstacle: [0, 360) degrees
+        """
+        [
+            distance_between_pair,      # Distance between the two aircraft in the pair
+            angle_to_intruder,          # Angle from aircraft 1 to aircraft 2
+            relative_heading,           # Relative heading of aircraft 2 compared to aircraft 1
+            distance_to_obstacle,       # Distance from aircraft 1 to nearest obstacle
+            angle_to_obstacle           # Angle from aircraft 1 to nearest obstacle
+        ]
+        """
         self.observation_space = spaces.Box(
             low=np.array([0, 0, 0, 0, 0]),    # Added two dimensions for obstacle info
             high=np.array([50, 360, 360, 50, 360]),
@@ -92,6 +95,7 @@ class ATCEnv(gym.Env):
         if not self.aircraft_pairs:
             # No pairs to control, just step the simulation with action 0, i.e. maintain course
             state, rewards_dict, done, info = self.simulation.step([0] * len(self.simulation.aircraft))
+            print(f"Debug - No aircraft pairs available, rewards_dict: {rewards_dict}")
             observation = np.zeros(3, dtype=np.float32)
             # +ve rewards for successful landing, -ve for aircraft and obstacle collision 
             reward = sum(rewards_dict.values())
@@ -105,11 +109,11 @@ class ATCEnv(gym.Env):
         all_actions = []
         for ac in self.simulation.aircraft:
             if ac.getIdent() == ac1_id:
-                all_actions.append(action)
+                all_actions.append(action) # apply agent's selected action to ac1 (the first aircraft in the pair)
             elif ac.getIdent() == ac2_id:
                 # For the intruder aircraft, mirror the action to create symmetric behavior
                 mirrored_action = self._mirror_action(action)
-                all_actions.append(mirrored_action)
+                all_actions.append(mirrored_action) # apply mirrored action to ac2 (the second aircraft in the pair)
             else:
                 # Other aircraft maintain course
                 all_actions.append(0)
@@ -167,6 +171,25 @@ class ATCEnv(gym.Env):
                         self.aircraft_pairs.append((ac1['id'], ac2['id']))
         
         print(f"Found {len(self.aircraft_pairs)} aircraft pairs in potential collision")
+        
+        # If no collision risks were found, use the closest pair
+        if not self.aircraft_pairs and len(state['aircraft']) >= 2:
+            # Find the closest pair of aircraft
+            min_dist = float('inf')
+            closest_pair = None
+            
+            for i, ac1 in enumerate(state['aircraft']):
+                for j, ac2 in enumerate(state['aircraft']):
+                    if i < j:  # Check each pair only once
+                        if ac1['nearest_aircraft'] == ac2['id']:
+                            dist = ac1['nearest_aircraft_dist']
+                            if dist < min_dist:
+                                min_dist = dist
+                                closest_pair = (ac1['id'], ac2['id'])
+            
+            if closest_pair:
+                self.aircraft_pairs = [closest_pair]
+                print(f"No collision risk, controlling closest pair: {closest_pair}, distance: {min_dist}")
     
     def _get_observation(self, aircraft_pair):
         # Get original aircraft observations
@@ -272,6 +295,26 @@ class ATCEnv(gym.Env):
         
         print(f"Closest pair distance: {min_dist}")
         return closest_pair
+    
+    def _find_aircraft_by_id(self, aircraft_id):
+        """Find an aircraft by its ID."""
+        for ac in self.simulation.aircraft:
+            if ac.getIdent() == aircraft_id:
+                return ac
+        return None
+    
+    def _calculate_angle(self, point1, point2):
+        """Calculate the angle from point1 to point2 in degrees (0-360)."""
+        dx = point2[0] - point1[0]
+        dy = point2[1] - point1[1]
+        
+        # Calculate angle in radians and convert to degrees
+        angle = np.degrees(np.arctan2(dy, dx))
+        
+        # Convert to 0-360 range
+        angle = (angle + 360) % 360
+        
+        return angle
     
     def _make_serializable(self, state):
         """Convert state to JSON-serializable format."""

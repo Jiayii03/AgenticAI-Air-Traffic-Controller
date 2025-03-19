@@ -73,6 +73,8 @@ class Simulation:
         self.step_count += 1
         rewards_dict = {ac.getIdent(): 0 for ac in self.aircraft}
         
+        print(f"Debug - initial rewards: {rewards_dict}")
+                
         # Apply actions to aircraft
         for i, ac in enumerate(self.aircraft):
             if i < len(actions):
@@ -86,6 +88,9 @@ class Simulation:
             if reached_destination:
                 landed_aircraft.append(ac)
                 rewards_dict[ac.getIdent()] += 200  # Reward for successful landing
+                print(f"Aircraft {ac.getIdent()} landed successfully, +200 reward")
+        
+        print(f"Debug - rewards after landing: {rewards_dict}")
         
         # Remove landed aircraft
         for ac in landed_aircraft:
@@ -97,14 +102,20 @@ class Simulation:
             ac1, ac2 = pair
             rewards_dict[ac1.getIdent()] -= 500  # Penalty for collision
             rewards_dict[ac2.getIdent()] -= 500
-            self.done = True  # End episode on collision
+            print(f"Collision detected between {ac1.getIdent()} and {ac2.getIdent()}, -500 reward")
+            self.done = True  # End episode on collision, critical failure in air traffic control
+        
+        print(f"Debug - rewards after collision check: {rewards_dict}")
         
         # Check obstacle collisions
         for obs in self.obstacles:
             collided = obs.collideAircraft(self.aircraft)
             for ac in self.aircraft:
                 if ac in obs.colliding and ac.getIdent() in rewards_dict:
-                    rewards_dict[ac.getIdent()] -= 20  # Penalty for obstacle collision
+                    rewards_dict[ac.getIdent()] -= 100  # Penalty for obstacle collision
+                    print(f"Obstacle collision detected for {ac.getIdent()}, -20 reward")
+                    
+        print(f"Debug - rewards after obstacle collision check: {rewards_dict}")
         
         # Get current state
         state = self._get_state()
