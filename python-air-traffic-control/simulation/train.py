@@ -13,7 +13,7 @@ import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-def train_dqn_agent(episodes=500, render_every=50):
+def train_dqn_agent(episodes=1, render_every=50):
     """Train a DQN agent on the ATC environment."""
     # Initialize logger
     logger = Logger(log_dir='logs', prefix='dqn_training').start()
@@ -60,7 +60,8 @@ def train_dqn_agent(episodes=500, render_every=50):
         step_count = 0
         
         # Render the environment at specified intervals
-        render = episode % render_every == 0
+        # render = episode % render_every == 0
+        render = False
         
         while not done:
             # Render if needed
@@ -81,6 +82,10 @@ def train_dqn_agent(episodes=500, render_every=50):
             # Move to next state
             state = next_state
             step_count += 1
+            
+            # if step_count >= 3000:
+            #     print("Episode aborted after 1000 steps")
+            #     break
         
         # Log results
         episode_rewards.append(total_reward)
@@ -95,15 +100,13 @@ def train_dqn_agent(episodes=500, render_every=50):
             print(f"Episode {episode+1}/{episodes}, Avg Reward: {avg_reward:.2f}, Epsilon: {agent.epsilon:.2f}")
         
         # Save model periodically
-        if (episode + 1) % 50 == 0:
-            agent.save(model_path)
-            print(f"Model saved to {model_path}")
-            
-        break
+        # if (episode + 1) % 50 == 0:
+        #     agent.save(model_path)
+        #     print(f"Model saved to {model_path}")
     
     # Save final model
-    agent.save(model_path)
-    print(f"Final model saved to {model_path}")
+    # agent.save(model_path)
+    # print(f"Final model saved to {model_path}")
     
     # Plot learning curve
     plt.figure(figsize=(10, 6))

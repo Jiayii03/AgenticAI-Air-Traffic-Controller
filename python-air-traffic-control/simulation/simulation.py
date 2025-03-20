@@ -77,6 +77,14 @@ class Simulation:
         for i, ac in enumerate(self.aircraft):
             if i < len(actions):
                 self._apply_action(ac, actions[i])
+                
+        # track aircraft progress
+        for ac in self.aircraft:
+            if len(ac.waypoints) > 0:
+                dest = ac.waypoints[-1].getLocation()
+                current = ac.getLocation()
+                dist_to_go = Utility.locDist(current, dest)
+                print(f"Aircraft {ac.getIdent()}: Distance to destination: {dist_to_go:.2f}")
         
         # Update aircraft positions
         landed_aircraft = []
@@ -86,6 +94,7 @@ class Simulation:
             if reached_destination:
                 landed_aircraft.append(ac)
                 rewards_dict[ac.getIdent()] += 200  # Reward for successful landing
+                print(f"Aircraft {ac.getIdent()} landed successfully, +200 reward")
         
         # Remove landed aircraft
         for ac in landed_aircraft:
@@ -97,6 +106,7 @@ class Simulation:
             ac1, ac2 = pair
             rewards_dict[ac1.getIdent()] -= 500  # Penalty for collision
             rewards_dict[ac2.getIdent()] -= 500
+            print(f"Collision detected between {ac1.getIdent()} and {ac2.getIdent()}, -500 reward")
             self.done = True  # End episode on collision
         
         # Check obstacle collisions
@@ -104,7 +114,8 @@ class Simulation:
             collided = obs.collideAircraft(self.aircraft)
             for ac in self.aircraft:
                 if ac in obs.colliding and ac.getIdent() in rewards_dict:
-                    rewards_dict[ac.getIdent()] -= 20  # Penalty for obstacle collision
+                    rewards_dict[ac.getIdent()] -= 100  # Penalty for obstacle collision
+                    print(f"Obstacle collision detected for {ac.getIdent()}, -100 reward")
         
         # Get current state
         state = self._get_state()
@@ -148,6 +159,11 @@ class Simulation:
         3: Medium right (MR)
         4: Hard right (HR)
         """
+        # Store the original destination (last waypoint) if it exists
+        final_destination = None
+        if len(aircraft.waypoints) > 0:
+            final_destination = aircraft.waypoints[-1]
+        
         # Current location and heading
         curr_loc = aircraft.getLocation()
         curr_heading = aircraft.getHeading()
@@ -165,19 +181,29 @@ class Simulation:
             new_heading = (curr_heading + 90) % 360
         
         # Calculate new waypoint location based on heading and distance
-        distance = 50  # Distance to place waypoint
+        distance = 100  # Distance to place waypoint
         rad_heading = np.radians(new_heading)
         dx = distance * np.sin(rad_heading)
         dy = -distance * np.cos(rad_heading)
         
         new_waypoint = (int(curr_loc[0] + dx), int(curr_loc[1] + dy))
         
-        # Create and add waypoint to aircraft
-        waypoint = Waypoint(new_waypoint)
+        # Create and add tactical waypoint
+        tactical_waypoint = Waypoint(new_waypoint)
         
-        # Clear existing waypoints and add new one
+        # Clear existing waypoints
         aircraft.waypoints = []
-        aircraft.addWaypoint(waypoint)
+        
+        # First add destination (if it exists), THEN add tactical waypoint
+        if final_destination:
+            aircraft.addWaypoint(final_destination)  # Add destination first
+        
+        # For maintain course (action 0), don't add tactical waypoint
+        # Just keep the destination
+        if action != 0:
+            aircraft.addWaypoint(tactical_waypoint)  # Add tactical waypoint second
+        
+        print(f"Aircraft {aircraft.getIdent()}: Action={action}, Waypoints={[wp.getLocation() for wp in aircraft.waypoints]}")
     
     def _detect_collisions(self):
         """Detect aircraft pairs that are in potential collision."""
