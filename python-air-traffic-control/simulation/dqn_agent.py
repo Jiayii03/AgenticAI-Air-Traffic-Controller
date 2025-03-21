@@ -66,10 +66,18 @@ class ReplayBuffer:
         return len(self.buffer)
 
 class DQNAgent:
-    """DQN agent using function approximation instead of tabular Q-values."""
-    
-    def __init__(self, state_dim, action_dim, lr=0.001, gamma=0.99, epsilon=1.0, epsilon_min=0.1, 
-                 epsilon_decay=0.995, buffer_size=10000, batch_size=64, update_frequency=4):
+    def __init__(self, state_dim, action_dim, 
+                 # Modify these hyperparameters
+                 lr=0.0001,              # Lower learning rate (from 0.001)
+                 gamma=0.99,             # Keep high discount factor
+                 epsilon=1.0,            # Start with full exploration
+                 epsilon_min=0.05,       # Lower minimum exploration
+                 epsilon_decay=0.998,    # Slower decay rate (was likely ~0.995)
+                 buffer_size=50000,      # Larger replay buffer (from ~10000)
+                 batch_size=64,          # Keep batch size
+                 update_frequency=10,    # Update less frequently
+                 target_update=1000):    # Update target network less frequently
+        
         self.state_dim = state_dim
         self.action_dim = action_dim
         self.gamma = gamma
@@ -79,34 +87,40 @@ class DQNAgent:
         self.batch_size = batch_size
         self.update_counter = 0
         self.update_frequency = update_frequency
+        self.target_update = target_update
         
-        # Q-Networks
-        self.q_network = QNetwork(state_dim, action_dim)
-        self.target_network = QNetwork(state_dim, action_dim)
+        # Network architecture - consider a slightly deeper network
+        self.q_network = QNetwork(state_dim, action_dim, hidden_dim=128)  # Larger hidden layer
+        self.target_network = QNetwork(state_dim, action_dim, hidden_dim=128)
         self.target_network.load_state_dict(self.q_network.state_dict())
         
-        self.optimizer = optim.Adam(self.q_network.parameters(), lr=lr)
+        # Use a smaller learning rate with weight decay
+        self.optimizer = optim.Adam(self.q_network.parameters(), 
+                                    lr=lr, 
+                                    weight_decay=1e-5)  # Add weight decay
+        
+        # Larger replay buffer for better experience diversity
         self.replay_buffer = ReplayBuffer(buffer_size)
         
-        # Statistics
+        # Add metrics tracking
         self.losses = []
+        self.avg_q_values = []
         self.exploration_rate = []
     
-    def select_action(self, state, training=True):
-        """Select action using epsilon-greedy policy."""
-        if training and np.random.rand() < self.epsilon:
-            # Exploration
-            return np.random.randint(self.action_dim)
+    def select_action(self, state):
+        if random.random() < self.epsilon:
+            return random.randrange(self.action_dim)
         else:
-            # Exploitation
-            state_tensor = torch.FloatTensor(state).unsqueeze(0)
+            # Convert state to tensor if it's a NumPy array
+            if isinstance(state, np.ndarray):
+                state = torch.FloatTensor(state).unsqueeze(0)
+            
             with torch.no_grad():
-                q_values = self.q_network(state_tensor)
+                q_values = self.q_network(state)
             return torch.argmax(q_values).item()
     
     def update(self, state, action, reward, next_state, done):
-        """Store transition and perform learning updates."""
-        # Store transition in replay buffer
+        # Store experience in replay buffer
         self.replay_buffer.add(state, action, reward, next_state, done)
         
         # Only update if we have enough samples
@@ -120,40 +134,46 @@ class DQNAgent:
         if self.update_counter % self.update_frequency != 0:
             return 0
             
-        # Sample a batch of transitions
+        # Sample a batch
         states, actions, rewards, next_states, dones = self.replay_buffer.sample(self.batch_size)
         
-        # Convert to tensors
-        states_tensor = torch.FloatTensor(states)
-        actions_tensor = torch.LongTensor(actions)
-        rewards_tensor = torch.FloatTensor(rewards)
-        next_states_tensor = torch.FloatTensor(next_states)
-        dones_tensor = torch.FloatTensor(dones)
+        # Convert NumPy arrays to PyTorch tensors
+        states = torch.FloatTensor(states)
+        actions = torch.LongTensor(actions)
+        rewards = torch.FloatTensor(rewards)
+        next_states = torch.FloatTensor(next_states)
+        dones = torch.FloatTensor(dones)
         
-        # Compute current Q-values
-        current_q_values = self.q_network(states_tensor).gather(1, actions_tensor.unsqueeze(1)).squeeze(1)
+        # Current Q-values
+        current_q_values = self.q_network(states).gather(1, actions.unsqueeze(1)).squeeze(1)
         
-        # Compute next Q-values using target network
+        # Next Q-values from target network for stability
         with torch.no_grad():
-            next_q_values = self.target_network(next_states_tensor).max(1)[0]
-            target_q_values = rewards_tensor + (1 - dones_tensor) * self.gamma * next_q_values
+            next_q_values = self.target_network(next_states).max(1)[0]
+            target_q_values = rewards + (1 - dones) * self.gamma * next_q_values
         
-        # Compute loss
-        loss = F.mse_loss(current_q_values, target_q_values)
+        # Compute loss with Huber loss for robustness to outliers
+        loss = F.smooth_l1_loss(current_q_values, target_q_values)
         
         # Optimize the model
         self.optimizer.zero_grad()
         loss.backward()
+        # Gradient clipping for stability
+        torch.nn.utils.clip_grad_norm_(self.q_network.parameters(), 1.0)
         self.optimizer.step()
         
-        # Decay epsilon
+        # Update target network periodically
+        if self.update_counter % self.target_update == 0:
+            self.target_network.load_state_dict(self.q_network.state_dict())
+        
+        # Track metrics
+        self.losses.append(loss.item())
+        self.avg_q_values.append(current_q_values.mean().item())
+        
+        # Decay epsilon (exploration rate)
         self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay)
         self.exploration_rate.append(self.epsilon)
         
-        # Periodically update target network
-        if self.update_counter % (self.update_frequency * 10) == 0:
-            self.target_network.load_state_dict(self.q_network.state_dict())
-            
         return loss.item()
     
     def save(self, filepath):

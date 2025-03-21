@@ -6,7 +6,7 @@ import time
 class Logger:
     """A logging utility that redirects print statements to both console and file."""
     
-    def __init__(self, log_dir='logs', prefix='training_log'):
+    def __init__(self, log_dir='logs', prefix='training_log', debug=False):
         """Initialize the logger with configurable directory and prefix.
         
         Args:
@@ -21,6 +21,7 @@ class Logger:
         self.log_filename = f"{log_dir}/{prefix}_{self.timestamp}.txt"
         self.terminal = sys.stdout
         self.log_file = None
+        self.debug = debug
     
     def start(self):
         """Start logging by redirecting stdout to the logger."""
@@ -43,6 +44,11 @@ class Logger:
         if self.log_file:
             self.log_file.write(message)
             self.log_file.flush()
+            
+    def debug_print(self, message):
+        """Only print if debug mode is enabled"""
+        if self.debug:
+            print(f"DEBUG - {message}")
     
     def flush(self):
         """Flush both outputs."""

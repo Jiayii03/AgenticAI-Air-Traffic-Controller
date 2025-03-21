@@ -17,7 +17,7 @@ import conf
 class Simulation:
     """A wrapper around the air traffic control simulation that allows for RL interaction."""
     
-    def __init__(self, num_planes=5, num_obstacles=3, screen_size=(800, 800)):
+    def __init__(self, logger, num_planes=5, num_obstacles=3, screen_size=(800, 800)):
         """Initialize pygame."""
         if not pygame.get_init():
             pygame.init()
@@ -33,6 +33,7 @@ class Simulation:
             self.screen = pygame.display.set_mode(screen_size)
         
         """Initialize the simulation with configuration parameters."""
+        self.logger = logger
         self.num_planes = num_planes
         self.num_obstacles = num_obstacles
         self.screen_size = screen_size
@@ -89,7 +90,7 @@ class Simulation:
                 dest = ac.waypoints[-1].getLocation()
                 current = ac.getLocation()
                 dist_to_go = Utility.locDist(current, dest)
-                print(f"Aircraft {ac.getIdent()}: Distance to destination: {dist_to_go:.2f}")
+                self.logger.debug_print(f"Aircraft {ac.getIdent()}: Distance to destination: {dist_to_go:.2f}")
         
         # Update aircraft positions
         landed_aircraft = []
@@ -224,11 +225,11 @@ class Simulation:
             tactical_waypoint = Waypoint(new_waypoint)
             aircraft.waypoints.insert(0, tactical_waypoint)  # Insert at beginning
             
-            print(f"Aircraft {aircraft.getIdent()}: Action={action}, Applied tactical waypoint")
+            self.logger.debug_print(f"Aircraft {aircraft.getIdent()}: Action={action}, Applied tactical waypoint")
         else:
-            print(f"Aircraft {aircraft.getIdent()}: Direct routing to destination")
+            self.logger.debug_print(f"Aircraft {aircraft.getIdent()}: Direct routing to destination")
         
-        print(f"Aircraft {aircraft.getIdent()}: Waypoints={[wp.getLocation() for wp in aircraft.waypoints]}")
+        self.logger.debug_print(f"Aircraft {aircraft.getIdent()}: Waypoints={[wp.getLocation() for wp in aircraft.waypoints]}")
     
     def _detect_collisions(self):
         """Detect aircraft pairs that are in potential collision."""

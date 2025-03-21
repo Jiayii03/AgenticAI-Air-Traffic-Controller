@@ -12,14 +12,14 @@ import time
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-def train_dqn_agent(episodes=3, render_every=50):
+def train_dqn_agent(episodes=200, render_every=50):
     """Train a DQN agent on the ATC environment."""
     # Initialize logger
-    logger = Logger(log_dir='logs', prefix='dqn_training').start()
+    logger = Logger(log_dir='logs', prefix='dqn_training', debug=False).start()
 
     # Create the environment
     print("Creates an ATC environment...")
-    env = ATCEnv(num_planes=5, num_obstacles=3)
+    env = ATCEnv(logger=logger, num_planes=2, num_obstacles=1)
     
     # Get state and action dimensions from environment
     state_dim = env.observation_space.shape[0]
@@ -31,20 +31,13 @@ def train_dqn_agent(episodes=3, render_every=50):
     agent = DQNAgent(
         state_dim=state_dim,  # State space dimension
         action_dim=action_dim, # Action space dimension
-        lr=0.001,              # Learning rate
-        gamma=0.99,            # Discount factor
-        epsilon=1.0,           # Initial exploration rate
-        epsilon_min=0.1,       # Minimum exploration rate
-        epsilon_decay=0.995,   # Exploration decay rate
-        buffer_size=10000,     # Replay buffer size
-        batch_size=64          # Training batch size
     )
     
     # Load existing model if available
     model_path = 'models/dqn_atc_model.pth'
-    # if os.path.exists(model_path):
-    #     print(f"Loading existing model from {model_path}")
-    #     agent.load(model_path)
+    if os.path.exists(model_path):
+        print(f"Loading existing model from {model_path}")
+        agent.load(model_path)
     
     # Training loop
     episode_rewards = []
@@ -53,6 +46,7 @@ def train_dqn_agent(episodes=3, render_every=50):
     collision_rate = []
     
     print("Entering training loop...")
+    training_start_time = time.time()
     for episode in range(episodes):
         print(f"Episode {episode+1}/{episodes}")
         episode_start_time = time.time()
@@ -70,6 +64,7 @@ def train_dqn_agent(episodes=3, render_every=50):
         
         while not done:
             # Render if needed
+            step_count += 1
             if render:
                 env.render()
                 
@@ -92,9 +87,8 @@ def train_dqn_agent(episodes=3, render_every=50):
             
             # Move to next state
             state = next_state
-            step_count += 1
             
-            if step_count >= 3000:
+            if step_count >= 5000:
                 print("Episode aborted after 3000 steps")
                 break
         
@@ -129,11 +123,14 @@ def train_dqn_agent(episodes=3, render_every=50):
     avg_steps = sum(episode_steps) / len(episode_steps)
     avg_landings = sum(successful_landings_per_episode) / len(successful_landings_per_episode)
     collision_percentage = (sum(collision_rate) / len(collision_rate)) * 100
-
+    training_end_time = time.time()
+    training_duration = training_end_time - training_start_time
+    
     print(f"Training results across {len(episode_steps)} episodes:")
     print(f"Average steps per episode: {avg_steps:.1f}")
     print(f"Average aircraft landed: {avg_landings:.2f}/{initial_aircraft_count}")
     print(f"Collision rate: {collision_percentage:.1f}%")
+    print(f"Training complete, total duration: {training_duration:.2f} seconds")
     
     # --------------- Plotting ---------------
     plt.figure(figsize=(15, 10))
