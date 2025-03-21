@@ -17,7 +17,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 assets_dir = os.path.join(os.path.dirname(__file__), 'assets')
 
-# from simulation.simulation import Simulation
+from simulation.rl_controller import RLController
 
 class Game:
 
@@ -37,8 +37,6 @@ class Game:
     RADAR_RADIUS = 0
 
     COLOR_SCORETIME = (20, 193, 236)    #Score/time counter colour
-
-    
 
     def __init__(self, screen, demomode):
         #Screen vars
@@ -84,6 +82,10 @@ class Game:
         self.sound_collision = pygame.mixer.Sound(os.path.join(assets_dir, 'sounds', 'boom.wav'))
         self.channel_warning = pygame.mixer.Channel(0)
         self.channel_collision = pygame.mixer.Channel(1)
+        self.mute = conf.get()['game']['mute']
+        self.n_aircrafts = conf.get()['game']['n_aircraft']
+        self.n_obstacles = conf.get()['game']['n_obstacles']
+        self.n_destinations = conf.get()['game']['n_destinations']
         
         self.app = gui.App()
         self.cnt_main = gui.Container(align=-1,valign=-1)
@@ -96,6 +98,14 @@ class Game:
         else:
             pygame.mouse.set_visible(False)
             self.delaytimer = pygame.time.get_ticks()
+            
+        # Initialize RL controller if enabled in config
+        self.rl_enabled = conf.get().get('rl_agent', {}).get('enabled', False)
+        if self.rl_enabled:
+            model_path = conf.get().get('rl_agent', {}).get('model_path', 'models/dqn_atc_model.pth')
+            model_path = os.path.join(os.path.dirname(__file__), model_path)
+            self.rl_controller = RLController(model_path=model_path)
+            print("RL agent enabled for collision avoidance")
         
         self.cnt_fspane = FlightStripPane(left=Game.FSPANE_LEFT, top=Game.FSPANE_TOP, width=Game.FS_W, align=-1, valign=-1)
         self.cnt_main.add(self.cnt_fspane, Game.FSPANE_LEFT, Game.FSPANE_TOP + 100)
@@ -104,14 +114,7 @@ class Game:
 
     # start() is the main game loop. It is called by main.py to start the game.
     def start(self):
-         # ===== ADDED: Default RL configuration parameters =====
-        default_num_landing_planes = 10
-        default_num_obstacles = 3
-        default_destination = (800, 600)
-        
-        # self.simulation = Simulation(default_num_landing_planes, default_num_obstacles, default_destination)
-        # ========================================================
-        
+                
         clock = pygame.time.Clock()
         #nextDemoEventTime = random.randint(10000,20000)
         nextDemoEventTime = 6000 # first demo event time is 6 seconds after start of demo
@@ -183,9 +186,9 @@ class Game:
                 self.screen.blit(sf_time, (Game.FSPANE_LEFT + 30, 40))
                 
                  # ===== ADDED: Draw configuration info as a vertical list =====
-                config_planes = self.font.render("Planes: {}".format(default_num_landing_planes), True, Game.COLOR_SCORETIME)
-                config_obstacles = self.font.render("Obstacles: {}".format(default_num_obstacles), True, Game.COLOR_SCORETIME)
-                config_destination = self.font.render("Destination: {}".format(default_destination), True, Game.COLOR_SCORETIME)
+                config_planes = self.font.render("Planes: {}".format(self.n_aircrafts), True, Game.COLOR_SCORETIME)
+                config_obstacles = self.font.render("Obstacles: {}".format(self.n_obstacles), True, Game.COLOR_SCORETIME)
+                config_destination = self.font.render("Destination: {}".format(self.n_destinations), True, Game.COLOR_SCORETIME)
                 
                 # Blit each configuration item on a separate line
                 self.screen.blit(config_planes, (Game.FSPANE_LEFT + 30, 70))
@@ -225,7 +228,10 @@ class Game:
             self.ac_selected.setSelected(True)
             
     def __update(self):
-
+        # Apply RL collision avoidance if enabled
+        if hasattr(self, 'rl_enabled') and self.rl_enabled:
+            self.__handle_rl_collision_avoidance()
+            
         #1: Update the positions of all existing aircraft
         #2: Check if any aircraft have collided with an obstacle
         #3: Check if any aircraft have reached a destination
@@ -367,8 +373,49 @@ class Game:
             # Highlight the collided aircraft
             ac1.image = Aircraft.AC_IMAGE_NEAR # later set to Aircraft.AC_IMAGE_COLLIDED
             ac2.image = Aircraft.AC_IMAGE_NEAR
-
-
+            
+    def __handle_rl_collision_avoidance(self):
+        """Use RL agent to avoid collisions between aircraft"""
+        if not self.rl_enabled or len(self.aircraft) < 2:
+            return
+        
+        # Detect aircraft at risk of collision
+        collision_pairs = self.rl_controller.detect_collision_risks(self.aircraft)
+        
+        # Apply RL actions to each pair at risk
+        for ac1, ac2 in collision_pairs:
+            ac1.rl_controlled = True
+            ac2.rl_controlled = True
+            
+            print(f"RL handling collision risk between {ac1.getIdent()} and {ac2.getIdent()}")
+            # Get observation for this pair
+            observation = self.rl_controller.get_observation(ac1, ac2, self.obstacles, self.destinations)
+            
+            # Select action based on observation
+            action = self.rl_controller.select_action(observation)
+            print(f"Selected action: {action}")
+            
+            # Apply action to first aircraft
+            self.rl_controller.apply_action(ac1, action)
+            print("Applied action to first aircraft")
+            
+            # Set the flags here to indicate these aircraft are being controlled by RL
+            ac1.rl_controlled = True
+            ac2.rl_controlled = True
+            
+            # Apply mirrored action to second aircraft
+            mirrored_action = 0
+            if action == 1: mirrored_action = 4    # Hard left -> Hard right
+            elif action == 2: mirrored_action = 3  # Medium left -> Medium right
+            elif action == 3: mirrored_action = 2  # Medium right -> Medium left
+            elif action == 4: mirrored_action = 1  # Hard right -> Hard left
+            
+            self.rl_controller.apply_action(ac2, mirrored_action)
+            print("Applied mirrored action to second aircraft")
+            
+            self.rl_controller.aircraft_cooldowns[ac1.getIdent()] = self.rl_controller.current_frame
+            self.rl_controller.aircraft_cooldowns[ac2.getIdent()] = self.rl_controller.current_frame
+            
     def __highlightImpendingCollision(self, a):
         for at in self.aircraft:
             # Skip current aircraft or currently selected aircraft (because it remains orange)
@@ -379,7 +426,8 @@ class Game:
                     if self.demomode == False:
                         #Checking if the sound is already playing. (Happens alot)
                         if not self.channel_warning.get_busy():
-                            self.channel_warning.play(self.sound_warning)
+                            if not self.mute:
+                                self.channel_warning.play(self.sound_warning)
                     break
                 else:
                     if (a.selected):
@@ -415,8 +463,8 @@ class Game:
                         dist = Utility.locDistSq(spawns[x].getSpawnPoint(), spawns[y].getSpawnPoint())
                         dt = math.fabs(times[x] - times[y])
                         if ((dist < 25 ** 2) and (dt < 6000)):
-                            ret = True;
-                            brk = True;
+                            ret = True
+                            brk = True
                     y += 1
                 x += 1
         else:
@@ -450,7 +498,8 @@ class Game:
             if(self.gameEndCode == conf.get()['codes']['ac_collide']):
                 # Check if sound is playing and if not play it. (Probably never happen in this call)
                 if not self.channel_collision.get_busy():
-                    self.channel_collision.play(self.sound_collision)
+                    if not self.mute:
+                        self.channel_collision.play(self.sound_collision)
                 c.add(gui.Label("COLLISION!!!!"), 0, 0)
             elif(self.gameEndCode == conf.get()['codes']['time_up']):
                 c.add(gui.Label("Time up!"), 0, 0)
