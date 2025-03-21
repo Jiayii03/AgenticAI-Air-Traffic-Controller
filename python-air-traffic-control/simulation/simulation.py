@@ -41,10 +41,12 @@ class Simulation:
         self.destinations = Destination.generateGameDestinations(screen_size[0], screen_size[1])
         self.obstacles = Obstacle.generateGameObstacles(screen_size[0], screen_size[1], self.destinations)
         self.aircraft = []
+        self.collision_radius = conf.get()['aircraft']['collision_radius']
         
         # Track simulation state
         self.active_aircraft = []
         self.collision_pairs = []
+        self.recent_collisions = []
         self.done = False
         self.step_count = 0
         
@@ -60,6 +62,7 @@ class Simulation:
         self.aircraft = []
         self.active_aircraft = []
         self.collision_pairs = []
+        self.recent_collisions = []
         self.done = False
         self.step_count = 0
         
@@ -71,6 +74,8 @@ class Simulation:
     def step(self, actions):
         """Execute actions and advance simulation by one step."""
         self.step_count += 1
+        had_collision = False
+        num_planes_landed = 0
         rewards_dict = {ac.getIdent(): 0 for ac in self.aircraft}
         
         # Apply actions to aircraft
@@ -94,6 +99,10 @@ class Simulation:
             if reached_destination:
                 landed_aircraft.append(ac)
                 rewards_dict[ac.getIdent()] += 200  # Reward for successful landing
+                num_planes_landed += 1
+                # Add time bonus to incentivize speed
+                time_bonus = max(50, 200 - self.step_count/50)  # Decreases over time
+                rewards_dict[ac.getIdent()] += time_bonus  # Reward reduces with time
                 print(f"Aircraft {ac.getIdent()} landed successfully, +200 reward")
         
         # Remove landed aircraft
@@ -107,15 +116,23 @@ class Simulation:
             rewards_dict[ac1.getIdent()] -= 500  # Penalty for collision
             rewards_dict[ac2.getIdent()] -= 500
             print(f"Collision detected between {ac1.getIdent()} and {ac2.getIdent()}, -500 reward")
+            had_collision = True
             self.done = True  # End episode on collision
         
         # Check obstacle collisions
         for obs in self.obstacles:
-            collided = obs.collideAircraft(self.aircraft)
             for ac in self.aircraft:
                 if ac in obs.colliding and ac.getIdent() in rewards_dict:
-                    rewards_dict[ac.getIdent()] -= 100  # Penalty for obstacle collision
-                    print(f"Obstacle collision detected for {ac.getIdent()}, -100 reward")
+                    # Check if this aircraft already had a collision recently
+                    if ac.getIdent() not in self.recent_collisions:
+                        rewards_dict[ac.getIdent()] -= 50
+                        self.recent_collisions[ac.getIdent()] = self.step_count
+                        print(f"Obstacle collision detected for {ac.getIdent()}, -50 reward")
+                    elif self.step_count - self.recent_collisions[ac.getIdent()] > 10:
+                        # Only penalize again after 10 steps
+                        rewards_dict[ac.getIdent()] -= 50
+                        self.recent_collisions[ac.getIdent()] = self.step_count
+                        print(f"Obstacle collision detected for {ac.getIdent()}, -50 reward")
         
         # Get current state
         state = self._get_state()
@@ -124,7 +141,7 @@ class Simulation:
         if len(self.aircraft) == 0:
             self.done = True
         
-        return state, rewards_dict, self.done, {}
+        return state, rewards_dict, self.done, {"num_planes_landed": num_planes_landed, "had_collision": had_collision}
     
     def _spawn_aircraft(self, count):
         """Spawn specified number of aircraft."""
@@ -150,60 +167,68 @@ class Simulation:
             self.aircraft.append(ac)
     
     def _apply_action(self, aircraft, action):
-        """Apply an action to an aircraft.
-        
-        Actions:
-        0: Maintain course (N)
-        1: Hard left (HL)
-        2: Medium left (ML)
-        3: Medium right (MR)
-        4: Hard right (HR)
-        """
-        # Store the original destination (last waypoint) if it exists
-        final_destination = None
-        if len(aircraft.waypoints) > 0:
-            final_destination = aircraft.waypoints[-1]
-        
-        # Current location and heading
+        """Apply an action to an aircraft."""
+        # Get current location and destination
         curr_loc = aircraft.getLocation()
-        curr_heading = aircraft.getHeading()
         
-        # Calculate new heading based on action
-        if action == 0:  # N - maintain course
-            new_heading = curr_heading
-        elif action == 1:  # HL - hard left
-            new_heading = (curr_heading - 90) % 360
-        elif action == 2:  # ML - medium left
-            new_heading = (curr_heading - 45) % 360
-        elif action == 3:  # MR - medium right
-            new_heading = (curr_heading + 45) % 360
-        elif action == 4:  # HR - hard right
-            new_heading = (curr_heading + 90) % 360
+        # Store original destination (last waypoint)
+        destination = None
+        if len(aircraft.waypoints) > 0:
+            destination = aircraft.waypoints[-1]  # Last waypoint is destination
         
-        # Calculate new waypoint location based on heading and distance
-        distance = 100  # Distance to place waypoint
-        rad_heading = np.radians(new_heading)
-        dx = distance * np.sin(rad_heading)
-        dy = -distance * np.cos(rad_heading)
-        
-        new_waypoint = (int(curr_loc[0] + dx), int(curr_loc[1] + dy))
-        
-        # Create and add tactical waypoint
-        tactical_waypoint = Waypoint(new_waypoint)
+        # Check for collision risk with other aircraft
+        collision_risk = False
+        for other_ac in self.aircraft:
+            if other_ac != aircraft:
+                dist = Utility.locDist(curr_loc, other_ac.getLocation())
+                if dist < self.collision_radius:  # Threshold for collision risk
+                    collision_risk = True
+                    break
         
         # Clear existing waypoints
         aircraft.waypoints = []
         
-        # First add destination (if it exists), THEN add tactical waypoint
-        if final_destination:
-            aircraft.addWaypoint(final_destination)  # Add destination first
+        # Add destination back if it exists
+        if destination:
+            aircraft.addWaypoint(destination)
+        else:
+            # If no destination exists, just maintain current heading
+            print(f"Aircraft {aircraft.getIdent()}: No destination found!")
+            return
         
-        # For maintain course (action 0), don't add tactical waypoint
-        # Just keep the destination
-        if action != 0:
-            aircraft.addWaypoint(tactical_waypoint)  # Add tactical waypoint second
+        # Determine if we need a tactical waypoint
+        if collision_risk and action != 0:
+            # Apply the selected action's heading change
+            curr_heading = aircraft.getHeading()
+            
+            # Apply heading change based on action
+            if action == 1:  # HL - hard left
+                new_heading = (curr_heading - 90) % 360
+            elif action == 2:  # ML - medium left
+                new_heading = (curr_heading - 45) % 360
+            elif action == 3:  # MR - medium right
+                new_heading = (curr_heading + 45) % 360
+            elif action == 4:  # HR - hard right
+                new_heading = (curr_heading + 90) % 360
+            else:  # N - maintain course
+                new_heading = curr_heading
         
-        print(f"Aircraft {aircraft.getIdent()}: Action={action}, Waypoints={[wp.getLocation() for wp in aircraft.waypoints]}")
+            # Calculate new waypoint location
+            distance = 50  # Standard distance
+            rad_heading = np.radians(new_heading)
+            dx = distance * np.sin(rad_heading)
+            dy = -distance * np.cos(rad_heading)
+            new_waypoint = (int(curr_loc[0] + dx), int(curr_loc[1] + dy))
+            
+            # Create and insert tactical waypoint
+            tactical_waypoint = Waypoint(new_waypoint)
+            aircraft.waypoints.insert(0, tactical_waypoint)  # Insert at beginning
+            
+            print(f"Aircraft {aircraft.getIdent()}: Action={action}, Applied tactical waypoint")
+        else:
+            print(f"Aircraft {aircraft.getIdent()}: Direct routing to destination")
+        
+        print(f"Aircraft {aircraft.getIdent()}: Waypoints={[wp.getLocation() for wp in aircraft.waypoints]}")
     
     def _detect_collisions(self):
         """Detect aircraft pairs that are in potential collision."""

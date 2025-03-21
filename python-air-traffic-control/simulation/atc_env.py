@@ -5,7 +5,6 @@ import numpy as np
 import pygame
 import sys
 import os
-import json
 
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -33,7 +32,7 @@ class ATCEnv(gym.Env):
     
     metadata = {'render.modes': ['human', 'rgb_array']}
     
-    def __init__(self, num_planes=5, num_obstacles=3, screen_size=(800, 800)):
+    def __init__(self, num_planes=3, num_obstacles=2, screen_size=(800, 800)):
         super(ATCEnv, self).__init__()
         
         # Initialize the simulation
@@ -91,20 +90,24 @@ class ATCEnv(gym.Env):
     
     def step(self, action):
         """Execute action and advance the environment by one timestep."""
-        # When only one aircraft remains or no aircraft pairs found
-        if len(self.simulation.aircraft) <= 1 or not self.aircraft_pairs:
+        # When no aircraft remain or no pairs found
+        if len(self.simulation.aircraft) == 0 or not self.aircraft_pairs:
+            # If all aircraft have landed - episode is done
+            if len(self.simulation.aircraft) == 0:
+                observation = np.zeros(5, dtype=np.float32)
+                return observation, 0, True, False, {"num_planes_landed": 0, "had_collision": False}
+                
+            # Handle case with one aircraft remaining
             state, rewards_dict, done, info = self.simulation.step([0] * len(self.simulation.aircraft))
+            observation = np.zeros(5, dtype=np.float32)
+            reward = sum(rewards_dict.values())
             
-            # Single aircraft cases need special observation handling
+            # Calculate additional rewards for the remaining aircraft
             if len(self.simulation.aircraft) == 1:
-                # Create a dummy observation with zeros but correct dimensions
-                observation = np.zeros(5, dtype=np.float32)  # Match expected network input
+                # Your existing code for single aircraft rewards
+                pass
                 
-                # Get reward from the last aircraft
-                reward = sum(rewards_dict.values())
-                
-                self._update_aircraft_pairs(state)
-                return observation, reward, done, False, info
+            return observation, reward, done, False, info
             
         # Get the pair of aircraft we're controlling
         ac1_id, ac2_id = self.aircraft_pairs[self.pair_index]
@@ -144,7 +147,7 @@ class ATCEnv(gym.Env):
         # Get new observation
         if not self.aircraft_pairs:
             # No more pairs, return a default observation
-            observation = np.zeros(3, dtype=np.float32)
+            observation = np.zeros(self.observation_space.shape[0], dtype=np.float32)
         elif self.pair_index >= len(self.aircraft_pairs):
             # Reset to the first pair if current index is out of bounds
             self.pair_index = 0
@@ -152,6 +155,13 @@ class ATCEnv(gym.Env):
         else:
             # Get observation for the current pair
             observation = self._get_observation(self.aircraft_pairs[self.pair_index])
+            
+        # Ensure observation is 5D (equal to observation space)
+        if len(observation) != self.observation_space.shape[0]:
+            # Pad with zeros if needed
+            padded_obs = np.zeros(5, dtype=np.float32)
+            padded_obs[:len(observation)] = observation
+            observation = padded_obs
         
         return observation, reward, done, False, info
     
@@ -171,7 +181,7 @@ class ATCEnv(gym.Env):
             for j, ac2 in enumerate(state['aircraft']):
                 if i < j:  # Check each pair only once
                     dist = Utility.locDist(ac1['location'], ac2['location'])
-                    if dist < 50:  # Threshold distance for potential collision
+                    if dist < self.collision_radius:  # Threshold distance for potential collision, =50
                         self.aircraft_pairs.append((ac1['id'], ac2['id']))
                         print(f"Found {len(self.aircraft_pairs)} aircraft pairs in potential collision")
                         
@@ -240,7 +250,10 @@ class ATCEnv(gym.Env):
         # For a proper penalty that's 0 when far apart and negative when close:
         distance_reward = 0
         if distance < radius:
-            distance_reward = -300 * (1 - (distance / radius)**2)
+            distance_reward = -500 * (1 - (distance / radius)**2)
+        # Add a moderate negative reward when aircraft are approaching collision radius but not yet within it
+        # if distance < radius * 2 and distance >= radius:
+        #     distance_reward = -50 * (1 - ((distance - radius) / radius)**2)
         
         # 2. Destination reward: reward progress toward destination
         destination_reward = 0
@@ -248,17 +261,24 @@ class ATCEnv(gym.Env):
             dest = ac1_state['waypoints'][-1]
             distance_to_go = Utility.locDist(ac1_state['location'], dest)
             
-            # Exponentially increasing reward as aircraft gets closer
-            proximity_factor = np.exp(max(0, (100 - distance_to_go) / 20))
+            # Cap the exponential proximity factor to prevent explosion
+            proximity_factor = min(10, np.exp(max(0, (100 - distance_to_go) / 20)))
             destination_reward = 100 * proximity_factor
-            
-            # Print for debugging
-            print(f"Destination reward: {destination_reward} (distance: {distance_to_go})")
+
+        # 3. Progressive time penalty - increases with step count
+        # Start small but grow over time to counterbalance large positive rewards
+        step_count = self.simulation.step_count
+        time_penalty = -0.5 * (1 + step_count / 500)
         
-        # Total reward
-        reward = distance_reward + 0.1 * destination_reward
+        # Log the reward components for debugging
+        print(f"Reward components - Distance: {distance_reward:.2f}, Destination: {destination_reward:.2f}, Time: {time_penalty:.2f}")
         
-        return max(min(reward, 100), -100)  # Limit between -100 and 100 per step
+        # Combine rewards with appropriate scaling
+        reward = 1.0 * distance_reward + 0.05 * destination_reward + 0.1 * time_penalty
+        
+        max_reward = max(5, 50 - step_count/50)  # Starts at 50, decreases faster over time
+        
+        return max(min(reward, max_reward), -100)  # Cap reward
     
     def _mirror_action(self, action):
         """Mirror an action for the intruder aircraft. Actions are defined in simulation > _apply_action()."""

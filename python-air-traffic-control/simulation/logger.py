@@ -17,8 +17,8 @@ class Logger:
         os.makedirs(log_dir, exist_ok=True)
         
         # Create a timestamped log filename
-        timestamp = time.strftime("%Y%m%d-%H%M%S")
-        self.log_filename = f"{log_dir}/{prefix}_{timestamp}.txt"
+        self.timestamp = time.strftime("%Y%m%d-%H%M%S")
+        self.log_filename = f"{log_dir}/{prefix}_{self.timestamp}.txt"
         self.terminal = sys.stdout
         self.log_file = None
     

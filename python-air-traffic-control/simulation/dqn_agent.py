@@ -31,8 +31,36 @@ class ReplayBuffer:
         self.buffer.append((state, action, reward, next_state, done))
         
     def sample(self, batch_size):
-        states, actions, rewards, next_states, dones = zip(*random.sample(self.buffer, batch_size))
-        return np.array(states), np.array(actions), np.array(rewards), np.array(next_states), np.array(dones)
+        """Sample a batch of experiences from the buffer."""
+        indices = np.random.randint(0, len(self.buffer), size=batch_size)
+        batch = [self.buffer[idx] for idx in indices]
+        
+        states, actions, rewards, next_states, dones = zip(*batch)
+        
+        # Make sure all states have the same shape by padding if necessary
+        max_dim = max(len(s) for s in states)
+        states_padded = []
+        next_states_padded = []
+        
+        for s in states:
+            if len(s) < max_dim:
+                # Pad with zeros to match the largest dimension
+                padded = np.zeros(max_dim, dtype=np.float32)
+                padded[:len(s)] = s
+                states_padded.append(padded)
+            else:
+                states_padded.append(s)
+        
+        for s in next_states:
+            if len(s) < max_dim:
+                # Pad with zeros to match the largest dimension
+                padded = np.zeros(max_dim, dtype=np.float32)
+                padded[:len(s)] = s
+                next_states_padded.append(padded)
+            else:
+                next_states_padded.append(s)
+        
+        return np.array(states_padded), np.array(actions), np.array(rewards), np.array(next_states_padded), np.array(dones)
     
     def __len__(self):
         return len(self.buffer)

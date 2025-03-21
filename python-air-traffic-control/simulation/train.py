@@ -12,8 +12,7 @@ import time
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-
-def train_dqn_agent(episodes=1, render_every=50):
+def train_dqn_agent(episodes=3, render_every=50):
     """Train a DQN agent on the ATC environment."""
     # Initialize logger
     logger = Logger(log_dir='logs', prefix='dqn_training').start()
@@ -43,12 +42,15 @@ def train_dqn_agent(episodes=1, render_every=50):
     
     # Load existing model if available
     model_path = 'models/dqn_atc_model.pth'
-    if os.path.exists(model_path):
-        print(f"Loading existing model from {model_path}")
-        agent.load(model_path)
+    # if os.path.exists(model_path):
+    #     print(f"Loading existing model from {model_path}")
+    #     agent.load(model_path)
     
     # Training loop
     episode_rewards = []
+    episode_steps = []
+    successful_landings_per_episode = []
+    collision_rate = []
     
     print("Entering training loop...")
     for episode in range(episodes):
@@ -58,6 +60,9 @@ def train_dqn_agent(episodes=1, render_every=50):
         total_reward = 0
         done = False
         step_count = 0
+        initial_aircraft_count = len(env.simulation.aircraft)
+        landed_aircraft_count = 0
+        had_collision = False
         
         # Render the environment at specified intervals
         # render = episode % render_every == 0
@@ -74,6 +79,12 @@ def train_dqn_agent(episodes=1, render_every=50):
             # Take action
             next_state, reward, done, truncated, info = env.step(action)
             total_reward += reward
+            # Extract landing and collision info
+            if "num_planes_landed" in info:
+                landed_aircraft_count += info["num_planes_landed"]
+                
+            if "had_collision" in info and info["had_collision"]:
+                had_collision = True
             print(f"Step {step_count}: Action={action}, Reward={reward:.4f}, Total Reward={total_reward:.4f}")
             
             # Update the agent
@@ -83,38 +94,102 @@ def train_dqn_agent(episodes=1, render_every=50):
             state = next_state
             step_count += 1
             
-            # if step_count >= 3000:
-            #     print("Episode aborted after 1000 steps")
-            #     break
+            if step_count >= 3000:
+                print("Episode aborted after 3000 steps")
+                break
         
         # Log results
         episode_rewards.append(total_reward)
         episode_end_time = time.time()
         episode_duration = episode_end_time - episode_start_time
+        episode_steps.append(step_count)
+        successful_landings_per_episode.append(landed_aircraft_count)
+        collision_rate.append(1 if had_collision else 0)
         print(f"Episode {episode+1} complete, Steps: {step_count}, Total Episode Reward: {total_reward:.2f}")
         print(f"Episode {episode+1} took {episode_duration:.2f} seconds")
-        
-        # Print progress
-        if (episode + 1) % 10 == 0:
-            avg_reward = np.mean(episode_rewards[-10:])
-            print(f"Episode {episode+1}/{episodes}, Avg Reward: {avg_reward:.2f}, Epsilon: {agent.epsilon:.2f}")
+        print(f"Aircraft landed in episode {episode+1}: {landed_aircraft_count}/{initial_aircraft_count}")
+        if had_collision:
+            print(f"Episode {episode+1} ended in a collision")
+        else:
+            if landed_aircraft_count > 0:
+                print(f"Average steps per landing for episode {episode+1}: {step_count / landed_aircraft_count:.1f}")
+            else:
+                print(f"No aircraft landed in episode {episode+1}")
         
         # Save model periodically
         # if (episode + 1) % 50 == 0:
         #     agent.save(model_path)
         #     print(f"Model saved to {model_path}")
     
-    # Save final model
-    # agent.save(model_path)
-    # print(f"Final model saved to {model_path}")
+    #------------- Save final model after all episodes -------------
+    agent.save(model_path)
+    print(f"Final model saved to {model_path}")
     
-    # Plot learning curve
-    plt.figure(figsize=(10, 6))
+    # --------------- Print training results ---------------
+    avg_steps = sum(episode_steps) / len(episode_steps)
+    avg_landings = sum(successful_landings_per_episode) / len(successful_landings_per_episode)
+    collision_percentage = (sum(collision_rate) / len(collision_rate)) * 100
+
+    print(f"Training results across {len(episode_steps)} episodes:")
+    print(f"Average steps per episode: {avg_steps:.1f}")
+    print(f"Average aircraft landed: {avg_landings:.2f}/{initial_aircraft_count}")
+    print(f"Collision rate: {collision_percentage:.1f}%")
+    
+    # --------------- Plotting ---------------
+    plt.figure(figsize=(15, 10))
+
+    # Plot 1: Total Reward per Episode
+    plt.subplot(2, 2, 1)
     plt.plot(episode_rewards)
     plt.xlabel('Episode')
+    plt.xticks(range(0, len(episode_rewards)))
     plt.ylabel('Total Reward')
-    plt.title('DQN Learning Curve')
-    plt.savefig('dqn_learning_curve.png')
+    plt.title('DQN Learning Curve (Total Reward)')
+    plt.grid(True)
+
+    # Plot 2: Steps per Landing (for successful episodes)
+    plt.subplot(2, 2, 2)
+    successful_episodes = [i for i in range(len(collision_rate)) if not collision_rate[i]]
+    if successful_episodes:
+        # Calculate steps per landing for each successful episode
+        steps_per_landing = [episode_steps[i] / successful_landings_per_episode[i] 
+                            if successful_landings_per_episode[i] > 0 else 0 
+                            for i in successful_episodes]
+        plt.plot(successful_episodes, steps_per_landing)
+        plt.xlabel('Episode')
+        plt.xticks(range(0, len(successful_episodes)))
+        plt.ylabel('Steps per Landing')
+        plt.title('Efficiency (Steps per Landing for Successful Episodes)')
+        plt.grid(True)
+    else:
+        plt.text(0.5, 0.5, 'No successful episodes yet', ha='center', va='center')
+
+    # Plot 3: Collision Rate (running average)
+    plt.subplot(2, 2, 3)
+    window_size = min(10, len(collision_rate))  # Use smaller window if not enough episodes
+    if window_size > 0:
+        running_collision_rate = [sum(collision_rate[max(0, i-window_size+1):i+1]) / window_size * 100 
+                                for i in range(len(collision_rate))]
+        plt.plot(running_collision_rate)
+        plt.xlabel('Episode')
+        plt.ylabel('Collision Rate (%)')
+        plt.xticks(range(0, len(collision_rate)))
+        plt.title(f'Safety (Collision Rate - {window_size}-episode average)')
+        plt.ylim(0, 100)
+        plt.grid(True)
+
+    # Plot 4: Successful Landings per Episode
+    plt.subplot(2, 2, 4)
+    plt.plot(successful_landings_per_episode)
+    plt.xlabel('Episode')
+    plt.ylabel('Aircraft Landed')
+    plt.xticks(range(0, len(episode_rewards)))
+    plt.title('Success (Aircraft Landed per Episode)')
+    plt.ylim(0, initial_aircraft_count + 0.5)
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.savefig(f"results/dqn_training_results_{logger.timestamp}.png")
     plt.show()
     
     return agent
