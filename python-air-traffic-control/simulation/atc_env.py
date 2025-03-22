@@ -16,18 +16,20 @@ import conf
 class ATCEnv(gym.Env):
     """
     Air Traffic Control environment for OpenAI Gym.
-    
+
     State Space:
-    - Distance to intruder aircraft (d): [0, 50] pixels, discretized into 50 buckets
-    - Angle to intruder (ρ): [0, 360) degrees, discretized into 36 buckets of 10 degrees
-    - Relative heading of intruder (θ): [0, 360) degrees, discretized into 36 buckets of 10 degrees
-    
+    - Distance to intruder aircraft (d): [0, 150] pixels
+    - Angle to intruder (ρ): [0, 360) degrees
+    - Relative heading of intruder (θ): [0, 360) degrees
+    - Angle to destination: [0, 360) degrees
+    - Angular difference to destination: [0, 180] degrees
+
     Action Space:
     - 0: Maintain course (N)
-    - 1: Hard left (HL)
-    - 2: Medium left (ML)
-    - 3: Medium right (MR)
-    - 4: Hard right (HR)
+    - 1: Medium left (ML): 90° turn
+    - 2: Slight left (SL): 45° turn
+    - 3: Medium right (MR): 90° turn
+    - 4: Slight right (SR): 45° turn
     """
     
     metadata = {'render.modes': ['human', 'rgb_array']}
@@ -47,20 +49,23 @@ class ATCEnv(gym.Env):
             distance_between_pair,      # Distance between the two aircraft in the pair
             angle_to_intruder,          # Angle from aircraft 1 to aircraft 2
             relative_heading,           # Relative heading of aircraft 2 compared to aircraft 1
-            distance_to_obstacle,       # Distance from aircraft 1 to nearest obstacle
-            angle_to_obstacle,          # Angle from aircraft 1 to nearest obstacle
-            distance_to_destination,    # Distance from aircraft 1 to its destination
-            angle_to_destination        # Angle from aircraft 1 to its destination
+            angle_to_destination,       # Angle from aircraft 1 to its destination
+            angular_diff_to_dest        # Angular difference between current heading and destination angle
         ]
         """
         self.observation_space = spaces.Box(
-            low=np.array([0, 0, 0, 0, 0, 0, 0]),
-            high=np.array([50, 360, 360, 50, 360, 1000, 360]),  # Distance to destination might be larger
+            low=np.array([0, 0, 0, 0, 0]),
+            high=np.array([150, 360, 360, 360, 180]),  # Increased max distance to match collision risk radius
             dtype=np.float32
         )
         
         # Collision detection threshold
-        self.collision_radius = conf.get()['aircraft']['collision_radius']
+        self.collision_risk_radius = conf.get()['rl_agent']['collision_risk_radius']
+        self.cooldown_frames = conf.get()['rl_agent']['cooldown_frames']
+        
+        # Add cooldown tracking
+        self.aircraft_cooldowns = {}  # Dictionary to track cooldown for each aircraft
+        self.current_frame = 0        # Frame counter
         
         # Target aircraft pair for learning (will be updated in reset)
         self.pair_index = 0
@@ -93,81 +98,69 @@ class ATCEnv(gym.Env):
     
     def step(self, action):
         """Execute action and advance the environment by one timestep."""
-        # When no aircraft remain or no pairs found
-        if len(self.simulation.aircraft) == 0 or not self.aircraft_pairs:
-            # If all aircraft have landed - episode is done
-            if len(self.simulation.aircraft) == 0:
-                observation = np.zeros(self.observation_space.shape[0], dtype=np.float32)
-                return observation, 0, True, False, {"num_planes_landed": 0, "had_collision": False}
-                
-            # Handle case with one aircraft remaining
-            state, rewards_dict, done, info = self.simulation.step([0] * len(self.simulation.aircraft))
+        self.current_frame += 1  # Increment frame counter
+        
+        # When no aircraft remain - episode is done
+        if len(self.simulation.aircraft) == 0:
             observation = np.zeros(self.observation_space.shape[0], dtype=np.float32)
-            reward = sum(rewards_dict.values())
-            
-            # Calculate additional rewards for the remaining aircraft
-            if len(self.simulation.aircraft) == 1:
-                # Your existing code for single aircraft rewards
-                print("Single aircraft remaining, no reward calculation")
-                pass
-                
-            return observation, reward, done, False, info
-            
-        # Get the pair of aircraft we're controlling
-        ac1_id, ac2_id = self.aircraft_pairs[self.pair_index]
+            return observation, 0, True, False, {"num_planes_landed": 0, "had_collision": False}
+        
+        # Update aircraft pairs to detect collision risks
+        state = self.simulation._get_state()
+        self._update_aircraft_pairs(state)
+        
+        # If no collision risks, all aircraft maintain course
+        if not self.aircraft_pairs:
+            state, rewards_dict, done, info = self.simulation.step([0] * len(self.simulation.aircraft)) # maintain course
+            observation = np.zeros(self.observation_space.shape[0], dtype=np.float32)
+            total_reward = sum(rewards_dict.values())
+            return observation, total_reward, done, False, info
+        
+        # Get the first pair to control
+        ac1_id, ac2_id = self.aircraft_pairs[0]  # Always use the first pair
+        self.logger.debug_print(f"Controlled aircraft pair: {ac1_id} - {ac2_id}")
         
         # Prepare actions for all aircraft
-        all_actions = []
-        for ac in self.simulation.aircraft:
-            if ac.getIdent() == ac1_id: # apply agent's selected action to ac1 (the first aircraft in the pair)
-                all_actions.append(action)
-            elif ac.getIdent() == ac2_id: # apply mirrored action to ac2 (the second aircraft in the pair)
-                mirrored_action = self._mirror_action(action)
-                all_actions.append(mirrored_action)
-            else:
-                # Other aircraft maintain course
-                all_actions.append(0)
+        all_actions = [0] * len(self.simulation.aircraft)  # Default: all maintain course
+        
+        # Apply action to the first pair
+        for i, ac in enumerate(self.simulation.aircraft):
+            if ac.getIdent() == ac1_id:
+                all_actions[i] = action
+            elif ac.getIdent() == ac2_id:
+                all_actions[i] = self._mirror_action(action)
         
         # Execute actions in simulation
         state, rewards_dict, done, info = self.simulation.step(all_actions)
-        
-        # Update aircraft pairs if there are any changes
-        self._update_aircraft_pairs(state)
-        
-        # Get simulation reward for target aircraft
-        sim_reward = 0
+
+        # NOW set the cooldowns for the aircraft pair we just controlled
+        self.aircraft_cooldowns[ac1_id] = self.current_frame
+        self.aircraft_cooldowns[ac2_id] = self.current_frame
+        self.logger.debug_print(f"Set cooldown for aircraft {ac1_id} and {ac2_id} at frame {self.current_frame}")
+
+        # Calculate reward for the specific aircraft pair we controlled
+        pair_reward = 0
         if ac1_id in rewards_dict:
-            sim_reward += rewards_dict[ac1_id]
+            pair_reward += rewards_dict[ac1_id]
         if ac2_id in rewards_dict:
-            sim_reward += rewards_dict[ac2_id]
-            
-        # Calculate additional reward for the target aircraft pair
+            pair_reward += rewards_dict[ac2_id]
+
+        # Add additional reward for collision avoidance
         additional_reward = self._calculate_reward(state, ac1_id, ac2_id)
-        
-        print(f"Step: {self.simulation.step_count}, Simulation Reward: {sim_reward:.2f} Additional Reward: {additional_reward:.2f}")
-        # Total reward is the combination
-        reward = sim_reward + additional_reward
-        
-        # Get new observation
-        if not self.aircraft_pairs:
-            # No more pairs, return a default observation
-            observation = np.zeros(self.observation_space.shape[0], dtype=np.float32)
-        elif self.pair_index >= len(self.aircraft_pairs):
-            # Reset to the first pair if current index is out of bounds
-            self.pair_index = 0
-            observation = self._get_observation(self.aircraft_pairs[self.pair_index])
+        total_reward = pair_reward + additional_reward
+
+        print(f"Step: {self.simulation.step_count}, Base Reward: {pair_reward:.2f}, Collision Avoidance Reward: {additional_reward:.2f}")
+
+        # Update pairs based on new state after taking action
+        self._update_aircraft_pairs(state)
+
+        # Get observation for the next step based on updated pairs
+        if self.aircraft_pairs:
+            observation = self._get_observation(self.aircraft_pairs[0])
         else:
-            # Get observation for the current pair
-            observation = self._get_observation(self.aircraft_pairs[self.pair_index])
-            
-        # Ensure observation is 5D (equal to observation space)
-        if len(observation) != self.observation_space.shape[0]:
-            # Pad with zeros if needed
-            padded_obs = np.zeros(self.observation_space.shape[0], dtype=np.float32)
-            padded_obs[:len(observation)] = observation
-            observation = padded_obs
+            observation = np.zeros(self.observation_space.shape[0], dtype=np.float32)
         
-        return observation, reward, done, False, info
+        return observation, total_reward, done, False, info
     
     def render(self, mode='human'):
         """Render the environment."""
@@ -184,19 +177,24 @@ class ATCEnv(gym.Env):
         for i, ac1 in enumerate(state['aircraft']):
             for j, ac2 in enumerate(state['aircraft']):
                 if i < j:  # Check each pair only once
+                    
                     dist = Utility.locDist(ac1['location'], ac2['location'])
-                    if dist < self.collision_radius:  # Threshold distance for potential collision, =50
-                        self.aircraft_pairs.append((ac1['id'], ac2['id']))
-                        print(f"Found {len(self.aircraft_pairs)} aircraft pairs in potential collision")
+                    if dist < self.collision_risk_radius: # if the distance is less than the collision risk radius
+                        # Skip if either aircraft is on cooldown
+                        if (ac1['id'] in self.aircraft_cooldowns and 
+                            self.current_frame - self.aircraft_cooldowns[ac1['id']] < self.cooldown_frames):
+                            self.logger.debug_print(f"Current frame: {self.current_frame}, Cooldown frame: {self.aircraft_cooldowns[ac1['id']]}")
+                            self.logger.debug_print(f"In collision risk, skipping aircraft {ac1['id']} due to cooldown")
+                            continue
+                        if (ac2['id'] in self.aircraft_cooldowns and 
+                            self.current_frame - self.aircraft_cooldowns[ac2['id']] < self.cooldown_frames):
+                            self.logger.debug_print(f"Current frame: {self.current_frame}, Cooldown frame: {self.aircraft_cooldowns[ac2['id']]}")
+                            self.logger.debug_print(f"In collision risk, skipping aircraft {ac2['id']} due to cooldown")
+                            continue
                         
-        # If no collision risks were found, use the closest pair
-        if not self.aircraft_pairs:
-            if len(state['aircraft']) >= 2:
-                # Find the closest pair of aircraft
-                self.aircraft_pairs = [self._find_closest_aircraft_pair()]
-                print(f"No collision risk, controlling closest pair: {self.aircraft_pairs[0]}")
-            else:
-                print("No collision risk, only one aircraft remaining")
+                        # If both aircraft are not on cooldown, add the pair
+                        self.aircraft_pairs.append((ac1['id'], ac2['id']))
+                        self.logger.debug_print(f"Adding aircraft pair: {ac1['id']} - {ac2['id']}, Distance: {dist:.2f}")
     
     def _get_observation(self, aircraft_pair):
         """Get observation for a pair of aircraft."""
@@ -205,49 +203,32 @@ class ATCEnv(gym.Env):
         ac2 = self._find_aircraft_by_id(ac2_id)
         
         if ac1 is None or ac2 is None:
-            return np.zeros(self.observation_space.shape[0], dtype=np.float32)  # Updated to 7 dimensions
+            return np.zeros(self.observation_space.shape[0], dtype=np.float32)
         
         # Calculate existing observation components
         distance = Utility.locDist(ac1.getLocation(), ac2.getLocation())
         angle = self._calculate_angle(ac1.getLocation(), ac2.getLocation())
         rel_heading = (angle - ac1.getHeading()) % 360
         
-        # Find nearest obstacle
-        nearest_obstacle = None
-        min_obstacle_dist = float('inf')
-        
-        for obs in self.simulation.obstacles:
-            dist = Utility.locDist(ac1.getLocation(), obs.location)
-            if dist < min_obstacle_dist:
-                min_obstacle_dist = dist
-                nearest_obstacle = obs
-        
-        # Default obstacle values
-        obstacle_dist = 50.0  # Maximum value if no obstacle
-        obstacle_angle = 0.0
-        
-        # Calculate obstacle-related observations
-        if nearest_obstacle:
-            obstacle_dist = min(Utility.locDist(ac1.getLocation(), nearest_obstacle.location), 50.0)
-            obstacle_angle = self._calculate_angle(ac1.getLocation(), nearest_obstacle.location)
-        
-        # NEW: Calculate destination-related observations
-        destination_dist = 1000.0  # Default maximum
+        # Calculate destination-related observations
         destination_angle = 0.0
+        angular_diff_to_dest = 0.0
         
         if len(ac1.waypoints) > 0:
             dest = ac1.waypoints[-1].getLocation()  # Assuming destination is last waypoint
-            destination_dist = Utility.locDist(ac1.getLocation(), dest)
             destination_angle = self._calculate_angle(ac1.getLocation(), dest)
+            
+            # Calculate angular difference between current heading and destination
+            angular_diff_to_dest = abs((ac1.getHeading() - destination_angle) % 360)
+            if angular_diff_to_dest > 180:
+                angular_diff_to_dest = 360 - angular_diff_to_dest
         
         return np.array([
             distance, 
             angle, 
-            rel_heading, 
-            obstacle_dist, 
-            obstacle_angle,
-            destination_dist,
-            destination_angle
+            rel_heading,
+            destination_angle,
+            angular_diff_to_dest
         ], dtype=np.float32)
     
     def _calculate_reward(self, state, ac1_id, ac2_id):
@@ -269,68 +250,72 @@ class ATCEnv(gym.Env):
         # Calculate distance
         distance = Utility.locDist(ac1_state['location'], ac2_state['location'])
         
-        # Reward components
-        # 1. Distance reward: penalize getting too close
-        radius = self.collision_radius
-        # For a proper penalty that's 0 when far apart and negative when close:
-        # Distance reward with multiple danger zones
-        distance_reward = 0
-        if distance < radius:  # Immediate danger zone
-            distance_reward = -500 * (1 - (distance / radius)**2)
-        elif distance < radius * 2:  # Warning zone
-            distance_reward = -100 * (1 - ((distance - radius) / radius)**2)
-        elif distance < radius * 3:  # Caution zone
-            distance_reward = -30 * (1 - ((distance - radius * 2) / radius)**2)
+        # 1. Distance reward - continuous function instead of zones
+        radius = self.collision_risk_radius
+        distance_factor = 1.0 - min(1.0, distance/radius)
+        distance_reward = -300 * (distance_factor ** 2)  # Quadratic penalty
         
-        # 2. Destination reward: reward progress toward destination
-        destination_reward = 0
+        # 2. Destination alignment reward
+        dest_alignment_reward = 0
         if len(ac1_state['waypoints']) > 0:
+            # Get destination
             dest = ac1_state['waypoints'][-1]
-            distance_to_go = Utility.locDist(ac1_state['location'], dest)
             
-            # Cap the exponential proximity factor to prevent explosion
-            proximity_factor = min(10, np.exp(max(0, (100 - distance_to_go) / 20)))
-            destination_reward = 100 * proximity_factor
-
-        # 3. Progressive time penalty - increases with step count
-        # Start small but grow over time to counterbalance large positive rewards
-        step_count = self.simulation.step_count
-        time_penalty = -0.5 * (1 + step_count / 500)
+            # Calculate angle to destination
+            dest_angle = self._calculate_angle(ac1_state['location'], dest)
+            
+            # Calculate angular difference between current heading and destination
+            hdg_to_dest_diff = abs((ac1_state['heading'] - dest_angle) % 360)
+            if hdg_to_dest_diff > 180:
+                hdg_to_dest_diff = 360 - hdg_to_dest_diff
+                
+            # Higher reward for pointing toward destination
+            dest_alignment_reward = 50 * (1 - hdg_to_dest_diff/180)
         
-        # 4. Reward for heading away from each other when close
+        # 3. Heading away from each other reward
         heading_reward = 0
-        if distance < radius * 3:  # Only apply when relatively close
+        if distance < radius * 3:  # Only when relatively close
             # Calculate relative heading between aircraft
-            heading_diff = abs((ac1_state["heading"] - ac2_state["heading"]) % 360)
+            heading_diff = abs((ac1_state['heading'] - ac2_state['heading']) % 360)
             if heading_diff > 180:
                 heading_diff = 360 - heading_diff
                 
             # Reward diverging headings (closer to 180 degrees)
             heading_reward = 50 * (heading_diff / 180)
         
+        # 4. Time penalty - discourages excessive maneuvering
+        step_count = self.simulation.step_count
+        time_penalty = -0.5 * (1 + step_count / 500)
+        
         # Log the reward components for debugging
-        print(f"Reward components - Distance: {distance_reward:.2f}, Heading: {heading_reward:.2f}, Destination: {destination_reward:.2f}, Time: {time_penalty:.2f}")
+        print(f"Reward components - Distance: {distance_reward:.2f}, Heading Away: {heading_reward:.2f}, Dest Alignment: {dest_alignment_reward:.2f}, Time: {time_penalty:.2f}")
         
         # Balance the importance of different components
         reward = (1.0 * distance_reward) + \
-                (0.5 * heading_reward) + \
-                (0.2 * destination_reward) + \
+                (0.8 * heading_reward) + \
+                (0.8 * dest_alignment_reward) + \
                 (0.2 * time_penalty)
         
-        max_reward = max(5, 50 - step_count/50)  # Starts at 50, decreases faster over time
-        
-        return max(min(reward, max_reward), -100)  # Cap reward
+        return max(min(reward, 50), -100)  # Cap reward
     
     def _mirror_action(self, action):
-        """Mirror an action for the intruder aircraft. Actions are defined in simulation > _apply_action()."""
-        if action == 1:  # HL -> HR
-            return 4
-        elif action == 2:  # ML -> MR
+        """Mirror an action for the intruder aircraft.
+        
+        Action mapping:
+        - 0: Maintain course (N) -> 0: Maintain course (N)
+        - 1: Medium left (ML) -> 3: Medium right (MR)
+        - 2: Slight left (SL) -> 4: Slight right (SR)
+        - 3: Medium right (MR) -> 1: Medium left (ML)
+        - 4: Slight right (SR) -> 2: Slight left (SL)
+        """
+        if action == 1:  # ML -> MR
             return 3
+        elif action == 2:  # SL -> SR
+            return 4
         elif action == 3:  # MR -> ML
-            return 2
-        elif action == 4:  # HR -> HL
             return 1
+        elif action == 4:  # SR -> SL
+            return 2
         else:
             return action  # N remains N
         
@@ -369,17 +354,3 @@ class ATCEnv(gym.Env):
         angle = (angle + 360) % 360
         
         return angle
-    
-    def _make_serializable(self, state):
-        """Convert state to JSON-serializable format."""
-        if isinstance(state, dict):
-            return {k: self._make_serializable(v) for k, v in state.items()}
-        elif isinstance(state, list):
-            return [self._make_serializable(item) for item in state]
-        elif isinstance(state, tuple):
-            return list(self._make_serializable(item) for item in state)
-        elif hasattr(state, '__dict__'):
-            # For objects like obstacles
-            return str(state)
-        else:
-            return state

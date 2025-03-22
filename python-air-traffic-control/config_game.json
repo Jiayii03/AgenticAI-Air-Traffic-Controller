@@ -31,7 +31,7 @@
 	},
 	"game":{
 		"gametime":180000,
-		"n_aircraft":30,
+		"n_aircraft":8,
 		"n_destinations":5,
 		"n_obstacles":5,
 		"framerate":40,
@@ -60,5 +60,13 @@
 		"speed_scalefactor":2000.0,
 		"collision_radius":50,
 		"draw_radius":false
+	},
+	"rl_agent": {
+		"enabled": true,
+		"model_path": "simulation/models/dqn_atc_model.pth",
+		"visualization": true,
+		"tactical_waypoint_distance": 50,
+		"cooldown_frames": 50,
+		"collision_risk_radius": 120
 	}
 }

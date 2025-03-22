@@ -8,18 +8,29 @@ import matplotlib.pyplot as plt
 import os
 import sys
 import time
+import torch
+import random
 
-# Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-def train_dqn_agent(episodes=200, render_every=50):
+import conf
+
+def train_dqn_agent(episodes=500, render_every=50, seed=42):
     """Train a DQN agent on the ATC environment."""
     # Initialize logger
     logger = Logger(log_dir='logs', prefix='dqn_training', debug=False).start()
+    
+    # Set the random seeds for reproducibility
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    random.seed(seed)
+    
+    num_planes = conf.get()["game"]["n_aircraft"]
+    num_obstacles = conf.get()["game"]["n_obstacles"]
 
     # Create the environment
     print("Creates an ATC environment...")
-    env = ATCEnv(logger=logger, num_planes=2, num_obstacles=1)
+    env = ATCEnv(logger=logger, num_planes=num_planes, num_obstacles=num_obstacles)
     
     # Get state and action dimensions from environment
     state_dim = env.observation_space.shape[0]
@@ -31,13 +42,22 @@ def train_dqn_agent(episodes=200, render_every=50):
     agent = DQNAgent(
         state_dim=state_dim,  # State space dimension
         action_dim=action_dim, # Action space dimension
+        lr=0.0001,              # Lower learning rate (from 0.001)
+        gamma=0.99,             # Keep high discount factor
+        epsilon=1.0,            # Start with full exploration
+        epsilon_min=0.05,       # Lower minimum exploration
+        epsilon_decay=0.999,    # Slower decay rate (was likely ~0.995)
+        buffer_size=50000,      # Larger replay buffer (from ~10000)
+        batch_size=64,          # Keep batch size
+        update_frequency=10,    # Update less frequently
+        target_update=500 
     )
     
     # Load existing model if available
     model_path = 'models/dqn_atc_model.pth'
-    if os.path.exists(model_path):
-        print(f"Loading existing model from {model_path}")
-        agent.load(model_path)
+    # if os.path.exists(model_path):
+    #     print(f"Loading existing model from {model_path}")
+    #     agent.load(model_path)
     
     # Training loop
     episode_rewards = []
@@ -49,25 +69,23 @@ def train_dqn_agent(episodes=200, render_every=50):
     training_start_time = time.time()
     for episode in range(episodes):
         print(f"Episode {episode+1}/{episodes}")
+        
+        # Use a different seed for each episode, but in a deterministic way
+        episode_seed = seed + episode
+        state, _ = env.reset(seed=episode_seed)
+    
         episode_start_time = time.time()
-        state, _ = env.reset()
         total_reward = 0
         done = False
         step_count = 0
-        initial_aircraft_count = len(env.simulation.aircraft)
+        initial_aircraft_count = num_planes
         landed_aircraft_count = 0
         had_collision = False
         
-        # Render the environment at specified intervals
-        # render = episode % render_every == 0
-        render = False
-        
         while not done:
-            # Render if needed
+            # Increment step count
             step_count += 1
-            if render:
-                env.render()
-                
+      
             # Select action
             action = agent.select_action(state)
             
@@ -88,7 +106,7 @@ def train_dqn_agent(episodes=200, render_every=50):
             # Move to next state
             state = next_state
             
-            if step_count >= 5000:
+            if step_count >= 3000:
                 print("Episode aborted after 3000 steps")
                 break
         
@@ -128,7 +146,7 @@ def train_dqn_agent(episodes=200, render_every=50):
     
     print(f"Training results across {len(episode_steps)} episodes:")
     print(f"Average steps per episode: {avg_steps:.1f}")
-    print(f"Average aircraft landed: {avg_landings:.2f}/{initial_aircraft_count}")
+    print(f"Average aircraft landed: {avg_landings:.2f}/{initial_aircraft_count:.2f}")
     print(f"Collision rate: {collision_percentage:.1f}%")
     print(f"Training complete, total duration: {training_duration:.2f} seconds")
     

@@ -43,11 +43,10 @@ class Simulation:
         self.obstacles = Obstacle.generateGameObstacles(screen_size[0], screen_size[1], self.destinations)
         self.aircraft = []
         self.collision_radius = conf.get()['aircraft']['collision_radius']
+        self.tactical_waypoint_distance = conf.get()['rl_agent']['tactical_waypoint_distance']
         
         # Track simulation state
-        self.active_aircraft = []
         self.collision_pairs = []
-        self.recent_collisions = []
         self.done = False
         self.step_count = 0
         
@@ -63,12 +62,20 @@ class Simulation:
         self.aircraft = []
         self.active_aircraft = []
         self.collision_pairs = []
-        self.recent_collisions = []
+        self.recent_collisions = {}
         self.done = False
         self.step_count = 0
         
-        # Spawn initial aircraft
-        self._spawn_aircraft(self.num_planes)
+        # Initialize spawn schedule instead of spawning all aircraft immediately
+        self.total_aircraft_to_spawn = self.num_planes
+        self.aircraft_spawned = 0
+        self.next_spawn_time = 0  # Spawn first aircraft immediately
+        self.spawn_interval_range = (20, 100)  # Frames between spawns
+        
+        # Spawn the first aircraft immediately
+        if self.total_aircraft_to_spawn > 0:
+            self._spawn_single_aircraft()
+            self.aircraft_spawned += 1
         
         return self._get_state()
     
@@ -79,6 +86,20 @@ class Simulation:
         num_planes_landed = 0
         rewards_dict = {ac.getIdent(): 0 for ac in self.aircraft}
         
+        # Check if it's time to spawn a new aircraft
+        if (self.aircraft_spawned < self.total_aircraft_to_spawn and 
+            self.step_count >= self.next_spawn_time):
+            self._spawn_single_aircraft()
+            self.aircraft_spawned += 1
+            
+            # Schedule next spawn
+            next_interval = np.random.randint(
+                self.spawn_interval_range[0], 
+                self.spawn_interval_range[1]
+            )
+            self.next_spawn_time = self.step_count + next_interval
+            self.logger.debug_print(f"Next aircraft spawn scheduled at step {self.next_spawn_time}")
+            
         # Apply actions to aircraft
         for i, ac in enumerate(self.aircraft):
             if i < len(actions):
@@ -87,10 +108,16 @@ class Simulation:
         # track aircraft progress
         for ac in self.aircraft:
             if len(ac.waypoints) > 0:
+                # Distance to final destination
                 dest = ac.waypoints[-1].getLocation()
                 current = ac.getLocation()
-                dist_to_go = Utility.locDist(current, dest)
-                self.logger.debug_print(f"Aircraft {ac.getIdent()}: Distance to destination: {dist_to_go:.2f}")
+                dist_to_dest = Utility.locDist(current, dest)
+                
+                # Distance to next waypoint (tactical or destination)
+                next_wp = ac.waypoints[0].getLocation()
+                dist_to_next = Utility.locDist(current, next_wp)
+                
+                self.logger.debug_print(f"Aircraft {ac.getIdent()} current position: {current} Distance to next waypoint: {dist_to_next:.2f}, to destination: {dist_to_dest:.2f}")
         
         # Update aircraft positions
         landed_aircraft = []
@@ -99,12 +126,12 @@ class Simulation:
             reached_destination = ac.update()
             if reached_destination:
                 landed_aircraft.append(ac)
-                rewards_dict[ac.getIdent()] += 200  # Reward for successful landing
                 num_planes_landed += 1
-                # Add time bonus to incentivize speed
-                time_bonus = max(50, 200 - self.step_count/50)  # Decreases over time
-                rewards_dict[ac.getIdent()] += time_bonus  # Reward reduces with time
-                print(f"Aircraft {ac.getIdent()} landed successfully, +200 reward")
+                # rewards_dict[ac.getIdent()] += 200  # Reward for successful landing
+                # # Add time bonus to incentivize speed
+                # time_bonus = max(50, 200 - self.step_count/50)  # Decreases over time
+                # rewards_dict[ac.getIdent()] += time_bonus  # Reward reduces with time
+                # print(f"Aircraft {ac.getIdent()} landed successfully, +200 reward")
         
         # Remove landed aircraft
         for ac in landed_aircraft:
@@ -114,26 +141,11 @@ class Simulation:
         self.collision_pairs = self._detect_collisions()
         for pair in self.collision_pairs:
             ac1, ac2 = pair
-            rewards_dict[ac1.getIdent()] -= 500  # Penalty for collision
-            rewards_dict[ac2.getIdent()] -= 500
-            print(f"Collision detected between {ac1.getIdent()} and {ac2.getIdent()}, -500 reward")
+            rewards_dict[ac1.getIdent()] -= 200  # Penalty for collision
+            rewards_dict[ac2.getIdent()] -= 200
+            print(f"Collision detected between {ac1.getIdent()} and {ac2.getIdent()}, -200 reward")
             had_collision = True
             self.done = True  # End episode on collision
-        
-        # Check obstacle collisions
-        for obs in self.obstacles:
-            for ac in self.aircraft:
-                if ac in obs.colliding and ac.getIdent() in rewards_dict:
-                    # Check if this aircraft already had a collision recently
-                    if ac.getIdent() not in self.recent_collisions:
-                        rewards_dict[ac.getIdent()] -= 50
-                        self.recent_collisions[ac.getIdent()] = self.step_count
-                        print(f"Obstacle collision detected for {ac.getIdent()}, -50 reward")
-                    elif self.step_count - self.recent_collisions[ac.getIdent()] > 10:
-                        # Only penalize again after 10 steps
-                        rewards_dict[ac.getIdent()] -= 50
-                        self.recent_collisions[ac.getIdent()] = self.step_count
-                        print(f"Obstacle collision detected for {ac.getIdent()}, -50 reward")
         
         # Get current state
         state = self._get_state()
@@ -144,9 +156,16 @@ class Simulation:
         
         return state, rewards_dict, self.done, {"num_planes_landed": num_planes_landed, "had_collision": had_collision}
     
-    def _spawn_aircraft(self, count):
-        """Spawn specified number of aircraft."""
-        for i in range(count):
+    def _spawn_single_aircraft(self):
+        """Spawn a single aircraft with minimum separation from existing aircraft."""
+        min_separation = 2.5 * self.collision_radius
+        max_attempts = 10
+        valid_position = False
+        attempts = 0
+        
+        while not valid_position and attempts < max_attempts:
+            attempts += 1
+            
             # Generate random spawn location on edge of screen
             side = np.random.randint(1, 5)
             if side == 1:  # Top
@@ -158,14 +177,23 @@ class Simulation:
             else:  # Left
                 loc = (0, np.random.randint(0, self.screen_size[1]))
             
-            # Select random destination
-            dest = np.random.choice(self.destinations)
-            
-            # Create aircraft
-            speed = conf.get()['aircraft']['speed_default']
-            ident = f"AC{i+1}"
-            ac = Aircraft(None, loc, speed, dest, ident)  # Pass None as game reference
-            self.aircraft.append(ac)
+            # Check distance to all existing aircraft
+            valid_position = True
+            for existing_ac in self.aircraft:
+                if Utility.locDist(loc, existing_ac.getLocation()) < min_separation:
+                    valid_position = False
+                    break
+        
+        # Select random destination
+        dest = np.random.choice(self.destinations)
+        
+        # Create aircraft
+        speed = conf.get()['aircraft']['speed_default']
+        ident = f"AC{self.aircraft_spawned+1}"
+        ac = Aircraft(None, loc, speed, dest, ident)
+        self.aircraft.append(ac)
+        
+        self.logger.debug_print(f"Spawned {ident} at {loc} heading to {dest.getLocation()}")
     
     def _apply_action(self, aircraft, action):
         """Apply an action to an aircraft."""
@@ -174,19 +202,20 @@ class Simulation:
         
         # Store original destination (last waypoint)
         destination = None
+        had_tactical_waypoint = False
+        
+        # Store all waypoints and check if there's more than just destination
         if len(aircraft.waypoints) > 0:
             destination = aircraft.waypoints[-1]  # Last waypoint is destination
+            had_tactical_waypoint = len(aircraft.waypoints) > 1
         
-        # Check for collision risk with other aircraft
-        collision_risk = False
-        for other_ac in self.aircraft:
-            if other_ac != aircraft:
-                dist = Utility.locDist(curr_loc, other_ac.getLocation())
-                if dist < self.collision_radius:  # Threshold for collision risk
-                    collision_risk = True
-                    break
+        # If aircraft already has tactical waypoints and action is to maintain course,
+        # don't modify the waypoints at all
+        if had_tactical_waypoint and action == 0:
+            self.logger.debug_print(f"Aircraft {aircraft.getIdent()}: Maintaining existing waypoints, Waypoints={[wp.getLocation() for wp in aircraft.waypoints]}")
+            return
         
-        # Clear existing waypoints
+        # Clear existing waypoints only if we're going to modify them
         aircraft.waypoints = []
         
         # Add destination back if it exists
@@ -197,25 +226,25 @@ class Simulation:
             print(f"Aircraft {aircraft.getIdent()}: No destination found!")
             return
         
-        # Determine if we need a tactical waypoint
-        if collision_risk and action != 0:
+        # Apply tactical waypoint if action is not "maintain course"
+        if action != 0:
             # Apply the selected action's heading change
             curr_heading = aircraft.getHeading()
             
             # Apply heading change based on action
-            if action == 1:  # HL - hard left
+            if action == 1:  # ML - Medium left (90° turn)
                 new_heading = (curr_heading - 90) % 360
-            elif action == 2:  # ML - medium left
+            elif action == 2:  # SL - Slight left (45° turn)
                 new_heading = (curr_heading - 45) % 360
-            elif action == 3:  # MR - medium right
-                new_heading = (curr_heading + 45) % 360
-            elif action == 4:  # HR - hard right
+            elif action == 3:  # MR - Medium right (90° turn)
                 new_heading = (curr_heading + 90) % 360
+            elif action == 4:  # SR - Slight right (45° turn)
+                new_heading = (curr_heading + 45) % 360
             else:  # N - maintain course
                 new_heading = curr_heading
         
             # Calculate new waypoint location
-            distance = 50  # Standard distance
+            distance = self.tactical_waypoint_distance 
             rad_heading = np.radians(new_heading)
             dx = distance * np.sin(rad_heading)
             dy = -distance * np.cos(rad_heading)
