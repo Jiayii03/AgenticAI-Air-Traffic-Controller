@@ -105,27 +105,48 @@ class Aircraft:
     def requestSelected(self):
         self.game.requestSelected(self)
 
-	#Draw myself on the screen at my current position and heading
     def draw(self, surface):
-        rot_image = pygame.transform.rotate(self.image, -self.heading)
-        rect = rot_image.get_rect()
-        rect.center = self.location
-        surface.blit(rot_image, rect)
-
-        if(conf.get()['aircraft']['draw_radius'] == True):
-            pygame.draw.circle(surface, (255, 255, 0), self.location, conf.get()['aircraft']['collision_radius'], 1)
-
-        #Draw lines and waypoints if selected
-        if(self.selected == True):
+        # Choose the appropriate image based on state
+        if hasattr(self, 'rl_controlled') and self.rl_controlled:
+            # Use the selected image for RL-controlled aircraft
+            rot_image = pygame.transform.rotate(Aircraft.AC_IMAGE_SELECTED, -self.heading)
+            rect = rot_image.get_rect()
+            rect.center = self.location
+            surface.blit(rot_image, rect)
+            
+            # Draw orange circle to indicate RL control (larger than the collision radius)
+            pygame.draw.circle(surface, (255, 165, 0), self.location, 25, 2)
+            
+            # Draw lines and waypoints if aircraft is RL controlled
             point_list = []
             point_list.append(self.location)
             for x in range(0, len(self.waypoints)-1):
                 point_list.append(self.waypoints[x].getLocation())
                 self.waypoints[x].draw(surface)
             point_list.append(self.waypoints[-1].getLocation())
-            pygame.draw.lines(surface, (255, 255, 0), False, point_list)
+            # Draw lines in orange to distinguish from normal selection (which uses yellow)
+            pygame.draw.lines(surface, (255, 165, 0), False, point_list)
+        else:
+            # Original draw code for non-RL controlled aircraft
+            rot_image = pygame.transform.rotate(self.image, -self.heading)
+            rect = rot_image.get_rect()
+            rect.center = self.location
+            surface.blit(rot_image, rect)
 
-		# Draw the ident string next to the aircraft?
+            if(conf.get()['aircraft']['draw_radius'] == True):
+                pygame.draw.circle(surface, (255, 255, 0), self.location, conf.get()['aircraft']['collision_radius'], 1)
+
+            # Draw lines and waypoints if selected
+            if(self.selected == True):
+                point_list = []
+                point_list.append(self.location)
+                for x in range(0, len(self.waypoints)-1):
+                    point_list.append(self.waypoints[x].getLocation())
+                    self.waypoints[x].draw(surface)
+                point_list.append(self.waypoints[-1].getLocation())
+                pygame.draw.lines(surface, (255, 255, 0), False, point_list)
+
+        # Draw the ident string next to the aircraft
         x = self.location[0] + 20
         y = self.location[1]
         list = [self.ident, "FL" + str(self.altitude/100), str(self.speed) + "kts"]
@@ -137,6 +158,7 @@ class Aircraft:
 	#Location/heading update function
     def update(self):
         if(self.__reachedWaypoint(self.location, self.waypoints[0].getLocation())):
+            self.rl_controlled = False
             #Reached next waypoint, pop it
             self.waypoints.pop(0)
             if( len(self.waypoints) == 0):
@@ -147,6 +169,9 @@ class Aircraft:
         self.heading = self.__calculateHeading(self.location, self.waypoints[0].getLocation())
         self.location = self.__calculateNewLocation(self.location, self.heading, self.speed)
         # self.fs.updateAllFields()
+    
+    def isFollowingRLWaypoint(self):
+        return self.rl_controlled and len(self.waypoints) > 0
 
     def getClickDistanceSq(self, clickpos):
         return Utility.locDistSq(clickpos, self.location)

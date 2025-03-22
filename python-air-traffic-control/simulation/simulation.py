@@ -141,11 +141,20 @@ class Simulation:
         self.collision_pairs = self._detect_collisions()
         for pair in self.collision_pairs:
             ac1, ac2 = pair
-            rewards_dict[ac1.getIdent()] -= 200  # Penalty for collision
-            rewards_dict[ac2.getIdent()] -= 200
+            # Add safety checks before applying penalties
+            if ac1.getIdent() in rewards_dict:
+                rewards_dict[ac1.getIdent()] -= 200  # Penalty for collision
+            else:
+                print(f"Warning: Aircraft {ac1.getIdent()} not found in rewards_dict")
+                
+            if ac2.getIdent() in rewards_dict:
+                rewards_dict[ac2.getIdent()] -= 200
+            else:
+                print(f"Warning: Aircraft {ac2.getIdent()} not found in rewards_dict")
+                
             print(f"Collision detected between {ac1.getIdent()} and {ac2.getIdent()}, -200 reward")
             had_collision = True
-            self.done = True  # End episode on collision
+            # self.done = True
         
         # Get current state
         state = self._get_state()

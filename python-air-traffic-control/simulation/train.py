@@ -15,10 +15,10 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import conf
 
-def train_dqn_agent(episodes=500, render_every=50, seed=42):
+def train_dqn_agent(episodes=440, render_every=50, seed=43):
     """Train a DQN agent on the ATC environment."""
     # Initialize logger
-    logger = Logger(log_dir='logs', prefix='dqn_training', debug=False).start()
+    logger = Logger(log_dir='logs', prefix='dqn_training', debug=True).start()
     
     # Set the random seeds for reproducibility
     np.random.seed(seed)
@@ -46,7 +46,7 @@ def train_dqn_agent(episodes=500, render_every=50, seed=42):
         gamma=0.99,             # Keep high discount factor
         epsilon=1.0,            # Start with full exploration
         epsilon_min=0.05,       # Lower minimum exploration
-        epsilon_decay=0.999,    # Slower decay rate (was likely ~0.995)
+        epsilon_decay=0.9995,    # Slower decay rate (was likely ~0.995)
         buffer_size=50000,      # Larger replay buffer (from ~10000)
         batch_size=64,          # Keep batch size
         update_frequency=10,    # Update less frequently
@@ -106,9 +106,9 @@ def train_dqn_agent(episodes=500, render_every=50, seed=42):
             # Move to next state
             state = next_state
             
-            if step_count >= 3000:
-                print("Episode aborted after 3000 steps")
-                break
+            # if step_count >= 3000:
+            #     print("Episode aborted after 3000 steps")
+            #     break
         
         # Log results
         episode_rewards.append(total_reward)

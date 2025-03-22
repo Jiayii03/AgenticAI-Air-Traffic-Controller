@@ -33,10 +33,11 @@
 		"gametime":180000,
 		"n_aircraft":8,
 		"n_destinations":5,
-		"n_obstacles":5,
+		"n_obstacles":0,
 		"framerate":40,
-		"fullscreen":true,
-		"n_highscores":30
+		"fullscreen":false,
+		"n_highscores":30,
+		"mute":true
 	},
 	"scoring":{
 		"reach_dest":200,
@@ -63,10 +64,10 @@
 	},
 	"rl_agent": {
 		"enabled": true,
-		"model_path": "simulation/models/dqn_atc_model.pth",
+		"model_path": "simulation/models/dqn_atc_model2.pth",
 		"visualization": true,
 		"tactical_waypoint_distance": 50,
-		"cooldown_frames": 50,
+		"cooldown_frames": 10,
 		"collision_risk_radius": 120
 	}
 }
