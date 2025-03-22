@@ -117,17 +117,17 @@ class Aircraft:
             rect.center = self.location
             surface.blit(rot_image, rect)
             
-            # Draw green circle to indicate RL control (larger than the collision radius)
+            # Draw orange circle to indicate RL control (larger than the collision radius)
             pygame.draw.circle(surface, (255, 165, 0), self.location, 25, 2)
             
             # Draw lines and waypoints if aircraft is RL controlled
             point_list = []
             point_list.append(self.location)
-            for x in range(0, len(self.waypoints)-2):
+            for x in range(0, len(self.waypoints)-1):
                 point_list.append(self.waypoints[x].getLocation())
                 self.waypoints[x].draw(surface)
             point_list.append(self.waypoints[-1].getLocation())
-            # Draw lines in green to distinguish from normal selection (which uses yellow)
+            # Draw lines in orange to distinguish from normal selection (which uses yellow)
             pygame.draw.lines(surface, (255, 165, 0), False, point_list)
         else:
             # Original draw code for non-RL controlled aircraft

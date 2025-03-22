@@ -44,10 +44,9 @@ class RLController:
             print(f"Warning: Model file {model_path} not found. RL agent will use untrained model.")
         
         # Initialize collision detection parameters
-        self.collision_risk_radius = 100  # 3x the actual collision radius (50)
-        # Add cooldown tracking using frame counts instead of time
-        self.aircraft_cooldowns = {}  # Dictionary to track cooldown for each aircraft
-        self.cooldown_frames = 120     # Number of frames to wait before another RL action
+        self.collision_risk_radius = conf.get()["rl_agent"]["collision_risk_radius"]
+        self.cooldown_frames = conf.get()["rl_agent"]["cooldown_frames"]  # Number of frames to wait before another RL action
+        self.aircraft_cooldowns = {}  
         self.current_frame = 0        # Frame counter
         
     def detect_collision_risks(self, aircraft_list):
