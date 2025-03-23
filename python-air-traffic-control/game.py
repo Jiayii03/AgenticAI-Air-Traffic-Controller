@@ -417,6 +417,7 @@ class Game:
             # Update cooldowns
             self.rl_controller.aircraft_cooldowns[ac1.getIdent()] = self.rl_controller.current_frame
             self.rl_controller.aircraft_cooldowns[ac2.getIdent()] = self.rl_controller.current_frame
+            print(f"Aircrafts on cooldown: {self.rl_controller.aircraft_cooldowns}")
 
     def __highlightImpendingCollision(self, a):
         for at in self.aircraft:

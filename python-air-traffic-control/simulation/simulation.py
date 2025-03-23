@@ -127,11 +127,6 @@ class Simulation:
             if reached_destination:
                 landed_aircraft.append(ac)
                 num_planes_landed += 1
-                # rewards_dict[ac.getIdent()] += 200  # Reward for successful landing
-                # # Add time bonus to incentivize speed
-                # time_bonus = max(50, 200 - self.step_count/50)  # Decreases over time
-                # rewards_dict[ac.getIdent()] += time_bonus  # Reward reduces with time
-                # print(f"Aircraft {ac.getIdent()} landed successfully, +200 reward")
         
         # Remove landed aircraft
         for ac in landed_aircraft:
@@ -154,7 +149,7 @@ class Simulation:
                 
             print(f"Collision detected between {ac1.getIdent()} and {ac2.getIdent()}, -200 reward")
             had_collision = True
-            # self.done = True
+            self.done = True
         
         # Get current state
         state = self._get_state()

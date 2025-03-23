@@ -82,19 +82,6 @@ class ATCEnv(gym.Env):
         self.logger.debug_print(f"Number of aircraft: {len(state['aircraft'])}")
         self.logger.debug_print(f"Aircraft IDs: {[ac['id'] for ac in state['aircraft']]}")
         self.logger.debug_print(f"Aircraft positions: {[ac['location'] for ac in state['aircraft']]}")
-
-        # Identify pairs of aircraft that are within threshold distance
-        self._update_aircraft_pairs(state)
-        
-        # If no aircraft pairs in potential collision course, return a default observation
-        if not self.aircraft_pairs:
-            return np.zeros(self.observation_space.shape[0], dtype=np.float32), {}
-        
-        # Get observation for the first pair
-        self.pair_index = 0
-        observation = self._get_observation(self.aircraft_pairs[self.pair_index])
-        
-        return observation, {}
     
     def step(self, action):
         """Execute action and advance the environment by one timestep."""
@@ -105,18 +92,14 @@ class ATCEnv(gym.Env):
             observation = np.zeros(self.observation_space.shape[0], dtype=np.float32)
             return observation, 0, True, False, {"num_planes_landed": 0, "had_collision": False}
         
-        # Update aircraft pairs to detect collision risks
-        state = self.simulation._get_state()
-        self._update_aircraft_pairs(state)
-        
         # If no collision risks, all aircraft maintain course
         if not self.aircraft_pairs:
             state, rewards_dict, done, info = self.simulation.step([0] * len(self.simulation.aircraft)) # maintain course
             observation = np.zeros(self.observation_space.shape[0], dtype=np.float32)
             total_reward = sum(rewards_dict.values())
-            return observation, total_reward, done, False, info
+            return observation, total_reward, done, False, {**info, "collision_risk": False}
         
-        # Get the first pair to control
+        # Else, if there is collision risk, get the first pair to control
         ac1_id, ac2_id = self.aircraft_pairs[0]  # Always use the first pair
         self.logger.debug_print(f"Controlled aircraft pair: {ac1_id} - {ac2_id}")
         
@@ -150,17 +133,15 @@ class ATCEnv(gym.Env):
         total_reward = pair_reward + additional_reward
 
         print(f"Step: {self.simulation.step_count}, Base Reward: {pair_reward:.2f}, Collision Avoidance Reward: {additional_reward:.2f}")
-
-        # Update pairs based on new state after taking action
-        self._update_aircraft_pairs(state)
-
-        # Get observation for the next step based on updated pairs
-        if self.aircraft_pairs:
-            observation = self._get_observation(self.aircraft_pairs[0])
-        else:
-            observation = np.zeros(self.observation_space.shape[0], dtype=np.float32)
         
-        return observation, total_reward, done, False, info
+        # Get observation for the next step based on the SAME aircraft pair we just controlled
+        # This maintains the state-action-reward-next_state continuity
+        observation = self._get_observation((ac1_id, ac2_id))
+   
+        return observation, total_reward, done, False, {
+            **info,
+            "collision_risk": True
+        }
     
     def render(self, mode='human'):
         """Render the environment."""
@@ -195,7 +176,17 @@ class ATCEnv(gym.Env):
                         # If both aircraft are not on cooldown, add the pair
                         self.aircraft_pairs.append((ac1['id'], ac2['id']))
                         self.logger.debug_print(f"Adding aircraft pair: {ac1['id']} - {ac2['id']}, Distance: {dist:.2f}")
-    
+        
+        # Get observation for the first pair if any exist
+        if self.aircraft_pairs:
+            observation = self._get_observation(self.aircraft_pairs[0])
+            self.logger.debug_print(f"Feeding observation for pair: {self.aircraft_pairs[0]}, Observation: {observation}")
+            return observation
+        else:
+            observation = np.zeros(self.observation_space.shape[0], dtype=np.float32)
+            self.logger.debug_print(f"No collision risks, no pairs to update, returning observation {np.zeros(self.observation_space.shape[0], dtype=np.float32)}")
+            return observation
+                    
     def _get_observation(self, aircraft_pair):
         """Get observation for a pair of aircraft."""
         ac1_id, ac2_id = aircraft_pair
@@ -281,7 +272,7 @@ class ATCEnv(gym.Env):
                 heading_diff = 360 - heading_diff
                 
             # Reward diverging headings (closer to 180 degrees)
-            heading_reward = 50 * (heading_diff / 180)
+            heading_reward = 80 * (heading_diff / 180)
         
         # 4. Time penalty - discourages excessive maneuvering
         step_count = self.simulation.step_count
@@ -290,10 +281,10 @@ class ATCEnv(gym.Env):
         # Log the reward components for debugging
         print(f"Reward components - Distance: {distance_reward:.2f}, Heading Away: {heading_reward:.2f}, Dest Alignment: {dest_alignment_reward:.2f}, Time: {time_penalty:.2f}")
         
-        # Balance the importance of different components
+        # Balance components with more emphasis on collision avoidance 
         reward = (1.0 * distance_reward) + \
-                (0.8 * heading_reward) + \
-                (0.8 * dest_alignment_reward) + \
+                (1.2 * heading_reward) + \
+                (0.7 * dest_alignment_reward) + \
                 (0.2 * time_penalty)
         
         return max(min(reward, 50), -100)  # Cap reward

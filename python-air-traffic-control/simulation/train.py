@@ -15,10 +15,10 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import conf
 
-def train_dqn_agent(episodes=440, render_every=50, seed=43):
+def train_dqn_agent(episodes=500, render_every=50, seed=43):
     """Train a DQN agent on the ATC environment."""
     # Initialize logger
-    logger = Logger(log_dir='logs', prefix='dqn_training', debug=True).start()
+    logger = Logger(log_dir='logs', prefix='dqn_training', debug=False).start()
     
     # Set the random seeds for reproducibility
     np.random.seed(seed)
@@ -72,7 +72,7 @@ def train_dqn_agent(episodes=440, render_every=50, seed=43):
         
         # Use a different seed for each episode, but in a deterministic way
         episode_seed = seed + episode
-        state, _ = env.reset(seed=episode_seed)
+        env.reset(seed=episode_seed)
     
         episode_start_time = time.time()
         total_reward = 0
@@ -83,32 +83,45 @@ def train_dqn_agent(episodes=440, render_every=50, seed=43):
         had_collision = False
         
         while not done:
-            # Increment step count
             step_count += 1
-      
-            # Select action
-            action = agent.select_action(state)
             
-            # Take action
+            # call update_aircraft_pairs to check for collision risk
+            state = env._update_aircraft_pairs(env.simulation._get_state())
+            
+            # Take a step first (either with action 0 or selected action)
+            if len(env.aircraft_pairs) > 0:  # if there is a collision risk
+                action = agent.select_action(state)
+                logger.debug_print(f"Existing pairs: {env.aircraft_pairs}, agent selecting action {action}")
+            else: # if there is no collision risk
+                action = 0
+                logger.debug_print(f"No existing pairs, agent selecting action {action}")
+            
+            # Execute action
             next_state, reward, done, truncated, info = env.step(action)
+            
+            if info.get("collision_risk", False):
+                # Only update the agent when there was a collision risk
+                logger.debug_print(f"Collision risk detected, updating agent with state {state}, action {action}, reward {reward}, next_state {next_state}, done {done}")
+                loss = agent.update(state, action, reward, next_state, done)
+                print(f"Step {step_count}: [COLLISION RISK] Action={action}, Reward={reward:.4f}")
+            else:
+                print(f"Step {step_count}: [NO RISK] Maintaining course, Reward={reward:.4f}")
+      
             total_reward += reward
+            print(f"step {step_count} Total Reward: {total_reward:.2f}")
             # Extract landing and collision info
             if "num_planes_landed" in info:
                 landed_aircraft_count += info["num_planes_landed"]
                 
             if "had_collision" in info and info["had_collision"]:
                 had_collision = True
-            print(f"Step {step_count}: Action={action}, Reward={reward:.4f}, Total Reward={total_reward:.4f}")
-            
-            # Update the agent
-            loss = agent.update(state, action, reward, next_state, done)
             
             # Move to next state
             state = next_state
             
-            # if step_count >= 3000:
-            #     print("Episode aborted after 3000 steps")
-            #     break
+            if step_count >= 4000:
+                print("Episode aborted after 4000 steps")
+                break
         
         # Log results
         episode_rewards.append(total_reward)

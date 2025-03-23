@@ -1,10 +1,12 @@
-#   File: destination.py
-#   Author: Tom Woolfrey
+# File: destination.py
+# Author: Tom Woolfrey
 
 import pygame
 import random
+import math
 import conf
 from waypoint import Waypoint
+from utility import Utility
 
 class Destination(Waypoint):
 
@@ -20,25 +22,54 @@ class Destination(Waypoint):
         pygame.draw.circle(surface, Destination.COLOR_DEST, self.location, 5, 0)
         surface.blit(self.font_img, (self.location[0] + 8, self.location[1] + 8))
 
-	# Must override this inherited method because Destination objects have no rect? 
-	# When deleting a waypoint I get an error:
-	##  File "C:\pyatc\game.py", line 77, in start
-	##    self.__handleUserInteraction()
-	##  File "C:\pyatc\game.py", line 201, in __handleUserInteraction
-	##    if(w.clickedOn(event.pos) == True):
-	##  File "C:\pyatc\waypoint.py", line 23, in clickedOn
-	##    return (self.way_rect.inflate(15,15).collidepoint(clickpos))
-	##  AttributeError: Destination instance has no attribute 'way_rect'
-	# Does not fix the problem though... still get the same error
     def clickedOn(self, clickpos):
         return False
 		
     @staticmethod
     def generateGameDestinations(screen_w, screen_h):
         ret = []
+        # Define minimum distance between destinations
+        min_distance = conf.get().get('destinations', {}).get('min_distance', 100)
+        # Maximum attempts to place a destination
+        max_attempts = 100
+        
+        # Margin from screen edges
+        margin = 40
+        
         for x in range(0, conf.get()['game']['n_destinations']):
-            randx = random.randint( 20, screen_w - 20 )
-            randy = random.randint( 20, screen_h - 20 )
-            dest = Destination((randx, randy), "D" + str(x))
-            ret.append(dest)
+            # Try to place each destination with safe distance
+            placed = False
+            attempts = 0
+            
+            while not placed and attempts < max_attempts:
+                # Generate random position within screen bounds (with margin)
+                randx = random.randint(margin, screen_w - margin)
+                randy = random.randint(margin, screen_h - margin)
+                candidate_loc = (randx, randy)
+                
+                # Check distance to all existing destinations
+                valid_position = True
+                for existing_dest in ret:
+                    dist = Utility.locDist(candidate_loc, existing_dest.location)
+                    if dist < min_distance:
+                        valid_position = False
+                        break
+                
+                if valid_position:
+                    # Create new destination and add to list
+                    dest = Destination(candidate_loc, "D" + str(x))
+                    ret.append(dest)
+                    placed = True
+                    print(f"Placed destination D{x} at {candidate_loc}")
+                
+                attempts += 1
+            
+            # If couldn't place after max attempts, place anyway but print warning
+            if not placed:
+                randx = random.randint(margin, screen_w - margin)
+                randy = random.randint(margin, screen_h - margin)
+                dest = Destination((randx, randy), "D" + str(x))
+                ret.append(dest)
+                print(f"Warning: Could not place destination D{x} with safe distance after {max_attempts} attempts")
+        
         return ret

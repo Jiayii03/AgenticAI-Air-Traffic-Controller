@@ -168,7 +168,7 @@ class Aircraft:
 		#Keep moving towards waypoint
         self.heading = self.__calculateHeading(self.location, self.waypoints[0].getLocation())
         self.location = self.__calculateNewLocation(self.location, self.heading, self.speed)
-        # self.fs.updateAllFields()
+        self.fs.updateAllFields()
     
     def isFollowingRLWaypoint(self):
         return self.rl_controlled and len(self.waypoints) > 0

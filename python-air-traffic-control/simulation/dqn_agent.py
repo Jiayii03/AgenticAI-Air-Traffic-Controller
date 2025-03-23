@@ -120,6 +120,17 @@ class DQNAgent:
             return torch.argmax(q_values).item()
     
     def update(self, state, action, reward, next_state, done):
+        # Ensure state and next_state are numpy arrays of type float32
+        if isinstance(state, np.ndarray):
+            state = state.astype(np.float32)
+        else:
+            state = np.array(state, dtype=np.float32)
+            
+        if isinstance(next_state, np.ndarray):
+            next_state = next_state.astype(np.float32)
+        else:
+            next_state = np.array(next_state, dtype=np.float32)
+        
         # Store experience in replay buffer
         self.replay_buffer.add(state, action, reward, next_state, done)
         
@@ -134,47 +145,63 @@ class DQNAgent:
         if self.update_counter % self.update_frequency != 0:
             return 0
             
-        # Sample a batch
-        states, actions, rewards, next_states, dones = self.replay_buffer.sample(self.batch_size)
+        try:
+            # Sample a batch - with forced numpy array conversion
+            states, actions, rewards, next_states, dones = self.replay_buffer.sample(self.batch_size)
+            
+            # Force the correct types before tensor conversion
+            states = np.array(states, dtype=np.float32)
+            actions = np.array(actions, dtype=np.int64)
+            rewards = np.array(rewards, dtype=np.float32)
+            next_states = np.array(next_states, dtype=np.float32)
+            dones = np.array(dones, dtype=np.float32)
+            
+            # Convert NumPy arrays to PyTorch tensors
+            states = torch.FloatTensor(states)
+            actions = torch.LongTensor(actions)
+            rewards = torch.FloatTensor(rewards)
+            next_states = torch.FloatTensor(next_states)
+            dones = torch.FloatTensor(dones)
+            
+            # Current Q-values
+            current_q_values = self.q_network(states).gather(1, actions.unsqueeze(1)).squeeze(1)
+            
+            # Next Q-values from target network for stability
+            with torch.no_grad():
+                next_q_values = self.target_network(next_states).max(1)[0]
+                target_q_values = rewards + (1 - dones) * self.gamma * next_q_values
+            
+            # Compute loss
+            loss = F.smooth_l1_loss(current_q_values, target_q_values)
+            
+            # Optimize the model - THIS IS WHERE THE ACTUAL UPDATE HAPPENS
+            self.optimizer.zero_grad()
+            loss.backward()
+            # Gradient clipping for stability
+            torch.nn.utils.clip_grad_norm_(self.q_network.parameters(), 1.0)
+            self.optimizer.step()
+            
+            # Update target network periodically
+            if self.update_counter % self.target_update == 0:
+                self.target_network.load_state_dict(self.q_network.state_dict())
+            
+            # Track metrics
+            self.losses.append(loss.item())
+            self.avg_q_values.append(current_q_values.mean().item())
+            
+            # Decay epsilon (exploration rate)
+            self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay)
+            self.exploration_rate.append(self.epsilon)
+            
+            print(f"Network updated: Loss = {loss.item():.6f}, Mean Q = {current_q_values.mean().item():.6f}")
+            
+            return loss.item()
         
-        # Convert NumPy arrays to PyTorch tensors
-        states = torch.FloatTensor(states)
-        actions = torch.LongTensor(actions)
-        rewards = torch.FloatTensor(rewards)
-        next_states = torch.FloatTensor(next_states)
-        dones = torch.FloatTensor(dones)
-        
-        # Current Q-values
-        current_q_values = self.q_network(states).gather(1, actions.unsqueeze(1)).squeeze(1)
-        
-        # Next Q-values from target network for stability
-        with torch.no_grad():
-            next_q_values = self.target_network(next_states).max(1)[0]
-            target_q_values = rewards + (1 - dones) * self.gamma * next_q_values
-        
-        # Compute loss with Huber loss for robustness to outliers
-        loss = F.smooth_l1_loss(current_q_values, target_q_values)
-        
-        # Optimize the model
-        self.optimizer.zero_grad()
-        loss.backward()
-        # Gradient clipping for stability
-        torch.nn.utils.clip_grad_norm_(self.q_network.parameters(), 1.0)
-        self.optimizer.step()
-        
-        # Update target network periodically
-        if self.update_counter % self.target_update == 0:
-            self.target_network.load_state_dict(self.q_network.state_dict())
-        
-        # Track metrics
-        self.losses.append(loss.item())
-        self.avg_q_values.append(current_q_values.mean().item())
-        
-        # Decay epsilon (exploration rate)
-        self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay)
-        self.exploration_rate.append(self.epsilon)
-        
-        return loss.item()
+        except Exception as e:
+            print(f"Error in network update: {e}")
+            # Log error details to help troubleshoot
+            print(f"Replay buffer size: {len(self.replay_buffer)}")
+            return 0
     
     def save(self, filepath):
         """Save the DQN model."""
