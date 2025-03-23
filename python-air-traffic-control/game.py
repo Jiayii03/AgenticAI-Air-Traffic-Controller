@@ -392,23 +392,15 @@ class Game:
             
             # Select action based on observation
             action = self.rl_controller.select_action(observation)
-            print(f"Selected action: {action}")
             
             # Apply action to first aircraft
             self.rl_controller.apply_action(ac1, action)
+            print(f"Applying action {action} to {ac1.getIdent()}")
             
             # Apply mirrored action to second aircraft
-            mirrored_action = 0
-            if action == 1:     # Medium left (90°) -> Medium right (90°)
-                mirrored_action = 3
-            elif action == 2:   # Slight left (45°) -> Slight right (45°) 
-                mirrored_action = 4
-            elif action == 3:   # Medium right (90°) -> Medium left (90°)
-                mirrored_action = 1
-            elif action == 4:   # Slight right (45°) -> Slight left (45°)
-                mirrored_action = 2
-            
+            mirrored_action = self.rl_controller._mirror_action(action)            
             self.rl_controller.apply_action(ac2, mirrored_action)
+            print(f"Applying mirrored action {mirrored_action} to {ac2.getIdent()}")
             
             # Set the flags AFTER applying actions to indicate these aircraft are being controlled by RL
             ac1.rl_controlled = True

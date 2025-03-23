@@ -5,6 +5,7 @@ import numpy as np
 import pygame
 import sys
 import os
+import math
 
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -23,13 +24,19 @@ class ATCEnv(gym.Env):
     - Relative heading of intruder (θ): [0, 360) degrees
     - Angle to destination: [0, 360) degrees
     - Angular difference to destination: [0, 180] degrees
+    - Relative speed of intruder (rs): [0, 2.0] ratio
+    - Separation rate (sr): [-1.0, 1.0] normalized value
 
     Action Space:
-    - 0: Maintain course (N)
-    - 1: Medium left (ML): 90° turn
-    - 2: Slight left (SL): 45° turn
-    - 3: Medium right (MR): 90° turn
-    - 4: Slight right (SR): 45° turn
+    - 0: Maintain course and speed (N)
+    - 1: Medium left turn (ML): 90° with normal speed
+    - 2: Slight left turn (SL): 45° with normal speed
+    - 3: Medium right turn (MR): 90° with normal speed
+    - 4: Slight right turn (SR): 45° with normal speed
+    - 5: Medium left turn (ML-S): 90° with reduced speed (-20%)
+    - 6: Slight left turn (SL-S): 45° with reduced speed (-20%)
+    - 7: Medium right turn (MR-S): 90° with reduced speed (-20%)
+    - 8: Slight right turn (SR-S): 45° with reduced speed (-20%)
     """
     
     metadata = {'render.modes': ['human', 'rgb_array']}
@@ -41,23 +48,25 @@ class ATCEnv(gym.Env):
         self.simulation = Simulation(logger, num_planes, num_obstacles, screen_size)
         
         # Define action and observation space
-        self.action_space = spaces.Discrete(5)  # 5 possible actions
+        self.action_space = spaces.Discrete(9)  # Extended to 9 possible actions with speed options
         
-        # Observation space based on state variables
+        # Observation space based on state variables with new speed and separation components
+        self.observation_space = spaces.Box(
+            low=np.array([0, 0, 0, 0, 0, 0, -1]),
+            high=np.array([150, 360, 360, 360, 180, 2, 1]),  # Bounds for all components
+            dtype=np.float32
+        )
         """
         [
             distance_between_pair,      # Distance between the two aircraft in the pair
             angle_to_intruder,          # Angle from aircraft 1 to aircraft 2
             relative_heading,           # Relative heading of aircraft 2 compared to aircraft 1
             angle_to_destination,       # Angle from aircraft 1 to its destination
-            angular_diff_to_dest        # Angular difference between current heading and destination angle
+            angular_diff_to_dest,       # Angular difference between current heading and destination angle
+            relative_speed,             # Speed of aircraft 2 relative to aircraft 1
+            separation_rate             # Rate of separation/approach (-1 to 1)
         ]
         """
-        self.observation_space = spaces.Box(
-            low=np.array([0, 0, 0, 0, 0]),
-            high=np.array([150, 360, 360, 360, 180]),  # Increased max distance to match collision risk radius
-            dtype=np.float32
-        )
         
         # Collision detection threshold
         self.collision_risk_radius = conf.get()['rl_agent']['collision_risk_radius']
@@ -188,7 +197,7 @@ class ATCEnv(gym.Env):
             return observation
                     
     def _get_observation(self, aircraft_pair):
-        """Get observation for a pair of aircraft."""
+        """Get observation for a pair of aircraft including speed information and separation rate."""
         ac1_id, ac2_id = aircraft_pair
         ac1 = self._find_aircraft_by_id(ac1_id)
         ac2 = self._find_aircraft_by_id(ac2_id)
@@ -214,16 +223,52 @@ class ATCEnv(gym.Env):
             if angular_diff_to_dest > 180:
                 angular_diff_to_dest = 360 - angular_diff_to_dest
         
+        # 1. Relative speed of aircraft 2 compared to aircraft 1
+        relative_speed = ac2.getSpeed() / max(ac1.getSpeed(), 0.1)  # Avoid division by zero
+        
+        # 2. Calculate separation rate (are they moving toward or away from each other?)
+        # First, get velocity components of both aircraft
+        hdg1_rad = math.radians(ac1.getHeading())
+        hdg2_rad = math.radians(ac2.getHeading())
+        
+        vx1 = ac1.getSpeed() * math.sin(hdg1_rad)
+        vy1 = -ac1.getSpeed() * math.cos(hdg1_rad)
+        vx2 = ac2.getSpeed() * math.sin(hdg2_rad)
+        vy2 = -ac2.getSpeed() * math.cos(hdg2_rad)
+        
+        # Calculate relative position vector (from ac1 to ac2)
+        dx = ac2.getLocation()[0] - ac1.getLocation()[0]
+        dy = ac2.getLocation()[1] - ac1.getLocation()[1]
+        
+        # Calculate relative velocity vector
+        rel_vx = vx2 - vx1
+        rel_vy = vy2 - vy1
+        
+        # Calculate dot product (negative means separating, positive means approaching)
+        dot_product = dx * rel_vx + dy * rel_vy
+        
+        # Normalize by distance and speeds to get a rate between -1 and 1
+        # where -1 is rapidly separating and +1 is rapidly approaching
+        distance_speed_product = distance * (ac1.getSpeed() + ac2.getSpeed())
+        if distance_speed_product > 0.1:  # Avoid division by very small numbers
+            separation_rate = dot_product / distance_speed_product
+            # Clamp to range [-1, 1]
+            separation_rate = max(-1.0, min(1.0, separation_rate))
+        else:
+            separation_rate = 0.0
+        
         return np.array([
             distance, 
             angle, 
             rel_heading,
             destination_angle,
-            angular_diff_to_dest
+            angular_diff_to_dest,
+            relative_speed,    # NEW: Relative speed of ac2 to ac1
+            separation_rate    # NEW: Rate of separation/approach
         ], dtype=np.float32)
     
     def _calculate_reward(self, state, ac1_id, ac2_id):
-        """Calculate reward based on aircraft states."""
+        """Calculate reward based on aircraft states, including speed adjustment factors."""
         # Find the aircraft states
         ac1_state = None
         ac2_state = None
@@ -237,6 +282,9 @@ class ATCEnv(gym.Env):
             # One of the aircraft no longer exists
             print("Only one aircraft remaining, no reward calculation")
             return 0
+        
+        # Get default speed from config
+        default_speed = conf.get()['aircraft']['speed_default']
         
         # Calculate distance
         distance = Utility.locDist(ac1_state['location'], ac2_state['location'])
@@ -274,57 +322,133 @@ class ATCEnv(gym.Env):
             # Reward diverging headings (closer to 180 degrees)
             heading_reward = 80 * (heading_diff / 180)
         
-        # 4. Time penalty - discourages excessive maneuvering
+        # 4. Calculate separation rate (are they moving toward or away from each other?)
+        # First, get velocity components of both aircraft
+        hdg1_rad = math.radians(ac1_state['heading'])
+        hdg2_rad = math.radians(ac2_state['heading'])
+        
+        vx1 = ac1_state['speed'] * math.sin(hdg1_rad)
+        vy1 = -ac1_state['speed'] * math.cos(hdg1_rad)
+        vx2 = ac2_state['speed'] * math.sin(hdg2_rad)
+        vy2 = -ac2_state['speed'] * math.cos(hdg2_rad)
+        
+        # Calculate relative position vector (from ac1 to ac2)
+        dx = ac2_state['location'][0] - ac1_state['location'][0]
+        dy = ac2_state['location'][1] - ac1_state['location'][1]
+        
+        # Calculate relative velocity vector
+        rel_vx = vx2 - vx1
+        rel_vy = vy2 - vy1
+        
+        # Calculate dot product (negative means separating, positive means approaching)
+        dot_product = dx * rel_vx + dy * rel_vy
+        
+        # Determine if aircraft are separating
+        separating = dot_product < 0
+        
+        # Calculate normalized separation rate (-1 to 1)
+        distance_speed_product = distance * (ac1_state['speed'] + ac2_state['speed'])
+        if distance_speed_product > 0.1:  # Avoid division by very small numbers
+            separation_rate = dot_product / distance_speed_product
+            # Clamp to range [-1, 1]
+            separation_rate = max(-1.0, min(1.0, separation_rate))
+        else:
+            separation_rate = 0.0
+        
+        # 5. Speed adjustment reward
+        speed_reward = 0
+        
+        # Check if ac1 has reduced speed
+        ac1_reduced = ac1_state['speed'] < default_speed * 0.9  # Allow some margin
+        
+        # Check if ac2 has normal speed (asymmetric speed adjustment)
+        ac2_normal = ac2_state['speed'] > default_speed * 0.9
+        
+        # Case 1: Effective speed reduction - reduced speed AND increasing separation AND reasonable alignment to destination
+        if ac1_reduced and separating:
+            # Base reward for effective speed reduction
+            speed_reward += 40
+            
+            # Bonus for good destination alignment despite reduced speed
+            if hdg_to_dest_diff < 90:  # Within 90 degrees of destination heading
+                speed_reward += 20 * (1 - hdg_to_dest_diff/90)
+                
+            # Extra bonus for asymmetric response (one slows, one maintains speed)
+            if ac2_normal:
+                speed_reward += 15
+        
+        # Case 2: Ineffective speed reduction - reduced speed BUT not separating
+        elif ac1_reduced and not separating:
+            # Penalty for ineffective speed reduction
+            speed_reward -= 30
+            
+            # Additional penalty if badly aligned with destination
+            if hdg_to_dest_diff > 90:
+                speed_reward -= 10
+        
+        # Case 3: Both aircraft reduced speed - usually suboptimal
+        if ac1_reduced and not ac2_normal:
+            speed_reward -= 20
+        
+        # 6. Time penalty - discourages excessive maneuvering
         step_count = self.simulation.step_count
         time_penalty = -0.5 * (1 + step_count / 500)
         
-        # Log the reward components for debugging
-        print(f"Reward components - Distance: {distance_reward:.2f}, Heading Away: {heading_reward:.2f}, Dest Alignment: {dest_alignment_reward:.2f}, Time: {time_penalty:.2f}")
+        # If speed is reduced, increase time penalty slightly to discourage unnecessary speed reductions
+        if ac1_reduced:
+            time_penalty *= 1.2
         
-        # Balance components with more emphasis on collision avoidance 
+        # Log the reward components for debugging
+        print(f"Reward components - Distance: {distance_reward:.2f}, Heading Away: {heading_reward:.2f}, "
+            f"Dest Alignment: {dest_alignment_reward:.2f}, Speed: {speed_reward:.2f}, Time: {time_penalty:.2f}")
+        
+        # Balance components with more emphasis on collision avoidance and effective speed usage
         reward = (1.0 * distance_reward) + \
                 (1.2 * heading_reward) + \
                 (0.7 * dest_alignment_reward) + \
+                (1.0 * speed_reward) + \
                 (0.2 * time_penalty)
         
         return max(min(reward, 50), -100)  # Cap reward
     
     def _mirror_action(self, action):
-        """Mirror an action for the intruder aircraft.
+        """Mirror an action for the intruder aircraft with asymmetric speed adjustments.
         
-        Action mapping:
-        - 0: Maintain course (N) -> 0: Maintain course (N)
-        - 1: Medium left (ML) -> 3: Medium right (MR)
-        - 2: Slight left (SL) -> 4: Slight right (SR)
-        - 3: Medium right (MR) -> 1: Medium left (ML)
-        - 4: Slight right (SR) -> 2: Slight left (SL)
+        Extended action space:
+        - 0: Maintain course and speed (N)
+        - 1: Medium left turn (90°) with normal speed (ML)
+        - 2: Slight left turn (45°) with normal speed (SL)
+        - 3: Medium right turn (90°) with normal speed (MR)
+        - 4: Slight right turn (45°) with normal speed (SR)
+        - 5: Medium left turn (90°) with reduced speed (ML-S)
+        - 6: Slight left turn (45°) with reduced speed (SL-S)
+        - 7: Medium right turn (90°) with reduced speed (MR-S)
+        - 8: Slight right turn (45°) with reduced speed (SR-S)
+        
+        Mirror mapping:
+        - When first aircraft turns left, second turns right (and vice versa)
+        - When first aircraft reduces speed, second maintains normal speed
         """
-        if action == 1:  # ML -> MR
+        if action == 0:  # Maintain course (N) -> Maintain course (N)
+            return 0
+        elif action == 1:  # Medium left (ML) -> Medium right (MR)
             return 3
-        elif action == 2:  # SL -> SR
+        elif action == 2:  # Slight left (SL) -> Slight right (SR)
             return 4
-        elif action == 3:  # MR -> ML
+        elif action == 3:  # Medium right (MR) -> Medium left (ML)
             return 1
-        elif action == 4:  # SR -> SL
+        elif action == 4:  # Slight right (SR) -> Slight left (SL)
+            return 2
+        elif action == 5:  # Medium left with reduced speed -> Medium right with normal speed
+            return 3
+        elif action == 6:  # Slight left with reduced speed -> Slight right with normal speed
+            return 4
+        elif action == 7:  # Medium right with reduced speed -> Medium left with normal speed
+            return 1
+        elif action == 8:  # Slight right with reduced speed -> Slight left with normal speed
             return 2
         else:
-            return action  # N remains N
-        
-    def _find_closest_aircraft_pair(self):
-        """Find the closest pair of aircraft even if not in collision risk."""
-        min_dist = float('inf')
-        closest_pair = None
-        
-        aircraft_list = self.simulation.aircraft
-        for i, ac1 in enumerate(aircraft_list):
-            for j, ac2 in enumerate(aircraft_list):
-                if i < j:  # Check each pair only once
-                    dist = Utility.locDist(ac1.getLocation(), ac2.getLocation())
-                    if dist < min_dist:
-                        min_dist = dist
-                        closest_pair = (ac1.getIdent(), ac2.getIdent())
-        
-        return closest_pair
+            return 0  # Default to maintain course for unknown actions
     
     def _find_aircraft_by_id(self, aircraft_id):
         """Find an aircraft by its ID."""

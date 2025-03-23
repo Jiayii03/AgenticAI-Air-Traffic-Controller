@@ -54,7 +54,7 @@ def train_dqn_agent(episodes=500, render_every=50, seed=43):
     )
     
     # Load existing model if available
-    model_path = 'models/dqn_atc_model.pth'
+    model_path = 'models/dqn_atc_model_2.pth'
     # if os.path.exists(model_path):
     #     print(f"Loading existing model from {model_path}")
     #     agent.load(model_path)

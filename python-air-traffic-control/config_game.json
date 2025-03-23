@@ -31,7 +31,7 @@
 	},
 	"game":{
 		"gametime":180000,
-		"n_aircraft":8,
+		"n_aircraft":4,
 		"n_destinations":5,
 		"n_obstacles":0,
 		"framerate":40,
@@ -57,7 +57,7 @@
 		"max_waypoints":6,
 		"speed_min":100,
 		"speed_max":1000,
-		"speed_default":1000,
+		"speed_default":800,
 		"speed_scalefactor":2000.0,
 		"collision_radius":50,
 		"draw_radius":false
@@ -67,10 +67,11 @@
 	},
 	"rl_agent": {
 		"enabled": true,
-		"model_path": "simulation/models/dqn_atc_model.pth",
+		"model_path": "simulation/models/dqn_atc_model_2.pth",
 		"visualization": true,
 		"tactical_waypoint_distance": 80,
-		"cooldown_frames": 100,
-		"collision_risk_radius": 120
+		"cooldown_frames": 120,
+		"collision_risk_radius": 120,
+		"speed_reset_delay": 150
 	}
 }

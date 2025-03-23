@@ -7,7 +7,7 @@ import string
 import conf
 from waypoint import *
 from utility import *
-from game import *
+# from game import *
 
 assets_dir = os.path.join(os.path.dirname(__file__), 'assets')
 

@@ -200,9 +200,14 @@ class Simulation:
         self.logger.debug_print(f"Spawned {ident} at {loc} heading to {dest.getLocation()}")
     
     def _apply_action(self, aircraft, action):
-        """Apply an action to an aircraft."""
-        # Get current location and destination
+        """Apply an action to an aircraft, including speed adjustments."""
+        # Get current location and heading
         curr_loc = aircraft.getLocation()
+        curr_heading = aircraft.getHeading()
+        
+        # Get default speed
+        default_speed = conf.get()['aircraft']['speed_default']
+        reduced_speed = default_speed * 0.8 
         
         # Store original destination (last waypoint)
         destination = None
@@ -216,7 +221,8 @@ class Simulation:
         # If aircraft already has tactical waypoints and action is to maintain course,
         # don't modify the waypoints at all
         if had_tactical_waypoint and action == 0:
-            self.logger.debug_print(f"Aircraft {aircraft.getIdent()}: Maintaining existing waypoints, Waypoints={[wp.getLocation() for wp in aircraft.waypoints]}")
+            if hasattr(self, 'logger') and self.logger is not None:
+                self.logger.debug_print(f"Aircraft {aircraft.getIdent()}: Maintaining existing waypoints")
             return
         
         # Clear existing waypoints only if we're going to modify them
@@ -227,22 +233,33 @@ class Simulation:
             aircraft.addWaypoint(destination)
         else:
             # If no destination exists, just maintain current heading
-            print(f"Aircraft {aircraft.getIdent()}: No destination found!")
+            if hasattr(self, 'logger') and self.logger is not None:
+                self.logger.debug_print(f"Aircraft {aircraft.getIdent()}: No destination found!")
             return
         
+        # Determine if this action includes a speed adjustment
+        speed_adjustment = False
+        if action >= 5:  # Actions 5-8 include speed reduction
+            speed_adjustment = True
+            aircraft.setSpeed(reduced_speed)
+        else:
+            aircraft.setSpeed(default_speed)
+        
+        # Determine the turn action (mapping actions 5-8 back to their turn equivalents)
+        turn_action = action
+        if action >= 5:
+            turn_action = action - 4  # Convert to base turn action (1-4)
+        
         # Apply tactical waypoint if action is not "maintain course"
-        if action != 0:
-            # Apply the selected action's heading change
-            curr_heading = aircraft.getHeading()
-            
-            # Apply heading change based on action
-            if action == 1:  # ML - Medium left (90° turn)
+        if turn_action != 0:
+            # Apply heading change based on turn action
+            if turn_action == 1:  # ML - Medium left (90° turn)
                 new_heading = (curr_heading - 90) % 360
-            elif action == 2:  # SL - Slight left (45° turn)
+            elif turn_action == 2:  # SL - Slight left (45° turn)
                 new_heading = (curr_heading - 45) % 360
-            elif action == 3:  # MR - Medium right (90° turn)
+            elif turn_action == 3:  # MR - Medium right (90° turn)
                 new_heading = (curr_heading + 90) % 360
-            elif action == 4:  # SR - Slight right (45° turn)
+            elif turn_action == 4:  # SR - Slight right (45° turn)
                 new_heading = (curr_heading + 45) % 360
             else:  # N - maintain course
                 new_heading = curr_heading
@@ -258,11 +275,12 @@ class Simulation:
             tactical_waypoint = Waypoint(new_waypoint)
             aircraft.waypoints.insert(0, tactical_waypoint)  # Insert at beginning
             
-            self.logger.debug_print(f"Aircraft {aircraft.getIdent()}: Action={action}, Applied tactical waypoint")
+            if hasattr(self, 'logger') and self.logger is not None:
+                speed_str = " with reduced speed" if speed_adjustment else ""
+                self.logger.debug_print(f"Aircraft {aircraft.getIdent()}: Action={action}, Applied tactical waypoint{speed_str}")
         else:
-            self.logger.debug_print(f"Aircraft {aircraft.getIdent()}: Direct routing to destination")
-        
-        self.logger.debug_print(f"Aircraft {aircraft.getIdent()}: Waypoints={[wp.getLocation() for wp in aircraft.waypoints]}")
+            if hasattr(self, 'logger') and self.logger is not None:
+                self.logger.debug_print(f"Aircraft {aircraft.getIdent()}: Direct routing to destination")
     
     def _detect_collisions(self):
         """Detect aircraft pairs that are in potential collision."""
