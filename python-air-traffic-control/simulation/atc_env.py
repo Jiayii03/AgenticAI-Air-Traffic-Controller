@@ -398,16 +398,23 @@ class ATCEnv(gym.Env):
         if ac1_reduced:
             time_penalty *= 1.2
         
+        # 7. Penalty for collisions involving aircraft in cooldown
+        cooldown_penalty = 0
+        if ac1_id in self.aircraft_cooldowns and ac2_id in self.aircraft_cooldowns:
+            cooldown_penalty = -100  # Apply a significant penalty for collisions involving aircraft in cooldown
+        
         # Log the reward components for debugging
         print(f"Reward components - Distance: {distance_reward:.2f}, Heading Away: {heading_reward:.2f}, "
-            f"Dest Alignment: {dest_alignment_reward:.2f}, Speed: {speed_reward:.2f}, Time: {time_penalty:.2f}")
+            f"Dest Alignment: {dest_alignment_reward:.2f}, Speed: {speed_reward:.2f}, Time: {time_penalty:.2f}, "
+            f"Cooldown Penalty: {cooldown_penalty:.2f}")
         
         # Balance components with more emphasis on collision avoidance and effective speed usage
         reward = (1.0 * distance_reward) + \
                 (1.2 * heading_reward) + \
                 (0.7 * dest_alignment_reward) + \
                 (1.0 * speed_reward) + \
-                (0.2 * time_penalty)
+                (0.2 * time_penalty) + \
+                cooldown_penalty
         
         return max(min(reward, 50), -100)  # Cap reward
     
