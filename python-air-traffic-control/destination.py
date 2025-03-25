@@ -1,6 +1,4 @@
 # File: destination.py
-# Author: Tom Woolfrey
-
 import pygame
 import random
 import math
@@ -11,43 +9,49 @@ from utility import Utility
 class Destination(Waypoint):
 
     COLOR_DEST = (192, 192, 192)
+    COLOR_EMERGENCY = (255, 0, 0)  # Red for emergency
 
     def __init__(self, location, text):
         self.location = location
         self.text = text
+        self.emergency = False  # New flag for emergency status
         font = pygame.font.Font(None, 20)
         self.font_img = font.render(text, True, Destination.COLOR_DEST)
 
     def draw(self, surface):
-        pygame.draw.circle(surface, Destination.COLOR_DEST, self.location, 5, 0)
+        # Change the drawing color if this destination is in emergency mode.
+        color = Destination.COLOR_EMERGENCY if self.emergency else Destination.COLOR_DEST
+        pygame.draw.circle(surface, color, self.location, 5, 0)
         surface.blit(self.font_img, (self.location[0] + 8, self.location[1] + 8))
 
     def clickedOn(self, clickpos):
         return False
-		
+
+    def setEmergency(self, status=True):
+        self.emergency = status
+        # Optionally update the font image to reflect emergency (e.g., by re-rendering with a different color)
+        font = pygame.font.Font(None, 20)
+        self.font_img = font.render(self.text, True, Destination.COLOR_EMERGENCY if status else Destination.COLOR_DEST)
+
+    def isEmergency(self):
+        return self.emergency
+
     @staticmethod
     def generateGameDestinations(screen_w, screen_h):
         ret = []
-        # Define minimum distance between destinations
         min_distance = conf.get().get('destinations', {}).get('min_distance', 100)
-        # Maximum attempts to place a destination
         max_attempts = 100
-        
-        # Margin from screen edges
         margin = 40
         
         for x in range(0, conf.get()['game']['n_destinations']):
-            # Try to place each destination with safe distance
             placed = False
             attempts = 0
             
             while not placed and attempts < max_attempts:
-                # Generate random position within screen bounds (with margin)
                 randx = random.randint(margin, screen_w - margin)
                 randy = random.randint(margin, screen_h - margin)
                 candidate_loc = (randx, randy)
                 
-                # Check distance to all existing destinations
                 valid_position = True
                 for existing_dest in ret:
                     dist = Utility.locDist(candidate_loc, existing_dest.location)
@@ -56,7 +60,6 @@ class Destination(Waypoint):
                         break
                 
                 if valid_position:
-                    # Create new destination and add to list
                     dest = Destination(candidate_loc, "D" + str(x))
                     ret.append(dest)
                     placed = True
@@ -64,7 +67,6 @@ class Destination(Waypoint):
                 
                 attempts += 1
             
-            # If couldn't place after max attempts, place anyway but print warning
             if not placed:
                 randx = random.randint(margin, screen_w - margin)
                 randy = random.randint(margin, screen_h - margin)
