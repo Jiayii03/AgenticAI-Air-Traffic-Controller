@@ -6,20 +6,19 @@ COMP3071 Designing Intelligent Agents
 
 1. Try train RL using current SARSA (tabular) method and existing observation and action space. If cannot then need change to neural network or other RL methods. **done**
 
-2. Integrate collision avoidance
- - 
+2. Integrate collision avoidance **done**
 
-3. Incorporate emergency situation
-- 
+3. Integrate emergency situation
 
 4. Benchmark against baseline, e.g. random or straight line
 
 ### Seed Number for Demonstration
 
-Head over to `config_game.json` and change the `scenario_seed`.
+Head over to `config_game.json` and change the `scenario_seed`. Suitable config as follows:
 
-1. 210546 (6 aircrafts, 5 destinations)
-2. 
+1. 331280 (5 aircrafts, 5 destinations)
+2. 350072 (5 aircrafts, 5 destinations)
+3. 379381 (5 aircrafts, 5 destinations)
 
 ### Observation space
 
