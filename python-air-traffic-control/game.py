@@ -13,11 +13,13 @@ from utility import *
 from pgu import gui
 from flightstrippane import *
 import sys
+import torch  
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 assets_dir = os.path.join(os.path.dirname(__file__), 'assets')
 
 from simulation.rl_controller import RLController
+from simulation.emergency_rl_controller import EmergencyRLController  # Import the new EmergencyRLController
 
 class Game:
 
@@ -108,8 +110,22 @@ class Game:
             self.rl_controller = RLController(model_path=model_path)
             print("RL agent enabled for collision avoidance")
         
+        # Initialize the Emergency RL Controller
+        emergency_model_path = conf.get().get('emergency_agent', {}).get('model_path', 'models/emergency_dqn_model.pth')
+        self.emergency_controller = EmergencyRLController(model_path=emergency_model_path)
+
+        # Emergency state tracking
+        self.emergency_destination = None
+        self.emergency_active = False
+        self.emergency_triggered = False
+        
         self.cnt_fspane = FlightStripPane(left=Game.FSPANE_LEFT, top=Game.FSPANE_TOP, width=Game.FS_W, align=-1, valign=-1)
         self.cnt_main.add(self.cnt_fspane, Game.FSPANE_LEFT, Game.FSPANE_TOP + 100)
+
+        # Add a button to trigger the emergency
+        self.btn_trigger_emergency = gui.Button(value="Trigger Emergency", width=Game.FS_W-3, height=60)
+        self.btn_trigger_emergency.connect(gui.CLICK, self.__trigger_emergency)  # Connect button to the trigger method
+        self.cnt_main.add(self.btn_trigger_emergency, Game.FSPANE_LEFT, Game.FSPANE_TOP + 100)
 
         self.app.init(self.cnt_main, self.screen)
 
@@ -228,56 +244,72 @@ class Game:
             self.ac_selected.setSelected(True)
             
     def __update(self):
-        
         # Apply RL collision avoidance if enabled
         if hasattr(self, 'rl_enabled') and self.rl_enabled:
             self.__handle_rl_collision_avoidance()
 
-        #1: Update the positions of all existing aircraft
-        #2: Check if any aircraft have collided with an obstacle
-        #3: Check if any aircraft have reached a destination
+        # Update the positions of all existing aircraft
         ac_removal = []
 
         for n in range(0, len(self.aircraft)):
             a = self.aircraft[n]
 
-            #Update positions and redraw
+            # Update positions and redraw
             reachdest = a.update()
-            if(reachdest == True):
-                #Schedule aircraft for removal
+            if reachdest:
+                # Schedule aircraft for removal
                 ac_removal.append(a)
                 self.score += conf.get()['scoring']['reach_dest']
             else:
                 a.draw(self.screen)
 
-            #Check collisions
+            # Check collisions
             self.__highlightImpendingCollision(a)
             for ac_t in self.aircraft:
-                if(ac_t != a):
+                if ac_t != a:
                     self.__handleAircraftCollision(ac_t, a)
 
         for a in ac_removal:
-            if(self.ac_selected == a):
+            if self.ac_selected == a:
                 self.requestSelected(None)
             self.aircraft.remove(a)
             self.cnt_fspane.remove(a.getFS())
             self.cnt_fspane.repaint()
-        
-        #4: Spawn new aircraft due for spawning (or if in demo, regenerate list if none left)
-        if(len(self.aircraftspawntimes) != 0):
+
+        # Spawn new aircraft due for spawning
+        if len(self.aircraftspawntimes) != 0:
             if self.ms_elapsed >= self.aircraftspawntimes[0]:
                 sp = self.aircraftspawns[0]
-                if(len(self.aircraft) < math.floor(Game.FSPANE_H / 60)):
+                if len(self.aircraft) < math.floor(Game.FSPANE_H / 60):
                     ac = Aircraft(self, sp.getSpawnPoint(), conf.get()['aircraft']['speed_default'], sp.getDestination(), "BA" + str(random.randint(1, 100)))
                     self.aircraft.append(ac)
                     self.cnt_fspane.addNewFlightStrip(ac)
                 self.aircraftspawns.remove(sp)
                 self.aircraftspawntimes.remove(self.aircraftspawntimes[0])
         elif self.demomode:
-            self.ms_eleapsed = 0
+            self.ms_elapsed = 0
             self.__generateAircraftSpawnEvents()
             print("reset")
-    
+
+        # Step 1: Handle emergency rerouting
+        if self.emergency_active:
+            self.__handle_emergency_rerouting()
+
+        # Step 2: Reset emergency if no aircraft are heading to the emergency destination
+        if self.emergency_active and not any(ac.destination == self.emergency_destination for ac in self.aircraft):
+            self.emergency_destination.setEmergency(False)
+            self.emergency_active = False
+            print(f"Emergency resolved at {self.emergency_destination.text}")
+
+        # Highlight the emergency destination
+        if self.emergency_active:
+            pygame.draw.circle(self.screen, (255, 0, 0), self.emergency_destination.getLocation(), 10, 2)  # Red circle
+
+        # Draw rerouted paths for affected aircraft
+        for ac in self.aircraft:
+            if ac.destination != ac.original_destination:
+                pygame.draw.line(self.screen, (255, 255, 0), ac.getLocation(), ac.destination.getLocation(), 2)  # Yellow line
+
     def __handleUserInteraction(self):
 
         for event in pygame.event.get():
@@ -515,3 +547,35 @@ class Game:
                 self.app.update(self.screen)
                 pygame.display.flip()
 
+    def __handle_emergency_rerouting(self):
+        """
+        Use the Emergency RL Controller to reroute aircraft heading to the emergency destination.
+        """
+        safe_destinations = [dest for dest in self.destinations if dest != self.emergency_destination]
+
+        for ac in self.aircraft:
+            if ac.destination == self.emergency_destination:
+                # Build observation
+                obs = self.emergency_controller.get_observation(ac, self.emergency_destination, safe_destinations)
+
+                # Select action
+                action = self.emergency_controller.select_action(obs)
+
+                # Apply action
+                self.emergency_controller.apply_action(ac, action, safe_destinations)
+
+    def __trigger_emergency(self):
+        """
+        Trigger an emergency manually by marking a random destination as emergency.
+        """
+        if not self.emergency_active:
+            # Select a random destination that an aircraft is traveling to
+            active_destinations = [ac.destination for ac in self.aircraft if ac.destination]
+            if active_destinations:
+                self.emergency_destination = random.choice(active_destinations)
+                self.emergency_destination.setEmergency(True)
+                self.emergency_active = True
+                self.emergency_triggered = True
+                print(f"Emergency triggered at {self.emergency_destination.text}")
+            else:
+                print("No active destinations to trigger an emergency.")

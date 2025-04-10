@@ -179,6 +179,9 @@ class EmergencyATCEnv(gym.Env):
         norm_speed = emergency_ac.getSpeed() / default_speed
         
         observation = np.array([dist_emerg, ang_diff_emerg] + safe_features + [norm_speed], dtype=np.float32)
+
+        # Ensure the observation vector has exactly 9 features
+        assert len(observation) == 9, f"Observation vector has incorrect size: {len(observation)} (expected 9)"
         return observation
 
     def _calculate_angle(self, point1, point2):

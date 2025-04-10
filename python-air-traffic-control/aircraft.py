@@ -46,14 +46,14 @@ class Aircraft:
     # Constructor
     def __init__(self, game, location, speed, destination, ident):
         self.game = game
-
-        # Game state vars
         self.location = location
         self.speed = speed
         self.altitude = 24000  # hardwired for now; measured in ft
         self.waypoints = []
         self.collisionRisk = []
-        self.waypoints.append(destination)
+        self.destination = destination  # Add destination attribute
+        self.original_destination = destination  # Track the original destination
+        self.waypoints.append(destination)  # Add the destination as the first waypoint
         self.ident = ident
         self.selected = False
         self.state = Aircraft.AC_STATE_NORMAL
@@ -69,6 +69,12 @@ class Aircraft:
 
         # Initialize the flight state
         self.fs = FlightState()
+
+    def update_destination(self, new_destination):
+        """Update the aircraft's destination."""
+        self.original_destination = self.destination
+        self.destination = new_destination
+        self.waypoints = [Waypoint(new_destination.getLocation())]  # Update waypoints
 
     # Add a new waypoint in the specified index in the list
     def addWaypoint(self, waypoint, index=0):
@@ -176,6 +182,7 @@ class Aircraft:
 
     # Location/heading update function
     def update(self):
+        """Update the aircraft's position and check if it has reached its destination."""
         if self.__reachedWaypoint(self.location, self.waypoints[0].getLocation()):
             self.rl_controlled = False
             # Reached next waypoint, pop it
@@ -183,11 +190,15 @@ class Aircraft:
             if len(self.waypoints) == 0:
                 # Reached destination, return True
                 return True
+            else:
+                # Update the current destination
+                self.destination = self.waypoints[0]
         
         # Keep moving towards waypoint
         self.heading = self.__calculateHeading(self.location, self.waypoints[0].getLocation())
         self.location = self.__calculateNewLocation(self.location, self.heading, self.speed)
         self.fs.updateAllFields()
+        return False
     
     def isFollowingRLWaypoint(self):
         return self.rl_controlled and len(self.waypoints) > 0

@@ -41,3 +41,26 @@ class Utility:
                 return (None, 0)
         else:
             return (None, 0)
+
+    @staticmethod
+    def angleBetween(reference_heading, point1, point2):
+        """
+        Calculate the angular difference (in degrees) between the reference heading
+        and the direction from point1 to point2.
+        - reference_heading: The current heading of the aircraft (in degrees).
+        - point1: The current location of the aircraft (x, y).
+        - point2: The target location (x, y).
+        """
+        dx = point2[0] - point1[0]
+        dy = point2[1] - point1[1]
+
+        # Calculate the angle from point1 to point2
+        target_angle = math.degrees(math.atan2(dy, dx))
+        target_angle = (target_angle + 360) % 360  # Normalize to [0, 360)
+
+        # Calculate the angular difference
+        angle_diff = abs(reference_heading - target_angle)
+        if angle_diff > 180:
+            angle_diff = 360 - angle_diff  # Normalize to [0, 180]
+
+        return angle_diff
