@@ -4,14 +4,21 @@ COMP3071 Designing Intelligent Agents
 
 ### TODOs:
 
-1. Try train RL using current SARSA (tabular) method and existing observation and action space. If cannot then need change to neural network or other RL methods.
+1. Try train RL using current SARSA (tabular) method and existing observation and action space. If cannot then need change to neural network or other RL methods. **done**
 
-2. Incorporate time efficiency
- - Add a small negative reward per timestep (-0.1 per step).
- - Scale landing rewards inversely with time (faster landing = higher reward).
- - Include a "direct path" component in your reward function that encourages staying close to the direct path to destination.
+2. Integrate collision avoidance **done**
 
-3. Incorporate emergency situation
+3. Integrate emergency situation
+
+4. Benchmark against baseline, e.g. random or straight line
+
+### Seed Number for Demonstration
+
+Head over to `config_game.json` and change the `scenario_seed`. Suitable config as follows:
+
+1. 331280 (5 aircrafts, 5 destinations)
+2. 350072 (5 aircrafts, 5 destinations)
+3. 379381 (5 aircrafts, 5 destinations)
 
 ### Observation space
 

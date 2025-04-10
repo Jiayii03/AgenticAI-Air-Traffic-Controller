@@ -5,6 +5,7 @@ from pygame import *
 from game import *
 import menu_base
 import conf
+import random_state
 
 STATE_MENU = 1
 STATE_GAME = 2
@@ -48,5 +49,11 @@ class Main:
 
 # main entry point
 if __name__ == '__main__':
+    # Get the scenario seed from config
+    scenario_seed = conf.get().get('game', {}).get('scenario_seed', 0)
+    
+    # Set the global seed - if it's 0, a random seed will be generated
+    used_seed = random_state.set_global_seed(scenario_seed)
+    
     game_main = Main()
     game_main.run()
