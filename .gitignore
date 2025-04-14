@@ -1,2 +1,3 @@
 **/__pycache__/
-python-air-traffic-control/simulation/logs/
+**/logs/
+**/results/

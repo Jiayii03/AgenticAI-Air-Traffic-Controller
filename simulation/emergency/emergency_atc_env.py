@@ -2,16 +2,9 @@ import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
 import pygame
-import sys
-import os
-import math
-
-# Add parent directory to path so we can import game components
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from emergency_simulation import EmergencySimulation  # Corrected import
-from utility import Utility
-import conf
+from simulation.emergency.emergency_simulation import EmergencySimulation 
+from core.utility import Utility
+from core import conf
 
 class EmergencyATCEnv(gym.Env):
     """

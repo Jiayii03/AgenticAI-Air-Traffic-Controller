@@ -6,13 +6,10 @@ import sys
 import numpy as np
 import math
 import torch
-from simulation.dqn_agent import QNetwork
-from utility import Utility
-from waypoint import Waypoint
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import conf
+from simulation.collision_avoidance.dqn_agent import QNetwork
+from core.utility import Utility
+from core.waypoint import Waypoint
+from core import conf
 
 class RLController:
     """Controls aircraft using a trained DQN model when collision risks are detected"""
@@ -28,26 +25,33 @@ class RLController:
         # Initialize the Q network with the same architecture as in training
         self.q_network = QNetwork(self.state_dim, self.action_dim, self.hidden_dim)
         
-        if os.path.exists(model_path):
+        # Resolve the path relative to the project root
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        resolved_path = os.path.join(base_dir, 'models', os.path.basename(model_path))
+    
+        if self.debug:
+            print(f"Looking for model at: {resolved_path}")
+        
+        if os.path.exists(resolved_path):
             try:
-                checkpoint = torch.load(model_path)
+                checkpoint = torch.load(resolved_path)
                 
                 # Check if this is a full agent checkpoint or just network weights
                 if "q_network" in checkpoint:
                     # This is a full agent checkpoint, load just the q_network part
                     self.q_network.load_state_dict(checkpoint["q_network"])
-                    print(f"RL agent loaded q_network from full checkpoint: {model_path}")
+                    print(f"RL agent loaded q_network from full checkpoint: {resolved_path}")
                 else:
                     # This is a direct network state dict
                     self.q_network.load_state_dict(checkpoint)
-                    print(f"RL agent loaded network weights from: {model_path}")
+                    print(f"RL agent loaded network weights from: {resolved_path}")
                 
                 self.q_network.eval()  # Set to evaluation mode
             except Exception as e:
                 print(f"Error loading model: {e}")
                 print("RL agent will use untrained model.")
         else:
-            print(f"Warning: Model file {model_path} not found. RL agent will use untrained model.")
+            print(f"Warning: Model file {resolved_path} not found. RL agent will use untrained model.")
         
         # Initialize collision detection parameters
         self.collision_risk_radius = conf.get()["rl_agent"]["collision_risk_radius"]
@@ -224,7 +228,6 @@ class RLController:
         
         return action
     
-
     def apply_action(self, aircraft, action):
         """Apply the selected action to aircraft by modifying its waypoints and speed"""
         # Get current location

@@ -2,7 +2,7 @@
 
 import math
 from pgu import gui
-import conf
+from core import conf
 
 class FlightStripPane(gui.Table):
 

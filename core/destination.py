@@ -1,10 +1,9 @@
 # File: destination.py
 import pygame
 import random
-import math
-import conf
-from waypoint import Waypoint
-from utility import Utility
+from core import conf
+from core.waypoint import Waypoint
+from core.utility import Utility
 
 class Destination(Waypoint):
 

@@ -1,34 +1,4 @@
 {
-    "menus":{
-     "main_menu": {
-        "title":"Main Menu",
-        "titleRGB":[8,165,225],
-        "titlesize":75,
-        "buttons":[
-            { "text":"Start Game", "code":3 },
-            { "text":"Demo", "code":4 },
-            { "text":"High Scores", "code":5 },
-            { "text":"Exit Game", "code":-10 }
-        ]
-    },
-    "ages_menu": {
-        "title":"Choose your age",
-        "titleRGB":[8,165,225],
-        "titlesize":75,
-        "buttons":[
-            { "text":"0-13", "code":"0-13" },
-            { "text":"14-21", "code":"14-21" },
-            { "text":"22-30", "code":"22-30" },
-            { "text":"31-40", "code":"31-40" },
-            { "text":"41-50", "code":"41-50" },
-            { "text":"51+", "code":"51+" }
-        ]
-    }
-    },
-    "logger":{
-        "dictkeys":["id","agegroup","difficulty","score"],
-        "logfile":"visitorlog.csv"
-    },
     "game":{
         "gametime":180000,
         "n_aircraft":5,
@@ -69,7 +39,7 @@
     },
     "rl_agent": {
         "enabled": true,
-        "model_path": "simulation/models/dqn_atc_model_2.pth",
+        "model_path": "models/dqn_atc_model.pth",
         "visualization": true,
         "tactical_waypoint_distance": 80,
         "cooldown_frames": 120,
@@ -77,6 +47,6 @@
         "speed_reset_delay": 150
     },
     "emergency_agent": {
-        "model_path": "simulation/models/emergency_dqn_model.pth"
+        "model_path": "models/emergency_dqn_model.pth"
     }
 }

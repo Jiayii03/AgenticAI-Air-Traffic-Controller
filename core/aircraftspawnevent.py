@@ -1,8 +1,8 @@
 #	File: aircraftspawnevent.py
 
-import conf
 import random
 import math
+from core import conf
 
 class AircraftSpawnEvent:
 

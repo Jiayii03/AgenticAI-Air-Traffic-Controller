@@ -4,22 +4,23 @@
 import pygame
 import random
 import math
-import conf
-from destination import *
-from aircraft import *
-from obstacle import *
-from aircraftspawnevent import *
-from utility import *
-from pgu import gui
-from flightstrippane import *
 import sys
-import torch  
+import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-assets_dir = os.path.join(os.path.dirname(__file__), 'assets')
 
-from simulation.rl_controller import RLController
-from simulation.emergency_rl_controller import EmergencyRLController  # Import the new EmergencyRLController
+from core import conf
+from core.destination import *
+from core.aircraft import *
+from core.obstacle import *
+from core.aircraftspawnevent import *
+from core.utility import *
+from core.flightstrippane import *
+from pgu import gui
+from simulation.collision_avoidance.rl_controller import RLController
+from simulation.emergency.emergency_rl_controller import EmergencyRLController 
+
+ASSETS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'assets'))
 
 class Game:
 
@@ -80,8 +81,8 @@ class Game:
         self.__generateAircraftSpawnEvents()
         
         # Preload sounds.
-        self.sound_warning = pygame.mixer.Sound(os.path.join(assets_dir, 'sounds', 'warning.ogg'))
-        self.sound_collision = pygame.mixer.Sound(os.path.join(assets_dir, 'sounds', 'boom.wav'))
+        self.sound_warning = pygame.mixer.Sound(os.path.join(ASSETS_DIR, 'sounds', 'warning.ogg'))
+        self.sound_collision = pygame.mixer.Sound(os.path.join(ASSETS_DIR, 'sounds', 'boom.wav'))
         self.channel_warning = pygame.mixer.Channel(0)
         self.channel_collision = pygame.mixer.Channel(1)
         

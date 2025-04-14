@@ -1,9 +1,9 @@
 import os
 import torch
 import numpy as np
-from utility import Utility
-from waypoint import Waypoint
-from simulation.emergency_dqn_agent import EmergencyDQNAgent
+from core.utility import Utility
+from core.waypoint import Waypoint
+from simulation.emergency.emergency_dqn_agent import EmergencyDQNAgent
 
 class EmergencyRLController:
     """Handles emergency rerouting using a trained DQN model."""
@@ -20,16 +20,21 @@ class EmergencyRLController:
 
         # Initialize the Emergency DQN model
         self.emergency_agent = EmergencyDQNAgent(state_dim=state_dim, action_dim=action_dim)
-        if os.path.exists(model_path):
+        
+        # Resolve the path relative to the project root
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        resolved_path = os.path.join(base_dir, 'models', os.path.basename(model_path))
+        
+        if os.path.exists(resolved_path):
             try:
-                self.emergency_agent.load(model_path)  # Use the load method of EmergencyDQNAgent
+                self.emergency_agent.load(resolved_path)  # Use the load method of EmergencyDQNAgent
                 self.emergency_agent.q_network.eval()  # Set Q-network to evaluation mode
-                print(f"Emergency RL agent loaded from: {model_path}")
+                print(f"Emergency RL agent loaded from: {resolved_path}")
             except Exception as e:
                 print(f"Error loading emergency model: {e}")
                 print("Emergency RL agent will use untrained model.")
         else:
-            print(f"Warning: Emergency model file {model_path} not found. Emergency RL agent will use untrained model.")
+            print(f"Warning: Emergency model file {resolved_path} not found. Emergency RL agent will use untrained model.")
 
     def get_observation(self, aircraft, emergency_destination, safe_destinations):
         """

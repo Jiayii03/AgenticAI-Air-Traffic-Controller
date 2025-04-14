@@ -3,9 +3,9 @@
 import pygame;
 import os;
 import random;
-import conf
+from core import conf
 
-assets_dir = os.path.join(os.path.dirname(__file__), 'assets')
+ASSETS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'assets'))
 
 class Obstacle:
 
@@ -17,9 +17,9 @@ class Obstacle:
         self.type = obs_type
         self.colliding = []
         if(self.type == Obstacle.TYPE_WEATHER):
-            self.image = pygame.image.load(os.path.join(assets_dir, 'obs_weather.png'))
+            self.image = pygame.image.load(os.path.join(ASSETS_DIR, 'obs_weather.png'))
         elif(self.type == Obstacle.TYPE_MOUNTAIN):
-            self.image = pygame.image.load(os.path.join(assets_dir, 'obs_mountain.png'))
+            self.image = pygame.image.load(os.path.join(ASSETS_DIR, 'obs_mountain.png'))
             
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()

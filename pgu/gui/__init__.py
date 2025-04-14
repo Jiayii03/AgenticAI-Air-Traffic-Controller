@@ -37,5 +37,3 @@ from .misc import ProgressBar
 from .menus import Menus
 from .dialog import Dialog, FileDialog
 from .textarea import TextArea
-
-from .deprecated import Toolbox, action_open, action_setvalue, action_quit, action_exec

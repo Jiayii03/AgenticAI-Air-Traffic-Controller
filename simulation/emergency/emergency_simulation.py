@@ -1,15 +1,9 @@
 import pygame
 import numpy as np
-import sys
-import os
 
-# Add parent directory to path so we can import game components
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from simulation import Simulation
-from destination import Destination
-from utility import Utility
-import conf
+from simulation.common.simulation import Simulation
+from core.destination import Destination
+from core.utility import Utility
 
 class EmergencySimulation(Simulation):
     """
@@ -90,8 +84,8 @@ class EmergencySimulation(Simulation):
 # If running this file directly, you can do a simple test.
 if __name__ == "__main__":
     # Basic setup for testing
-    import conf
-    from logger import Logger
+    from core import conf
+    from simulation.common.logger import Logger
 
     logger = Logger(log_dir='logs', prefix='emergency_sim', debug=True).start()
     sim = EmergencySimulation(logger, num_planes=3, num_obstacles=2, screen_size=(800, 800))

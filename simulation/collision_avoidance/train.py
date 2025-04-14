@@ -1,7 +1,4 @@
 # simulation/train.py
-from dqn_agent import DQNAgent
-from atc_env import ATCEnv
-from logger import Logger
 import gymnasium as gym
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,14 +8,24 @@ import time
 import torch
 import random
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Add the parent directory to the system path to import modules
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-import conf
+# Add the simulation directory to the system path to import modules
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'simulation')))
 
-def train_dqn_agent(episodes=500, render_every=50, seed=43):
+# Add the project root directory to the system path to import modules
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
+from dqn_agent import DQNAgent
+from atc_env import ATCEnv
+from common.logger import Logger
+from core import conf
+
+def train_dqn_agent(episodes=2, render_every=50, seed=43):
     """Train a DQN agent on the ATC environment."""
     # Initialize logger
-    logger = Logger(log_dir='logs', prefix='dqn_training', debug=False).start()
+    logger = Logger(log_dir='../logs', prefix='dqn_training', debug=False).start()
     
     # Set the random seeds for reproducibility
     np.random.seed(seed)
@@ -54,7 +61,7 @@ def train_dqn_agent(episodes=500, render_every=50, seed=43):
     )
     
     # Load existing model if available
-    model_path = 'models/dqn_atc_model_2.pth'
+    model_path = "../../models/dqn_model_refactor.pth"
     # if os.path.exists(model_path):
     #     print(f"Loading existing model from {model_path}")
     #     agent.load(model_path)
@@ -217,7 +224,7 @@ def train_dqn_agent(episodes=500, render_every=50, seed=43):
     plt.grid(True)
 
     plt.tight_layout()
-    plt.savefig(f"results/dqn_training_results_{logger.timestamp}.png")
+    plt.savefig(f"../results/dqn_training_results_{logger.timestamp}.png")
     plt.show()
     
     return agent

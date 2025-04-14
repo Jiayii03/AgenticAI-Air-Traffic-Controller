@@ -3,13 +3,11 @@
 import math
 import pygame
 import os
-import string
-import conf
-from waypoint import *
-from utility import *
-# from game import *
+from core import conf
+from core.waypoint import *
+from core.utility import *
 
-assets_dir = os.path.join(os.path.dirname(__file__), 'assets')
+ASSETS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'assets'))
 
 class FlightState:
     def __init__(self):
@@ -30,9 +28,9 @@ class FlightState:
 
 class Aircraft:
 
-    AC_IMAGE_NORMAL = pygame.image.load(os.path.join(assets_dir, 'aircraft.png'))
-    AC_IMAGE_SELECTED = pygame.image.load(os.path.join(assets_dir, 'aircraft_sel.png'))
-    AC_IMAGE_NEAR = pygame.image.load(os.path.join(assets_dir, 'aircraft_near.png'))
+    AC_IMAGE_NORMAL = pygame.image.load(os.path.join(ASSETS_DIR, 'aircraft.png'))
+    AC_IMAGE_SELECTED = pygame.image.load(os.path.join(ASSETS_DIR, 'aircraft_sel.png'))
+    AC_IMAGE_NEAR = pygame.image.load(os.path.join(ASSETS_DIR, 'aircraft_near.png'))
 
     AC_STATE_NORMAL = 1
     AC_STATE_SELECTED = 2

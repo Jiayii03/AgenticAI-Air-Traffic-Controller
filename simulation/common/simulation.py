@@ -1,18 +1,13 @@
 # simulation/simulation.py
 import pygame
 import numpy as np
-import sys
-import os
 
-# Add parent directory to path so we can import game components
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from aircraft import Aircraft
-from destination import Destination
-from obstacle import Obstacle
-from waypoint import Waypoint
-from utility import Utility
-import conf
+from core.aircraft import Aircraft
+from core.destination import Destination
+from core.obstacle import Obstacle
+from core.waypoint import Waypoint
+from core.utility import Utility
+from core import conf
 
 class Simulation:
     """A wrapper around the air traffic control simulation that allows for RL interaction."""

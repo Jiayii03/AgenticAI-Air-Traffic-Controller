@@ -1,24 +1,30 @@
 import gymnasium as gym
 import numpy as np
 import matplotlib.pyplot as plt
-import os
-import sys
 import time
 import torch
 import random
+import sys
+import os
 
-# Add parent directory to path so we can import game components
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Add the parent directory to the system path to import modules
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-import conf
+# Add the simulation directory to the system path to import modules
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'simulation')))
+
+# Add the project root directory to the system path to import modules
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
+from core import conf
 from emergency_atc_env import EmergencyATCEnv
 from emergency_dqn_agent import EmergencyDQNAgent
-from logger import Logger
+from common.logger import Logger
 
-def train_emergency_agent(episodes=500, render_every=50, seed=43):
+def train_emergency_agent(episodes=2, render_every=50, seed=43):
     """Train an emergency rerouting DQN agent on the EmergencyATCEnv."""
     # Initialize logger
-    logger = Logger(log_dir='logs', prefix='emergency_training', debug=False).start()
+    logger = Logger(log_dir='../logs', prefix='emergency_training', debug=False).start()
     
     # Set random seeds for reproducibility
     np.random.seed(seed)
@@ -56,7 +62,7 @@ def train_emergency_agent(episodes=500, render_every=50, seed=43):
     )
     
     # Optionally load an existing model if available
-    model_path = 'models/emergency_dqn_model.pth'
+    model_path = '../../models/emergency_dqn_refactor.pth'
     if os.path.exists(model_path):
         print(f"Loading existing emergency model from {model_path}")
         agent.load(model_path)
@@ -179,7 +185,7 @@ def train_emergency_agent(episodes=500, render_every=50, seed=43):
     plt.grid(True)
     
     plt.tight_layout()
-    results_filename = f"results/emergency_training_results_{logger.timestamp}.png"
+    results_filename = f"../results/emergency_training_results_{logger.timestamp}.png"
     plt.savefig(results_filename)
     plt.show()
     

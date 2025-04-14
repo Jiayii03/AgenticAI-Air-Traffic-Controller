@@ -3,7 +3,7 @@ import json
 import os
 
 # Get the directory where conf.py is located
-base_dir = os.path.dirname(os.path.abspath(__file__))
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 configfile = os.path.join(base_dir, "config_game.json")
 loaded = ""
 

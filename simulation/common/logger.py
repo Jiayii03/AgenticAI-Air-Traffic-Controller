@@ -6,7 +6,7 @@ import time
 class Logger:
     """A logging utility that redirects print statements to both console and file."""
     
-    def __init__(self, log_dir='logs', prefix='training_log', debug=False):
+    def __init__(self, log_dir='../logs', prefix='training_log', debug=False):
         """Initialize the logger with configurable directory and prefix.
         
         Args:
