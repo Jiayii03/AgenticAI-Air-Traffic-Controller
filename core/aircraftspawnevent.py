@@ -238,7 +238,7 @@ class AircraftSpawnEvent:
         
         # If we couldn't find a well-separated point after max attempts,
         # just return the last generated point and print a warning
-        print(f"Warning: Could not find a well-separated spawn point after {max_attempts} attempts.")
+        # print(f"Warning: Could not find a well-separated spawn point after {max_attempts} attempts.")
         return spawn_point, side
 
     @staticmethod

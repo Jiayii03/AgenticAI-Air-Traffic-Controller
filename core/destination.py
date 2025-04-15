@@ -28,7 +28,7 @@ class Destination(Waypoint):
 
     def setEmergency(self, status=True):
         self.emergency = status
-        # Optionally update the font image to reflect emergency (e.g., by re-rendering with a different color)
+        # print(f"Setting emergency status of {self.text} to {status}")
         font = pygame.font.Font(None, 20)
         self.font_img = font.render(self.text, True, Destination.COLOR_EMERGENCY if status else Destination.COLOR_DEST)
 
@@ -62,7 +62,7 @@ class Destination(Waypoint):
                     dest = Destination(candidate_loc, "D" + str(x))
                     ret.append(dest)
                     placed = True
-                    print(f"Placed destination D{x} at {candidate_loc}")
+                    # print(f"Placed destination D{x} at {candidate_loc}")
                 
                 attempts += 1
             

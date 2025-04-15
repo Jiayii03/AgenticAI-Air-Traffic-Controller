@@ -86,6 +86,7 @@ class Game:
         self.channel_warning = pygame.mixer.Channel(0)
         self.channel_collision = pygame.mixer.Channel(1)
         
+        self.debug = conf.get()['game']['debug_mode']
         self.mute = conf.get()['game']['mute']
         self.n_aircrafts = conf.get()['game']['n_aircraft']
         self.n_obstacles = conf.get()['game']['n_obstacles']
@@ -108,25 +109,33 @@ class Game:
         if self.rl_enabled:
             model_path = conf.get().get('rl_agent', {}).get('model_path', 'models/dqn_atc_model.pth')
             model_path = os.path.join(os.path.dirname(__file__), model_path)
-            self.rl_controller = RLController(model_path=model_path)
-            print("RL agent enabled for collision avoidance")
+            self.rl_controller = RLController(model_path=model_path, debug=self.debug)
+            # print("RL agent enabled for collision avoidance")
         
         # Initialize the Emergency RL Controller
         emergency_model_path = conf.get().get('emergency_agent', {}).get('model_path', 'models/emergency_dqn_model.pth')
-        self.emergency_controller = EmergencyRLController(model_path=emergency_model_path)
+        self.emergency_controller = EmergencyRLController(model_path=emergency_model_path, debug=self.debug)
 
         # Emergency state tracking
         self.emergency_destination = None
         self.emergency_active = False
         self.emergency_triggered = False
+        self.emergency_resolve_time = None
+        self.emergency_min_duration = conf.get().get('emergency_agent', {}).get('visualisation_min_duration', 5000)  
+        self.max_emergencies = conf.get().get('emergency_agent', {}).get('max_emergencies', 2) 
+        self.emergency_count = 0
+        
+        # Add programmatic emergency timing
+        self.next_emergency_time = None
+        self.emergency_message = None
+        self.emergency_message_start_time = 0
+        
+        # Schedule first emergency between 10-15 seconds after start
+        self.next_emergency_time = random.randint(10000, 15000)
+        print(f"First emergency scheduled at: {self.next_emergency_time}ms")
         
         self.cnt_fspane = FlightStripPane(left=Game.FSPANE_LEFT, top=Game.FSPANE_TOP, width=Game.FS_W, align=-1, valign=-1)
         self.cnt_main.add(self.cnt_fspane, Game.FSPANE_LEFT, Game.FSPANE_TOP + 100)
-
-        # Add a button to trigger the emergency
-        self.btn_trigger_emergency = gui.Button(value="Trigger Emergency", width=Game.FS_W-3, height=60)
-        self.btn_trigger_emergency.connect(gui.CLICK, self.__trigger_emergency)  # Connect button to the trigger method
-        self.cnt_main.add(self.btn_trigger_emergency, Game.FSPANE_LEFT, Game.FSPANE_TOP + 100)
 
         self.app.init(self.cnt_main, self.screen)
 
@@ -204,13 +213,11 @@ class Game:
                 self.screen.blit(sf_time, (Game.FSPANE_LEFT + 30, 40))
                 
                 config_planes = self.font.render("Planes: {}".format(self.n_aircrafts), True, Game.COLOR_SCORETIME)
-                config_obstacles = self.font.render("Obstacles: {}".format(self.n_obstacles), True, Game.COLOR_SCORETIME)
                 config_destination = self.font.render("Destination: {}".format(self.n_destinations), True, Game.COLOR_SCORETIME)
                 
                 # Blit each configuration item on a separate line
                 self.screen.blit(config_planes, (Game.FSPANE_LEFT + 30, 70))
-                self.screen.blit(config_obstacles, (Game.FSPANE_LEFT + 30, 100))
-                self.screen.blit(config_destination, (Game.FSPANE_LEFT + 30, 130))
+                self.screen.blit(config_destination, (Game.FSPANE_LEFT + 30, 100))
                 # ===============================================================
             else:
                 #if (self.ms_elapsed / 1000) % 2 == 0:
@@ -245,6 +252,17 @@ class Game:
             self.ac_selected.setSelected(True)
             
     def __update(self):
+        # Check if it's time for a programmatic emergency
+        if (not self.emergency_active and 
+        self.next_emergency_time and 
+        self.ms_elapsed >= self.next_emergency_time and
+        self.emergency_count < self.max_emergencies):
+            self.__trigger_programmatic_emergency()
+            
+            # Schedule next emergency (between 15-20 seconds from now)
+            self.next_emergency_time = self.ms_elapsed + random.randint(15000, 20000)
+            print(f"Next emergency scheduled at: {self.next_emergency_time}ms")
+        
         # Apply RL collision avoidance if enabled
         if hasattr(self, 'rl_enabled') and self.rl_enabled:
             self.__handle_rl_collision_avoidance()
@@ -291,6 +309,10 @@ class Game:
             self.ms_elapsed = 0
             self.__generateAircraftSpawnEvents()
             print("reset")
+            
+        # Draw destinations
+        for dest in self.destinations:
+            dest.draw(self.screen)
 
         # Step 1: Handle emergency rerouting
         if self.emergency_active:
@@ -298,9 +320,20 @@ class Game:
 
         # Step 2: Reset emergency if no aircraft are heading to the emergency destination
         if self.emergency_active and not any(ac.destination == self.emergency_destination for ac in self.aircraft):
-            self.emergency_destination.setEmergency(False)
-            self.emergency_active = False
-            print(f"Emergency resolved at {self.emergency_destination.text}")
+            # Set resolve time when all aircraft are rerouted
+            if self.emergency_resolve_time is None:
+                self.emergency_resolve_time = self.ms_elapsed + self.emergency_min_duration
+            # Only resolve after minimum duration
+            elif self.ms_elapsed >= self.emergency_resolve_time:
+                self.emergency_destination.setEmergency(False)
+                self.emergency_active = False
+                self.emergency_resolve_time = None
+                self.emergency_message = f"Emergency at {self.emergency_destination.text} resolved!"
+                self.emergency_message_start_time = self.ms_elapsed
+                
+                for ac in self.aircraft:
+                    if hasattr(ac, 'rerouted') and ac.rerouted:
+                        ac.setRerouted(False)
 
         # Highlight the emergency destination
         if self.emergency_active:
@@ -310,6 +343,9 @@ class Game:
         for ac in self.aircraft:
             if ac.destination != ac.original_destination:
                 pygame.draw.line(self.screen, (255, 255, 0), ac.getLocation(), ac.destination.getLocation(), 2)  # Yellow line
+                
+        # Draw emergency notification if active
+        self.__draw_emergency_notification()
 
     def __handleUserInteraction(self):
 
@@ -418,7 +454,7 @@ class Game:
         
         # Apply RL actions to each pair at risk
         for ac1, ac2 in collision_pairs:
-            print(f"RL handling collision risk between {ac1.getIdent()} and {ac2.getIdent()}")
+            # print(f"RL handling collision risk between {ac1.getIdent()} and {ac2.getIdent()}")
             
             # Get observation for this pair
             observation = self.rl_controller.get_observation(ac1, ac2, self.obstacles, self.destinations)
@@ -428,12 +464,12 @@ class Game:
             
             # Apply action to first aircraft
             self.rl_controller.apply_action(ac1, action)
-            print(f"Applying action {action} to {ac1.getIdent()}")
+            # print(f"Applying action {action} to {ac1.getIdent()}")
             
             # Apply mirrored action to second aircraft
             mirrored_action = self.rl_controller._mirror_action(action)            
             self.rl_controller.apply_action(ac2, mirrored_action)
-            print(f"Applying mirrored action {mirrored_action} to {ac2.getIdent()}")
+            # print(f"Applying mirrored action {mirrored_action} to {ac2.getIdent()}")
             
             # Set the flags AFTER applying actions to indicate these aircraft are being controlled by RL
             ac1.rl_controlled = True
@@ -442,7 +478,7 @@ class Game:
             # Update cooldowns
             self.rl_controller.aircraft_cooldowns[ac1.getIdent()] = self.rl_controller.current_frame
             self.rl_controller.aircraft_cooldowns[ac2.getIdent()] = self.rl_controller.current_frame
-            print(f"Aircrafts on cooldown: {self.rl_controller.aircraft_cooldowns}")
+            # print(f"Aircrafts on cooldown: {self.rl_controller.aircraft_cooldowns}")
 
     def __highlightImpendingCollision(self, a):
         for at in self.aircraft:
@@ -555,7 +591,18 @@ class Game:
         safe_destinations = [dest for dest in self.destinations if dest != self.emergency_destination]
 
         for ac in self.aircraft:
-            if ac.destination == self.emergency_destination:
+            # Check if destination matches emergency destination (either by object or location)
+            is_emergency = False
+            if hasattr(ac.destination, 'text'):
+                # It's a Destination object, compare directly
+                is_emergency = (ac.destination == self.emergency_destination)
+            else:
+                # It's a Waypoint, compare locations
+                ac_dest_loc = ac.destination.getLocation()
+                emergency_loc = self.emergency_destination.getLocation()
+                is_emergency = (ac_dest_loc == emergency_loc)
+            
+            if is_emergency:
                 # Build observation
                 obs = self.emergency_controller.get_observation(ac, self.emergency_destination, safe_destinations)
 
@@ -564,19 +611,41 @@ class Game:
 
                 # Apply action
                 self.emergency_controller.apply_action(ac, action, safe_destinations)
+                print(f"Rerouting aircraft {ac.getIdent()} from emergency destination {self.emergency_destination.text} to {safe_destinations[action].text}")
 
-    def __trigger_emergency(self):
-        """
-        Trigger an emergency manually by marking a random destination as emergency.
-        """
-        if not self.emergency_active:
-            # Select a random destination that an aircraft is traveling to
+    def __trigger_programmatic_emergency(self):
+        """Trigger an emergency programmatically based on the random seed."""
+        if not self.emergency_active and self.aircraft:
+            # Select active destinations that aircraft are traveling to
             active_destinations = [ac.destination for ac in self.aircraft if ac.destination]
             if active_destinations:
+                # Use reproducible random choice
                 self.emergency_destination = random.choice(active_destinations)
                 self.emergency_destination.setEmergency(True)
                 self.emergency_active = True
                 self.emergency_triggered = True
-                print(f"Emergency triggered at {self.emergency_destination.text}")
+                self.emergency_count += 1
+                
+                # Set emergency message and start time
+                self.emergency_message = f"EMERGENCY AT {self.emergency_destination.text}!"
+                self.emergency_message_start_time = self.ms_elapsed
+                
+                print(f"Emergency {self.emergency_count}/{self.max_emergencies} triggered at {self.emergency_destination.text}")
             else:
                 print("No active destinations to trigger an emergency.")
+    
+    def __draw_emergency_notification(self):
+        """Draw emergency notification text on the screen if active."""
+        if self.emergency_message and (self.ms_elapsed - self.emergency_message_start_time) < self.emergency_min_duration:
+            # Draw text with background box (no flashing)
+            emergency_font = pygame.font.Font(None, 36)
+            text_surface = emergency_font.render(self.emergency_message, True, (255, 0, 0))
+            text_rect = text_surface.get_rect(center=(Game.AERIALPANE_W / 2, 50))
+            
+            # Draw background box
+            background_rect = text_rect.inflate(20, 10)
+            pygame.draw.rect(self.screen, (0, 0, 0), background_rect)
+            pygame.draw.rect(self.screen, (255, 0, 0), background_rect, 2)
+            
+            # Draw text
+            self.screen.blit(text_surface, text_rect)

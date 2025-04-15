@@ -34,7 +34,7 @@ class RLController:
         
         if os.path.exists(resolved_path):
             try:
-                checkpoint = torch.load(resolved_path)
+                checkpoint = torch.load(resolved_path, weights_only=True)
                 
                 # Check if this is a full agent checkpoint or just network weights
                 if "q_network" in checkpoint:
@@ -92,7 +92,7 @@ class RLController:
                         pair_id = f"{min(ac1.getIdent(), ac2.getIdent())}_{max(ac1.getIdent(), ac2.getIdent())}"
                         self.encounter_history[pair_id] = self.current_frame
                         
-                        print(f"Detected collision risk between {ac1.getIdent()} and {ac2.getIdent()}, distance: {dist:.2f}")
+                        # print(f"Detected collision risk between {ac1.getIdent()} and {ac2.getIdent()}, distance: {dist:.2f}")
         
         # Check for aircraft that need to return to default speed
         self._check_speed_reset_timers(aircraft_list, aircraft_in_pairs)
@@ -223,16 +223,30 @@ class RLController:
             action = torch.argmax(q_values).item()
             
             if self.debug:
-                # print(f"Q-values: {q_values.numpy()}")
+                print(f"Q-values: {q_values.numpy()}")
                 print(f"Selected action: {action}")
         
         return action
     
     def apply_action(self, aircraft, action):
         """Apply the selected action to aircraft by modifying its waypoints and speed"""
+        # Define a distance threshold below which we won't apply collision avoidance
+        proximity_threshold = conf.get()['rl_agent']['proximity_omit_threshold']
+        
         # Get current location
         curr_loc = aircraft.getLocation()
         curr_heading = aircraft.getHeading()
+        
+        # Check if aircraft is close to destination
+        if len(aircraft.waypoints) > 0:
+            dest_loc = aircraft.waypoints[-1].getLocation()
+            distance_to_dest = Utility.locDist(curr_loc, dest_loc)
+            
+            # Skip collision avoidance if too close to destination
+            if distance_to_dest <= proximity_threshold:
+                if self.debug:
+                    print(f"Aircraft {aircraft.getIdent()}: Too close to destination ({distance_to_dest:.1f} px) - skipping collision avoidance")
+                return
         
         # Get default speed
         default_speed = conf.get()['aircraft']['speed_default']
@@ -240,22 +254,10 @@ class RLController:
         
         # Store original destination (last waypoint)
         destination = None
-        destination = aircraft.waypoints[-1]  # Last waypoint is destination
+        if len(aircraft.waypoints) > 0:
+            destination = aircraft.waypoints[-1]  # Last waypoint is destination
         
-        # had_tactical_waypoint = False
-        
-        # Store all waypoints and check if there's more than just destination
-        # if len(aircraft.waypoints) > 0:
-        #     had_tactical_waypoint = len(aircraft.waypoints) > 1
-        
-        # # If aircraft already has tactical waypoints and action is to maintain course,
-        # # don't modify the waypoints at all
-        # if had_tactical_waypoint and action == 0:
-        #     if self.debug:
-        #         print(f"Aircraft {aircraft.getIdent()}: Maintaining existing waypoints")
-        #     return
-        
-        # Clear existing waypoints only if we're going to modify them
+        # Clear existing waypoints
         aircraft.waypoints = []
         
         # Add destination back if it exists

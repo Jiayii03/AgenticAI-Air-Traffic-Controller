@@ -27,7 +27,7 @@ class EmergencyRLController:
         
         if os.path.exists(resolved_path):
             try:
-                self.emergency_agent.load(resolved_path)  # Use the load method of EmergencyDQNAgent
+                self.emergency_agent.load(resolved_path, weights_only=True)  # Use the load method of EmergencyDQNAgent
                 self.emergency_agent.q_network.eval()  # Set Q-network to evaluation mode
                 print(f"Emergency RL agent loaded from: {resolved_path}")
             except Exception as e:
@@ -95,6 +95,7 @@ class EmergencyRLController:
         if action < len(safe_destinations):
             new_destination = safe_destinations[action]
             aircraft.update_destination(new_destination)  # Update the aircraft's destination
+            aircraft.setRerouted(True) # Mark the aircraft as rerouted
             if self.debug:
                 print(f"Aircraft {aircraft.getIdent()} rerouted to {new_destination.text}")  # Use 'text' instead of 'name'
         else:

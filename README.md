@@ -2,174 +2,126 @@
 
 COMP3071 Designing Intelligent Agents
 
-### TODOs:
+## Project Overview
 
-1. Try train RL using current SARSA (tabular) method and existing observation and action space. If cannot then need change to neural network or other RL methods. **done**
+This project implements an intelligent air traffic control system using reinforcement learning. The agents handle both collision avoidance and emergency destination rerouting.
 
-2. Integrate collision avoidance **done**
+## Features
 
-3. Integrate emergency situation
+- Collision avoidance using a DQN agent
+- Emergency rerouting using a separate DQN agent
+- Visual feedback for emergency situations
+- Reproducible simulation using seed-based randomization
 
-4. Benchmark against baseline, e.g. random or straight line
+## Collision Avoidance System
 
-### Seed Number for Demonstration
+### Observation Space
 
-Head over to `config_game.json` and change the `scenario_seed`. Suitable config as follows:
+The collision avoidance agent uses the following state representation:
 
-1. 331280 (5 aircrafts, 5 destinations)
-2. 350072 (5 aircrafts, 5 destinations)
-3. 379381 (5 aircrafts, 5 destinations)
-
-### Observation space
-
-Defines the format and boundaries of the state information that your agent will receive from the environment. 
-
-```python
-"""
-1. distance to nearest aircraft: [0, 50] pixels
-2. angle to nearest aircraft: [0, 360) degrees
-3. relative heading of nearest aircraft: [0, 360) degrees
-4. distance to nearest obstacle: [0, 50] pixels
-5.  to nearest obstacle: [0, 360) degrees
-"""
-self.observation_space = spaces.Box(
-    low=np.array([0, 0, 0, 0, 0]),    # Added two dimensions for obstacle info
-    high=np.array([50, 360, 360, 50, 360]),
-    dtype=np.float32
-)
 ```
-
-For tabular reinforcement learning methods like SARSA, you need to convert continuous state values into discrete indices to use as keys in your Q-table. "Buckets" are the discrete bins you divide each continuous dimension into.
-```python
-bucket_sizes = [50, 36, 36, 50, 36]
-value_ranges = [[0, 50], [0, 360], [0, 360], [0, 50], [0, 360]]
+[
+    distance_between_pair,      # Distance between the two aircraft in the pair
+    angle_to_intruder,          # Angle from aircraft 1 to aircraft 2
+    relative_heading,           # Relative heading of aircraft 2 compared to aircraft 1
+    angle_to_destination,       # Angle from aircraft 1 to its destination
+    angular_diff_to_dest,       # Angular difference between current heading and destination angle
+    relative_speed,             # Speed of aircraft 2 relative to aircraft 1
+    separation_rate             # Rate of separation/approach (-1 to 1)
+]
 ```
-
-For the `distance` dimension:
-`bucket_sizes[0] = 50` means you're dividing the range into 50 buckets
-`value_ranges[0] = [0, 50]` means the range spans from 0 to 50 pixels
-Each bucket has a width of 1 pixel (50 ÷ 50 = 1)
-
-For the `angle` dimension:
-`bucket_sizes[1] = 36` means you're dividing the angle into 36 buckets
-`value_ranges[1] = [0, 360]` means the range spans 0 to 360 degrees
-Each bucket has a width of 10 degrees (360 ÷ 36 = 10)
-
-If you expand your observation space to include obstacle information with the bucket sizes we discussed, your Q-table size would increase dramatically:
-50 × 36 × 36 × 50 × 36 = 116,640,000 state combinations
 
 ### Action Space
 
-0: N (Maintain course) - Continue straight ahead
-1: HL (Hard Left) - Make a sharp left turn (90° left)
-2: ML (Medium Left) - Make a moderate left turn (45° left)
-3: MR (Medium Right) - Make a moderate right turn (45° right)
-4: HR (Hard Right) - Make a sharp right turn (90° right)
+The collision avoidance agent can perform 9 different actions:
 
-```python
-self.action_space = spaces.Discrete(5)  # 5 possible actions
+- 0: Maintain course and speed (N)
+- 1: Medium left turn (90°) with normal speed (ML)
+- 2: Slight left turn (45°) with normal speed (SL)
+- 3: Medium right turn (90°) with normal speed (MR)
+- 4: Slight right turn (45°) with normal speed (SR)
+- 5: Medium left turn (90°) with reduced speed (ML-S)
+- 6: Slight left turn (45°) with reduced speed (SL-S)
+- 7: Medium right turn (90°) with reduced speed (MR-S)
+- 8: Slight right turn (45°) with reduced speed (SR-S)
+
+### Reward Function
+
+The collision avoidance reward function considers:
+
+- Distance between aircraft (quadratic penalty for close proximity)
+- Heading alignments (reward for diverging headings)
+- Destination alignment (reward for maintaining heading toward destination)
+- Speed adjustment effectiveness (reward for effective use of speed reductions)
+- Time penalties (small penalty to encourage efficient resolution)
+
+## Emergency Rerouting System
+
+### Observation Space
+
+The emergency agent uses the following state representation (9 dimensions):
+
+```
+[
+    distance_to_emergency,      # Distance from aircraft to emergency destination
+    angle_diff_to_emergency,    # Angle difference between heading and emergency destination
+    
+    # For each of 3 safe alternative destinations:
+    distance_to_safe1,          # Distance to first safe destination
+    angle_diff_to_safe1,        # Angle difference to first safe destination
+    distance_to_safe2,          # Distance to second safe destination
+    angle_diff_to_safe2,        # Angle difference to second safe destination
+    distance_to_safe3,          # Distance to third safe destination
+    angle_diff_to_safe3,        # Angle difference to third safe destination
+    
+    normalized_speed            # Aircraft's speed normalized between 0-1
+]
 ```
 
-### Environment state:
-```json
-{
-  "aircraft": [
-    {
-      "id": "AC1",
-      "location": [
-        800,
-        692
-      ],
-      "heading": 328.7082428175321,
-      "speed": 200,
-      "waypoints": [
-        [
-          411,
-          52
-        ]
-      ],
-      "nearest_aircraft": "AC4",
-      "nearest_aircraft_dist": 215.94675269612182,
-      "nearest_obstacle": "<obstacle.Obstacle object at 0x000001A741BC7680>",
-      "nearest_obstacle_dist": 204.38444167793205
-    },
-    {
-      "id": "AC2",
-      "location": [
-        5,
-        0
-      ],
-      "heading": 142.06672971640108,
-      "speed": 200,
-      "waypoints": [
-        [
-          164,
-          204
-        ]
-      ],
-      "nearest_aircraft": "AC3",
-      "nearest_aircraft_dist": 385.0324661635691,
-      "nearest_obstacle": "<obstacle.Obstacle object at 0x000001A7416EED80>",
-      "nearest_obstacle_dist": 223.2129028528593
-    },
-    {
-      "id": "AC3",
-      "location": [
-        0,
-        385
-      ],
-      "heading": 46.18730731572882,
-      "speed": 200,
-      "waypoints": [
-        [
-          197,
-          196
-        ]
-      ],
-      "nearest_aircraft": "AC2",
-      "nearest_aircraft_dist": 385.0324661635691,
-      "nearest_obstacle": "<obstacle.Obstacle object at 0x000001A741BC76E0>",
-      "nearest_obstacle_dist": 210.60151946270474
-    },
-    {
-      "id": "AC4",
-      "location": [
-        613,
-        800
-      ],
-      "heading": 345.98728662500656,
-      "speed": 200,
-      "waypoints": [
-        [
-          470,
-          227
-        ]
-      ],
-      "nearest_aircraft": "AC1",
-      "nearest_aircraft_dist": 215.94675269612182,
-      "nearest_obstacle": "<obstacle.Obstacle object at 0x000001A741BC7680>",
-      "nearest_obstacle_dist": 258.940147524481
-    },
-    {
-      "id": "AC5",
-      "location": [
-        800,
-        333
-      ],
-      "heading": 216.20945681718607,
-      "speed": 200,
-      "waypoints": [
-        [
-          677,
-          501
-        ]
-      ],
-      "nearest_aircraft": "AC1",
-      "nearest_aircraft_dist": 359.0,
-      "nearest_obstacle": "<obstacle.Obstacle object at 0x000001A741BC7680>",
-      "nearest_obstacle_dist": 255.16269319788896
-    }
-  ],
-  "collision_pairs": []
-}
-```
+### Action Space
+
+The emergency agent selects one of 3 actions:
+
+- 0: Reroute to first safe destination
+- 1: Reroute to second safe destination
+- 2: Reroute to third safe destination
+
+### Reward Function
+
+The emergency agent reward function considers:
+
+- Immediate reward for successful rerouting (+50)
+- Bonus for landing at a safe destination (+100)
+- Penalty for landing at emergency destination (-200)
+- Small time penalty to encourage quick decisions (-1 per step)
+
+## Configuration
+
+The system is configurable through `config_game.json`, where you can set:
+
+- Number of aircraft and destinations
+- Collision risk parameters
+- Maximum number of emergencies
+- Random seed for reproducibility
+
+## Seed Numbers for Demonstration
+
+Head over to `config_game.json` and change the `scenario_seed`. Suitable config as follows:
+
+### Without Emergency
+1. 331280 (5 aircrafts, 5 destinations)
+2. 350072 
+3. 379381 
+
+### With Emergency
+1. 508861 (5 aircrafts, 5 destinations)
+2. 776740 (7 aircrafts, 5 destinations)
+3. 959018, 478953 
+
+## TODO:
+
+1. ✓ Try train RL using DQN method with neural network
+2. ✓ Integrate collision avoidance
+3. ✓ Integrate emergency situation
+4. Benchmark against baseline, e.g. random or straight line
+5. Parameterised experiment and rigorous testing

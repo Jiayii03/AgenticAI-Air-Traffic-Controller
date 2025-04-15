@@ -31,10 +31,12 @@ class Aircraft:
     AC_IMAGE_NORMAL = pygame.image.load(os.path.join(ASSETS_DIR, 'aircraft.png'))
     AC_IMAGE_SELECTED = pygame.image.load(os.path.join(ASSETS_DIR, 'aircraft_sel.png'))
     AC_IMAGE_NEAR = pygame.image.load(os.path.join(ASSETS_DIR, 'aircraft_near.png'))
+    AC_IMAGE_REROUTE = pygame.image.load(os.path.join(ASSETS_DIR, 'aircraft_reroute.png'))
 
     AC_STATE_NORMAL = 1
     AC_STATE_SELECTED = 2
     AC_STATE_NEAR = 3
+    AC_STATE_REROUTE = 4
 
     EVENT_CLICK_AC = 0
     EVENT_CLICK_FS = 1
@@ -56,7 +58,7 @@ class Aircraft:
         self.selected = False
         self.state = Aircraft.AC_STATE_NORMAL
         self.heading = self.__calculateHeading(self.location, self.waypoints[0].getLocation())
-
+        self.rerouted = False
         Aircraft.AC_IMAGE_NORMAL.convert_alpha()
         Aircraft.AC_IMAGE_SELECTED.convert_alpha()
 
@@ -71,8 +73,11 @@ class Aircraft:
     def update_destination(self, new_destination):
         """Update the aircraft's destination."""
         self.original_destination = self.destination
-        self.destination = new_destination
-        self.waypoints = [Waypoint(new_destination.getLocation())]  # Update waypoints
+        self.destination = new_destination  # This should be a Destination object
+
+        # Clear existing waypoints and add the new destination
+        self.waypoints = []
+        self.addWaypoint(Waypoint(new_destination.getLocation()))  # Create a Waypoint from the destination location
 
     # Add a new waypoint in the specified index in the list
     def addWaypoint(self, waypoint, index=0):
@@ -124,13 +129,31 @@ class Aircraft:
         else:
             self.image = Aircraft.AC_IMAGE_NORMAL
             self.fs.deselect()
+    
+    def setRerouted(self, rerouted=True):
+        """Set whether this aircraft is being rerouted."""
+        self.rerouted = rerouted
+        if rerouted:
+            self.image = Aircraft.AC_IMAGE_REROUTE
+        else:
+            # Revert to normal image
+            if self.selected:
+                self.image = Aircraft.AC_IMAGE_SELECTED
+            else:
+                self.image = Aircraft.AC_IMAGE_NORMAL
             
     def requestSelected(self):
         self.game.requestSelected(self)
 
     def draw(self, surface):
         # Choose the appropriate image based on state
-        if hasattr(self, 'rl_controlled') and self.rl_controlled:
+        if hasattr(self, 'rerouted') and self.rerouted:
+            rot_image = pygame.transform.rotate(Aircraft.AC_IMAGE_REROUTE, -self.heading)
+            rect = rot_image.get_rect()
+            rect.center = self.location
+            surface.blit(rot_image, rect)
+        
+        elif hasattr(self, 'rl_controlled') and self.rl_controlled:
             # Use the selected image for RL-controlled aircraft
             rot_image = pygame.transform.rotate(Aircraft.AC_IMAGE_SELECTED, -self.heading)
             rect = rot_image.get_rect()

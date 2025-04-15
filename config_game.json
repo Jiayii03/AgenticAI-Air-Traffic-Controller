@@ -1,15 +1,16 @@
 {
     "game":{
         "gametime":180000,
-        "n_aircraft":5,
+        "n_aircraft":7,
         "n_destinations":5,
         "spawn_interval": 3,
-        "scenario_seed": 331280,
+        "scenario_seed": 907055,
         "n_obstacles":0,
         "framerate":40,
         "fullscreen":false,
         "n_highscores":30,
-        "mute":true
+        "mute":true,
+        "debug_mode":false
     },
     "scoring":{
         "reach_dest":200,
@@ -31,7 +32,7 @@
         "speed_max":1000,
         "speed_default":800,
         "speed_scalefactor":2000.0,
-        "collision_radius":50,
+        "collision_radius":40,
         "draw_radius":false
     },
     "destinations": {
@@ -44,9 +45,13 @@
         "tactical_waypoint_distance": 80,
         "cooldown_frames": 120,
         "collision_risk_radius": 120,
-        "speed_reset_delay": 150
+        "speed_reset_delay": 150,
+        "proximity_omit_threshold": 150
     },
     "emergency_agent": {
-        "model_path": "models/emergency_dqn_model.pth"
+        "model_path": "models/emergency_dqn_model.pth",
+        "visualisation_min_duration": 10000,
+        "auto_emergency": true,
+        "max_emergencies": 2
     }
 }

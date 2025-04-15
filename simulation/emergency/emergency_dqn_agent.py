@@ -202,11 +202,12 @@ class EmergencyDQNAgent:
             'epsilon': self.epsilon
         }, filepath)
     
-    def load(self, filepath):
-        """Load the emergency DQN model."""
+    def load(self, filepath, weights_only=False):
+        """Load the DQN model."""
         if not os.path.exists(filepath):
             return
-        checkpoint = torch.load(filepath)
+            
+        checkpoint = torch.load(filepath, weights_only=weights_only)
         self.q_network.load_state_dict(checkpoint['q_network'])
         self.target_network.load_state_dict(checkpoint['target_network'])
         self.optimizer.load_state_dict(checkpoint['optimizer'])
