@@ -9,7 +9,7 @@ import math
 # Add parent directory to path so we can import game components
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from emergency_simulation import EmergencySimulation  # Corrected import
+from simulation.emergency_simulation import EmergencySimulation  # Corrected import
 from utility import Utility
 import conf
 
@@ -100,6 +100,11 @@ class EmergencyATCEnv(gym.Env):
         chosen_dest = safe_dests[action]
         rerouted = original_dest != chosen_dest
 
+        # Calculate rerouted distance
+        rerouted_distance = 0
+        if rerouted:
+            rerouted_distance = Utility.locDist(emergency_ac.getLocation(), chosen_dest.getLocation())
+
         emergency_ac.waypoints[-1] = chosen_dest
         self.logger.debug_print(f"[EmergencyATCEnv] Aircraft {emergency_ac.getIdent()} rerouted to {chosen_dest.text} via action {action}")
 
@@ -107,7 +112,7 @@ class EmergencyATCEnv(gym.Env):
         
         reward = rewards_dict.get(emergency_ac.getIdent(), 0)
 
-        # ✅ IMMEDIATE reward for rerouting
+        # Immediate reward for rerouting
         if rerouted:
             reward += 50
 
@@ -124,7 +129,13 @@ class EmergencyATCEnv(gym.Env):
             reward -= 1  # time penalty
 
         obs = self._build_observation()
-        return obs, reward, done, False, {**info, "emergency_risk": True, "rerouted": rerouted}
+        return obs, reward, done, False, {
+            **info,
+            "emergency_risk": True,
+            "rerouted": rerouted,
+            "rerouted_distance": rerouted_distance,
+            "aircraft_speed": emergency_ac.getSpeed() / conf.get()['aircraft']['speed_scalefactor']
+        }
 
     def _build_observation(self):
         """

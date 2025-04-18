@@ -1,0 +1,672 @@
+Logging started at 2025-04-18 23:14:11
+Log file: logs/evaluation_20250418-231411.txt
+Initializing Emergency ATC Environment...
+Placed destination D0 at (737, 296)
+Placed destination D1 at (121, 627)
+Placed destination D2 at (550, 75)
+Placed destination D3 at (253, 159)
+Placed destination D4 at (572, 674)
+Initializing Emergency RL Controller...
+Warning: Emergency model file models/emergency_dqn_model.pth not found. Emergency RL agent will use untrained model.
+
+Running simulations with random assignment...
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D1
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D2
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC1 and AC2, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D4
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D3
+Collision detected between AC1 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D4
+Collision detected between AC1 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D4
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D1
+Collision detected between AC1 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Collision detected between AC1 and AC2, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Collision detected between AC1 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D1
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D1
+Collision detected between AC3 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D3
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D1
+Collision detected between AC1 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D4
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D2
+Collision detected between AC1 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC3 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC1 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC1 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D3
+Collision detected between AC2 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D4
+Collision detected between AC1 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC2 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D1
+Collision detected between AC1 and AC2, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC1 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC2 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D1
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D3
+Collision detected between AC2 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D2
+Collision detected between AC1 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC1 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D2
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D3
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D2
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D2
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D1
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D1
+Collision detected between AC4 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC4 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D1
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D4
+Collision detected between AC1 and AC2, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC2 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D2
+Collision detected between AC1 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC1 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC1 and AC2, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D2
+Collision detected between AC1 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC2 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC2 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC3 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D4
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D4
+Collision detected between AC2 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Collision detected between AC4 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D2
+Collision detected between AC2 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D3
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D3
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D4
+Collision detected between AC1 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D3
+Collision detected between AC1 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D2
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D1
+Collision detected between AC2 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC1 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC3 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC3 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC2 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D2
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D4
+Collision detected between AC1 and AC2, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D1
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D1
+Collision detected between AC2 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D1
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC2 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D2
+Collision detected between AC1 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC1 and AC2, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D4
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC1 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D3
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Collision detected between AC2 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D2
+Collision detected between AC1 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D4
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC4 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D3
+Collision detected between AC4 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D3
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC2 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Average rerouted distance with random assignment: 460.46
+Average time saved with random assignment: 1151.16 seconds
+
+Running simulations with RL agent...
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC2 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC2 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D4
+Collision detected between AC4 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D3
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D2
+Collision detected between AC2 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D1
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D2
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D1
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D4
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D1
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D1
+Collision detected between AC2 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D4
+Collision detected between AC1 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D3
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D2
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC3 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D1
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D2
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D1
+Collision detected between AC1 and AC2, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC3 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC1 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D3
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D3
+Collision detected between AC1 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D2
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D1
+Collision detected between AC1 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC4 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D4
+Collision detected between AC2 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D1
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC3 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D4
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D2
+Collision detected between AC1 and AC2, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC2 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D3
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D1
+Collision detected between AC4 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC1 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D2
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D2
+Collision detected between AC3 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC3 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D2
+Collision detected between AC3 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC3 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D3
+Collision detected between AC2 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D3
+Collision detected between AC1 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC2 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC1 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D2
+Collision detected between AC2 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC2 and AC3, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D1
+Collision detected between AC4 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC3 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Collision detected between AC4 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D2
+Collision detected between AC3 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D2
+Collision detected between AC3 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D2
+Collision detected between AC1 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D3
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D4
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D4
+Collision detected between AC3 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D2
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D1
+Collision detected between AC1 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D4
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D2
+Collision detected between AC3 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC3 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D1
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC3 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D1
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D3
+Collision detected between AC3 and AC5, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D4
+Collision detected between AC3 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC3 is heading to an EMERGENCY destination: D0
+Aircraft AC3 rerouted to safe destination: D3
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D3
+Collision detected between AC3 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Aircraft AC2 is heading to an EMERGENCY destination: D0
+Aircraft AC2 rerouted to safe destination: D3
+Aircraft AC4 is heading to an EMERGENCY destination: D0
+Aircraft AC4 rerouted to safe destination: D3
+Aircraft AC5 is heading to an EMERGENCY destination: D0
+Aircraft AC5 rerouted to safe destination: D3
+Destination D0 has been marked as EMERGENCY.
+Destination D0 has been marked as EMERGENCY.
+Collision detected between AC1 and AC4, -200 reward
+Destination D0 has been marked as EMERGENCY.
+Average rerouted distance with RL agent: 218.82
+Average time saved with RL agent: 547.06 seconds
+
+Comparison Results:
+Random Assignment: 460.46 units, 1151.16 seconds
+RL Agent: 218.82 units, 547.06 seconds
+Improvement with RL Agent: 241.64 units, 604.10 seconds
