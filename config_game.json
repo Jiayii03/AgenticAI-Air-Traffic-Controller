@@ -1,10 +1,10 @@
 {
     "game":{
         "gametime":180000,
-        "n_aircraft":7,
+        "n_aircraft":5,
         "n_destinations":5,
         "spawn_interval": 3,
-        "scenario_seed": 612312,
+        "scenario_seed": 331280,
         "n_obstacles":0,
         "framerate":40,
         "fullscreen":false,
