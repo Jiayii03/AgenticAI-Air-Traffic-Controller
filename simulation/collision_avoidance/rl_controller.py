@@ -14,7 +14,7 @@ from core import conf
 class RLController:
     """Controls aircraft using a trained DQN model when collision risks are detected"""
     
-    def __init__(self, model_path='models/dqn_atc_model.pth', debug=True):
+    def __init__(self, model_path='models/collision_avoidance_dqn_model.pth', debug=True):
         """Initialize the RL controller with trained model"""
         # Set up model parameters matching your training configuration
         self.state_dim = 7  # Updated to include relative speed and separation rate

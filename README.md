@@ -10,8 +10,8 @@ This project implements an intelligent air traffic control system using reinforc
 
 - Collision avoidance using a DQN agent
 - Emergency rerouting using a separate DQN agent
+- Intuitive frontend visualisation to simulate real-world ATC
 - Visual feedback for emergency situations
-- Reproducible simulation using seed-based randomization
 
 ## Collision Avoidance System
 

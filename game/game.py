@@ -107,7 +107,7 @@ class Game:
         # Initialize RL controller if enabled in config
         self.rl_enabled = conf.get().get('rl_agent', {}).get('enabled', False)
         if self.rl_enabled:
-            model_path = conf.get().get('rl_agent', {}).get('model_path', 'models/dqn_atc_model.pth')
+            model_path = conf.get().get('rl_agent', {}).get('model_path', 'models/collision_avoidance_dqn_model.pth')
             model_path = os.path.join(os.path.dirname(__file__), model_path)
             self.rl_controller = RLController(model_path=model_path, debug=self.debug)
             # print("RL agent enabled for collision avoidance")

@@ -72,7 +72,7 @@ def simulate_rl_agent(env, rl_controller, num_simulations=100):
 
 def main():
     # Initialize logger
-    logger = Logger(log_dir='../logs', prefix='evaluation', debug=False).start()
+    logger = Logger(log_dir='../logs', prefix='benchmark_emergency', debug=False).start()
     
     # Configuration parameters
     num_planes = conf.get()["game"]["n_aircraft"]

@@ -40,7 +40,7 @@
     },
     "rl_agent": {
         "enabled": true,
-        "model_path": "models/dqn_atc_model.pth",
+        "model_path": "models/collision_avoidance_dqn_model.pth",
         "visualization": true,
         "tactical_waypoint_distance": 80,
         "cooldown_frames": 120,
