@@ -117,6 +117,7 @@ class Game:
         self.emergency_controller = EmergencyRLController(model_path=emergency_model_path, debug=self.debug)
 
         # Emergency state tracking
+        self.emergency_enabled = conf.get().get('emergency_agent', {}).get('auto_emergency', False)
         self.emergency_destination = None
         self.emergency_active = False
         self.emergency_triggered = False
@@ -131,8 +132,9 @@ class Game:
         self.emergency_message_start_time = 0
         
         # Schedule first emergency between 10-15 seconds after start
-        self.next_emergency_time = random.randint(10000, 15000)
-        print(f"First emergency scheduled at: {self.next_emergency_time}ms")
+        if self.emergency_enabled:
+            self.next_emergency_time = random.randint(10000, 15000)
+            print(f"First emergency scheduled at: {self.next_emergency_time}ms")
         
         self.cnt_fspane = FlightStripPane(left=Game.FSPANE_LEFT, top=Game.FSPANE_TOP, width=Game.FS_W, align=-1, valign=-1)
         self.cnt_main.add(self.cnt_fspane, Game.FSPANE_LEFT, Game.FSPANE_TOP + 100)
@@ -256,7 +258,7 @@ class Game:
         if (not self.emergency_active and 
         self.next_emergency_time and 
         self.ms_elapsed >= self.next_emergency_time and
-        self.emergency_count < self.max_emergencies):
+        self.emergency_count < self.max_emergencies and self.emergency_enabled):
             self.__trigger_programmatic_emergency()
             
             # Schedule next emergency (between 15-20 seconds from now)

@@ -4,7 +4,7 @@
         "n_aircraft":7,
         "n_destinations":5,
         "spawn_interval": 3,
-        "scenario_seed": 907055,
+        "scenario_seed": 612312,
         "n_obstacles":0,
         "framerate":40,
         "fullscreen":false,
@@ -51,7 +51,7 @@
     "emergency_agent": {
         "model_path": "models/emergency_dqn_model.pth",
         "visualisation_min_duration": 10000,
-        "auto_emergency": true,
+        "auto_emergency": false,
         "max_emergencies": 2
     }
 }

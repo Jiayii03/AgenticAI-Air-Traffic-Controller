@@ -109,14 +109,15 @@ The system is configurable through `config_game.json`, where you can set:
 Head over to `config_game.json` and change the `scenario_seed`. Suitable config as follows:
 
 ### Without Emergency
-1. 331280 (5 aircrafts, 5 destinations)
-2. 350072 
-3. 379381 
+1. 612312 (7 aircrafts, 5 destinations) - 70s
+2. 508861 (5 aircrafts, 5 destinations) - 60s
+3. 331280 (5 aircrafts, 5 destinations) - 60s
 
 ### With Emergency
-1. 508861 (5 aircrafts, 5 destinations)
-2. 776740 (7 aircrafts, 5 destinations)
-3. 959018, 478953 
+1. 776740 (7 aircrafts, 5 destinations) - 60s
+2. 508861 (5 aircrafts, 5 destinations) - 65s
+3. 959018 (5 aircrafts, 5 destinations) - 45s
+4. 478953 (5 aircrafts, 5 destinations) - 55s
 
 ## TODO:
 
@@ -124,4 +125,6 @@ Head over to `config_game.json` and change the `scenario_seed`. Suitable config 
 2. ✓ Integrate collision avoidance
 3. ✓ Integrate emergency situation
 4. Benchmark against baseline, e.g. random or straight line
-5. Parameterised experiment and rigorous testing
+5. Find benchmark for similar paper
+6. Parameterised experiment and rigorous testing
+7. Add backend print statement for demo purpose
