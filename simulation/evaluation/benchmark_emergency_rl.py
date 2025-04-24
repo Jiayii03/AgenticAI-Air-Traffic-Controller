@@ -17,8 +17,10 @@ def simulate_random_assignment(env, num_simulations=100):
     Simulate emergency scenarios where aircraft are randomly assigned to safe destinations.
     """
     total_rerouted_distance = 0
-    total_time_saved = 0
+    total_time_required = 0  # Updated metric name
     rerouted_count = 0
+    total_steps = 0
+
     for _ in tqdm(range(num_simulations), desc="Simulating Random Assignment"):
         obs = env.reset()
         done = False
@@ -32,22 +34,34 @@ def simulate_random_assignment(env, num_simulations=100):
                 total_rerouted_distance += info.get("rerouted_distance", 0)
                 rerouted_count += 1
                 
-                # Calculate time saved for this reroute
+                # Calculate time required for this reroute
                 speed = info.get("aircraft_speed", 1)  # Default to 1 if speed is not provided
-                total_time_saved += info.get("rerouted_distance", 0) / speed
-    
-    # Calculate average rerouted distance and time saved
-    avg_rerouted_distance = total_rerouted_distance / rerouted_count if rerouted_count > 0 else 0
-    avg_time_saved = total_time_saved / rerouted_count if rerouted_count > 0 else 0
-    return avg_rerouted_distance, avg_time_saved
+                total_time_required += info.get("rerouted_distance", 0) / speed
+            
+            # Track steps
+            total_steps += 1
+
+    # Access the number of planes from the simulation object
+    num_planes = env.simulation.num_planes
+
+    # Calculate metrics
+    diversion_success_rate = (rerouted_count / (num_simulations * num_planes)) * 100
+    avg_distance = total_rerouted_distance / rerouted_count if rerouted_count > 0 else 0
+    avg_steps = total_steps / rerouted_count if rerouted_count > 0 else 0
+    avg_time_required = total_time_required / rerouted_count if rerouted_count > 0 else 0  # Updated metric name
+
+    return diversion_success_rate, avg_distance, avg_steps, avg_time_required
+
 
 def simulate_rl_agent(env, rl_controller, num_simulations=100):
     """
     Simulate emergency scenarios using the Emergency RL Agent.
     """
     total_rerouted_distance = 0
-    total_time_saved = 0
+    total_time_required = 0  # Updated metric name
     rerouted_count = 0
+    total_steps = 0
+
     for _ in tqdm(range(num_simulations), desc="Simulating RL Agent"):
         obs = env.reset()
         done = False
@@ -61,14 +75,24 @@ def simulate_rl_agent(env, rl_controller, num_simulations=100):
                 total_rerouted_distance += info.get("rerouted_distance", 0)
                 rerouted_count += 1
                 
-                # Calculate time saved for this reroute
+                # Calculate time required for this reroute
                 speed = info.get("aircraft_speed", 1)  # Default to 1 if speed is not provided
-                total_time_saved += info.get("rerouted_distance", 0) / speed
-    
-    # Calculate average rerouted distance and time saved
-    avg_rerouted_distance = total_rerouted_distance / rerouted_count if rerouted_count > 0 else 0
-    avg_time_saved = total_time_saved / rerouted_count if rerouted_count > 0 else 0
-    return avg_rerouted_distance, avg_time_saved
+                total_time_required += info.get("rerouted_distance", 0) / speed
+            
+            # Track steps
+            total_steps += 1
+
+    # Access the number of planes from the simulation object
+    num_planes = env.simulation.num_planes
+
+    # Calculate metrics
+    diversion_success_rate = (rerouted_count / (num_simulations * num_planes)) * 100
+    avg_distance = total_rerouted_distance / rerouted_count if rerouted_count > 0 else 0
+    avg_steps = total_steps / rerouted_count if rerouted_count > 0 else 0
+    avg_time_required = total_time_required / rerouted_count if rerouted_count > 0 else 0  # Updated metric name
+
+    return diversion_success_rate, avg_distance, avg_steps, avg_time_required
+
 
 def main():
     # Initialize logger
@@ -91,21 +115,34 @@ def main():
     
     # Simulate random assignment
     print("\nRunning simulations with random assignment...")
-    avg_rerouted_distance_random, avg_time_saved_random = simulate_random_assignment(env, num_simulations=num_simulations)
-    print(f"Average rerouted distance with random assignment: {avg_rerouted_distance_random:.2f}")
-    print(f"Average time saved with random assignment: {avg_time_saved_random:.2f} seconds")
+    diversion_success_rate_random, avg_distance_random, avg_steps_random, avg_time_required_random = simulate_random_assignment(env, num_simulations=num_simulations)
+    print(f"Random Assignment:")
+    print(f"  Diversion Success Rate: {diversion_success_rate_random:.2f}%")
+    print(f"  Avg Distance to Alternative Destination: {avg_distance_random:.2f} units")
+    print(f"  Avg Steps to Destination: {avg_steps_random:.2f}")
+    print(f"  Avg Time Required: {avg_time_required_random:.2f} seconds")
     
     # Simulate RL agent
     print("\nRunning simulations with RL agent...")
-    avg_rerouted_distance_rl, avg_time_saved_rl = simulate_rl_agent(env, rl_controller, num_simulations=num_simulations)
-    print(f"Average rerouted distance with RL agent: {avg_rerouted_distance_rl:.2f}")
-    print(f"Average time saved with RL agent: {avg_time_saved_rl:.2f} seconds")
+    diversion_success_rate_rl, avg_distance_rl, avg_steps_rl, avg_time_required_rl = simulate_rl_agent(env, rl_controller, num_simulations=num_simulations)
+    print(f"RL Agent:")
+    print(f"  Diversion Success Rate: {diversion_success_rate_rl:.2f}%")
+    print(f"  Avg Distance to Alternative Destination: {avg_distance_rl:.2f} units")
+    print(f"  Avg Steps to Destination: {avg_steps_rl:.2f}")
+    print(f"  Avg Time Required: {avg_time_required_rl:.2f} seconds")
     
     # Compare results
     print("\nComparison Results:")
-    print(f"Random Assignment: {avg_rerouted_distance_random:.2f} units, {avg_time_saved_random:.2f} seconds")
-    print(f"RL Agent: {avg_rerouted_distance_rl:.2f} units, {avg_time_saved_rl:.2f} seconds")
-    print(f"Improvement with RL Agent: {avg_rerouted_distance_random - avg_rerouted_distance_rl:.2f} units, {avg_time_saved_random - avg_time_saved_rl:.2f} seconds")
+    print(f"Random Assignment:")
+    print(f"  Diversion Success Rate: {diversion_success_rate_random:.2f}%")
+    print(f"  Avg Distance to Alternative Destination: {avg_distance_random:.2f} units")
+    print(f"  Avg Steps to Destination: {avg_steps_random:.2f}")
+    print(f"  Avg Time Required: {avg_time_required_random:.2f} seconds")
+    print(f"RL Agent:")
+    print(f"  Diversion Success Rate: {diversion_success_rate_rl:.2f}%")
+    print(f"  Avg Distance to Alternative Destination: {avg_distance_rl:.2f} units")
+    print(f"  Avg Steps to Destination: {avg_steps_rl:.2f}")
+    print(f"  Avg Time Required: {avg_time_required_rl:.2f} seconds")
 
 if __name__ == "__main__":
     main()
