@@ -1,6 +1,3 @@
-#   File: game.py
-#   Description: An instance of one game of ATC
-
 import pygame
 import random
 import math

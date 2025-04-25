@@ -1,4 +1,6 @@
-# simulation/simulation.py
+"""
+Actual game simulation that runs the air traffic control scenario as players would experience it
+"""
 import pygame
 import numpy as np
 

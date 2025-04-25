@@ -6,7 +6,65 @@ COMP3071 Designing Intelligent Agents
 
 This project implements an intelligent air traffic control system using reinforcement learning. The agents handle both collision avoidance and emergency destination rerouting.
 
-## Features
+## Directory Structure
+
+```
+AgenticAI-Air-Traffic-Controller
+├── assets
+│   ├── sounds/
+│   └── themes/
+├── core
+│   ├── aircraft.py
+│   ├── aircraftspawnevent.py
+│   ├── conf.py
+│   ├── destination.py
+│   ├── flightstrippane.py
+│   ├── obstacle.py
+│   ├── utility.py
+│   └── waypoint.py
+├── game
+│   ├── game.py
+│   ├── main.py
+│   └── random_state.py
+├── models
+│   ├── collision_avoidance_dqn_model.pth
+│   └── emergency_dqn_model.pth
+├── pgu
+│   └── gui/
+├── simulation
+│   ├── collision_avoidance/
+│   ├── common/
+│   ├── emergency/
+│   ├── evaluation/
+│   └── logs/
+│   └── results/
+├── config_game.json
+├── requirements.txt
+├── README.md
+└── .gitignore
+```
+
+## Quickstart
+
+1. Clone the repository and navigate to the root directory:
+```bash
+cd AgenticAI-Air-Traffic-Controller
+```
+
+2. Install required dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+3. Run the frontend simulation:
+```bash
+cd game
+python main.py
+```
+
+The Pygame-based air traffic control simulation will launch, allowing you to observe real-time agent decisions for both collision avoidance and emergency response.
+
+## Key Features
 
 - Collision avoidance using a DQN agent
 - Emergency rerouting using a separate DQN agent
@@ -97,34 +155,10 @@ The emergency agent reward function considers:
 
 ## Configuration
 
-The system is configurable through `config_game.json`, where you can set:
+The system is parameterised and configurable through `config_game.json`, where you can change:
 
 - Number of aircraft and destinations
 - Collision risk parameters
+- RL model paths
 - Maximum number of emergencies
 - Random seed for reproducibility
-
-## Seed Numbers for Demonstration
-
-Head over to `config_game.json` and change the `scenario_seed`. Suitable config as follows:
-
-### Without Emergency
-1. 612312 (7 aircrafts, 5 destinations) - 70s
-2. 508861 (5 aircrafts, 5 destinations) - 60s
-3. 331280 (5 aircrafts, 5 destinations) - 60s
-
-### With Emergency
-1. 776740 (7 aircrafts, 5 destinations) - 60s
-2. 508861 (5 aircrafts, 5 destinations) - 65s
-3. 959018 (5 aircrafts, 5 destinations) - 45s
-4. 478953 (5 aircrafts, 5 destinations) - 55s
-
-## TODO:
-
-1. ✓ Try train RL using DQN method with neural network
-2. ✓ Integrate collision avoidance
-3. ✓ Integrate emergency situation
-4. Benchmark against baseline, e.g. random or straight line
-5. Find benchmark for similar paper
-6. Parameterised experiment and rigorous testing
-7. Add backend print statement for demo purpose

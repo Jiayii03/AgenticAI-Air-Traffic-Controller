@@ -1,4 +1,7 @@
-# simulation/atc_env.py
+"""
+Training environment using the OpenAI Gym interface and includes specialized reward functions, state observations, and other RL training components.
+"""
+
 import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
